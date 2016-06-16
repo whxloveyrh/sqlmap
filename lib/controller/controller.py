@@ -491,7 +491,7 @@ def start():
 
                         '''
                         kb.testedParams用于保存已经注入了的信息，例如：目标IP,请求路径，注入点位置信息等
-                        
+
                         '''
                         if paramKey in kb.testedParams:
                             testSqlInj = False
