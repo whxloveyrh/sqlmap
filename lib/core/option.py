@@ -2594,15 +2594,15 @@ def init():
     based upon command line and configuration file options.
     """
 
-    _useWizardInterface()
+    _useWizardInterface() #为初学者创建按一个向导
     setVerbosity()  #设定信息显示等级 默认为等级1级
     _saveConfig()
-    _setRequestFromFile()
+    _setRequestFromFile()  #判断HTTP请求是不是从文件中读取
     _cleanupOptions()
     _dirtyPatches()
-    _purgeOutput()
-    _checkDependencies()
-    _createTemporaryDirectory()
+    _purgeOutput()  #清理输出目录
+    _checkDependencies() #检查依赖关系
+    _createTemporaryDirectory()  #创建一个临时目录
     _basicOptionValidation()
     _setProxyList()
     _setTorProxySettings()
@@ -2648,4 +2648,4 @@ def init():
     loadPayloads()
     _setPrefixSuffix()
     update()
-    _loadQueries()
+    _loadQueries()  #导入查询信息xml/queries.xml

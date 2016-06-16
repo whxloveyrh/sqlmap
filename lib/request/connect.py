@@ -841,7 +841,7 @@ class Connect(object):
                     warnMsg += "GET and POST parameters"
                     singleTimeWarnMessage(warnMsg)
 
-        #place存储的是GET/POST
+        #place存储的是GET/POST等信息，详细见lib\core\enums.py
         if place:
             value = agent.removePayloadDelimiters(value)  #删除分隔符
 
@@ -853,12 +853,12 @@ class Connect(object):
         elif place == PLACE.GET:  # Note: for (e.g.) checkWaf() when there are no GET parameters
             get = value
 
-        if PLACE.POST in conf.parameters:
+        if PLACE.POST in conf.parameters:  #获取post请求的参数信息
             post = conf.parameters[PLACE.POST] if place != PLACE.POST or not value else value
         elif place == PLACE.POST:
             post = value
 
-        if PLACE.CUSTOM_POST in conf.parameters:
+        if PLACE.CUSTOM_POST in conf.parameters: #获取自定义post请求的参数信息
             post = conf.parameters[PLACE.CUSTOM_POST].replace(CUSTOM_INJECTION_MARK_CHAR, "") if place != PLACE.CUSTOM_POST or not value else value
             post = post.replace(ASTERISK_MARKER, '*') if post else post
 
@@ -866,12 +866,26 @@ class Connect(object):
         if PLACE.COOKIE in conf.parameters:
             cookie = conf.parameters[PLACE.COOKIE] if place != PLACE.COOKIE or not value else value
 
-        if PLACE.USER_AGENT in conf.parameters:
+        '''
+        User-Agent作用：告诉HTTP服务器， 客户端使用的操作系统和浏览器的名称和版本.
+        '''
+        if PLACE.USER_AGENT in conf.parameters: #获取用户代理信息
             ua = conf.parameters[PLACE.USER_AGENT] if place != PLACE.USER_AGENT or not value else value
 
+        '''Referer:
+    　　作用： 提供了Request的上下文信息的服务器，告诉服务器我是从哪个链接过来的，比如从我主页上链接到一个朋友那里，他的服务器就能够从HTTP Referer中统计出每天有多少用户点击我主页上的链接访问他的网站。
+    　　例如: Referer:http://translate.google.cn/?hl=zh-cn&tab=wT
+        '''
         if PLACE.REFERER in conf.parameters:
             referer = conf.parameters[PLACE.REFERER] if place != PLACE.REFERER or not value else value
 
+        '''Host（发送请求时，该报头域是必需的）
+    　　作用: 请求报头域主要用于指定被请求资源的Internet主机和端口号，它通常从HTTP URL中提取出来的
+    　　例如: 我们在浏览器中输入：http://www.guet.edu.cn/index.html
+    　　浏览器发送的请求消息中，就会包含Host请求报头域，如下：
+    　　Host：http://www.guet.edu.cn
+    　　此处使用缺省端口号80，若指定了端口号，则变成：Host：指定端口号
+        '''
         if PLACE.HOST in conf.parameters:
             host = conf.parameters[PLACE.HOST] if place != PLACE.HOST or not value else value
 

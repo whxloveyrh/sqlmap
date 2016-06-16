@@ -289,7 +289,7 @@ def start():
         logger.error(errMsg)
         return False
 
-    if kb.targets and len(kb.targets) > 1:
+    if kb.targets and len(kb.targets) > 1:  #需要测试多个目标URL
         infoMsg = "sqlmap got a total of %d targets" % len(kb.targets)
         logger.info(infoMsg)
 

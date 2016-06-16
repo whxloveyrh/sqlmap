@@ -978,7 +978,7 @@ def heuristicCheckSqlInjection(place, parameter):
 
     randStr = ""
 
-    while '\'' not in randStr:  #randStr必须有单引号"'"
+    while '\'' not in randStr:  #randStr必须有单引号"'"，产生一个长度为10的随机字符串
         randStr = randomStr(length=10, alphabet=HEURISTIC_CHECK_ALPHABET)
 
     kb.heuristicMode = True
