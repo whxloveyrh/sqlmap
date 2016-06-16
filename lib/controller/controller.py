@@ -444,6 +444,9 @@ def start():
                 proceed = True
                 '''
                 开始测试参数是否可以注入(测试之前没有测试过的参数)
+                测试GET参数，POST参数，HTTP Cookie参数，HTTP User-Agent头和HTTP Referer头来确认是否有SQL注入，
+                它也可以指定用逗号分隔的列表的具体参数来测试。
+                parameters存储GET/POST/HTTP Cookie/HTTP User-Agent header/HTTP Referer header等信息
                 '''
                 for place in parameters:  #检测在哪些参数位置可以进行注入的
                     # Test User-Agent and Referer headers only if
