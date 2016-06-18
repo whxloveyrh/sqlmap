@@ -340,7 +340,7 @@ def start():
                 logger.info(infoMsg)
                 continue
 
-            if conf.multipleTargets:
+            if conf.multipleTargets:  #当检测的目标存在多个的时候
                 hostCount += 1
 
                 if conf.forms and conf.method:
@@ -413,13 +413,16 @@ def start():
             if not checkConnection(suppressOutput=conf.forms) or not checkString() or not checkRegexp():
                 continue
 
-            checkWaf()   #检测WAF(Web Application FireWall),检测方法是NMAP的http-waf-detect.nse
+            #Determines if a web server is protected by an IPS (Intrusion Prevention System), IDS (Intrusion Detection System) or WAF (Web Application Firewall)
+            checkWaf()   #检测WAF(Web Application FireWall),检测方法是NMAP的http-waf-detect.nse，判断系统是否被防火墙所保护
 
+            #conf.identifyWaf=True表示需要检测后台防火墙的类型,否则，表示不检测防火墙类型
+            #判断防火墙的类型
             if conf.identifyWaf:  #conf.identifyWaf表示sqlmap的参数 --identify-waf,如果指定了此参数，就会进入identifyWaf()函数中
                 identifyWaf()     #主要检测的WAF(防火墙)都在sqlmap的waf目录下面
 
             if conf.nullConnection:
-                checkNullConnection()
+                checkNullConnection()  #空连接就是不用密码和用户名的IPC(Internet Process Connection) 连接，在Windows 下，它是用 Net 命令来实现的．
 
             if (len(kb.injections) == 0 or (len(kb.injections) == 1 and kb.injections[0].place is None)) \
                 and (kb.injection.place is None or kb.injection.parameter is None):
@@ -427,13 +430,13 @@ def start():
                 if not any((conf.string, conf.notString, conf.regexp)) and PAYLOAD.TECHNIQUE.BOOLEAN in conf.tech:
                     # NOTE: this is not needed anymore, leaving only to display
                     # a warning message to the user in case the page is not stable
-                    #判断页面是否是稳定页面(何谓稳定页面--两次相同的URL请求，返回的页面信息没有发生变化)
+                    #判断页面是否是稳定页面(何谓稳定页面--两次相同的URL请求，返回的页面信息没有发生变化，如新浪微博的页面就不是稳定的，因为每次刷新过后，页面的内容会发生变化)
                     checkStability()
 
                 # Do a little prioritization reorder of a testable parameter list
                 parameters = conf.parameters.keys()
 
-                # Order of testing list (first to last)
+                # Order of testing list (first to last) #测试注入点位置的几种情况
                 orderList = (PLACE.CUSTOM_POST, PLACE.CUSTOM_HEADER, PLACE.URI, PLACE.POST, PLACE.GET)
 
                 for place in orderList[::-1]:

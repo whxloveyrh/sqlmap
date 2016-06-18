@@ -18,7 +18,7 @@ from lib.core.enums import DBMS_DIRECTORY_NAME
 from lib.core.enums import OS
 from lib.core.revision import getRevisionNumber
 
-# sqlmap version (<major>.<minor>.<month>.<monthly commit>)
+# sqlmap version (<major>.<minor>.<month>.<monthly commit>)  sqlmap版本信息
 VERSION = "1.0.6.24"
 REVISION = getRevisionNumber()
 STABLE = VERSION.count('.') <= 2
@@ -29,7 +29,7 @@ ISSUES_PAGE = "https://github.com/sqlmapproject/sqlmap/issues/new"
 GIT_REPOSITORY = "git://github.com/sqlmapproject/sqlmap.git"
 GIT_PAGE = "https://github.com/sqlmapproject/sqlmap"
 
-# colorful banner
+# colorful banner 富有色彩的标识
 BANNER = """\033[01;33m         _
  ___ ___| |_____ ___ ___  \033[01;37m{\033[01;%dm%s\033[01;37m}\033[01;33m
 |_ -| . | |     | .'| . |
@@ -69,19 +69,19 @@ PAYLOAD_DELIMITER = "__PAYLOAD_DELIMITER__"
 CHAR_INFERENCE_MARK = "%c"
 PRINTABLE_CHAR_REGEX = r"[^\x00-\x1f\x7f-\xff]"
 
-# Regular expression used for extraction of table names (useful for (e.g.) MsAccess)
+# Regular expression used for extraction of table names (useful for (e.g.) MsAccess) 用于提取表名的正则表达式
 SELECT_FROM_TABLE_REGEX = r"\bSELECT .+? FROM (?P<result>[\w.]+)\b"
 
-# Regular expression used for recognition of textual content-type
+# Regular expression used for recognition of textual content-type  #用于识别文本的内容类型的正则表达式
 TEXT_CONTENT_TYPE_REGEX = r"(?i)(text|form|message|xml|javascript|ecmascript|json)"
 
-# Regular expression used for recognition of generic permission messages
+# Regular expression used for recognition of generic permission messages #用于识别通用的权限信息的正则表达式
 PERMISSION_DENIED_REGEX = r"(command|permission|access)\s*(was|is)?\s*denied"
 
 # Regular expression used for recognition of generic maximum connection messages
 MAX_CONNECTIONS_REGEX = r"max.+connections"
 
-# Regular expression used for extracting results from Google search
+# Regular expression used for extracting results from Google search  #用于提取来自于Google搜索结果的正则表达式
 GOOGLE_REGEX = r"webcache\.googleusercontent\.com/search\?q=cache:[^:]+:([^+]+)\+&amp;cd=|url\?\w+=((?![^>]+webcache\.googleusercontent\.com)http[^>]+)&(sa=U|rct=j)"
 
 # Regular expression used for extracting results from DuckDuckGo search
@@ -90,29 +90,29 @@ DUCKDUCKGO_REGEX = r'"u":"([^"]+)'
 # Regular expression used for extracting results from Disconnect Search
 DISCONNECT_SEARCH_REGEX = r'<p class="url wrapword">([^<]+)</p>'
 
-# Dummy user agent for search (if default one returns different results)
+# Dummy user agent for search (if default one returns different results)  #虚假的用户代理
 DUMMY_SEARCH_USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0"
 
-# Regular expression used for extracting content from "textual" tags
+# Regular expression used for extracting content from "textual" tags  #用于提取来自于文本的标签的内容的正则表达式
 TEXT_TAG_REGEX = r"(?si)<(abbr|acronym|b|blockquote|br|center|cite|code|dt|em|font|h\d|i|li|p|pre|q|strong|sub|sup|td|th|title|tt|u)(?!\w).*?>(?P<result>[^<]+)"
 
-# Regular expression used for recognition of IP addresses
+# Regular expression used for recognition of IP addresses #用于识别IP地址的正则表达式
 IP_ADDRESS_REGEX = r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"
 
-# Regular expression used for recognition of generic "your ip has been blocked" messages
+# Regular expression used for recognition of generic "your ip has been blocked" messages  #用于识别通用的IP地址锁定的消息
 BLOCKED_IP_REGEX = r"(?i)(\A|\b)ip\b.*\b(banned|blocked|block list|firewall)"
 
 # Dumping characters used in GROUP_CONCAT MySQL technique
 CONCAT_ROW_DELIMITER = ','
 CONCAT_VALUE_DELIMITER = '|'
 
-# Coefficient used for a time-based query delay checking (must be >= 7)
+# Coefficient used for a time-based query delay checking (must be >= 7)  #基于时间的查询延迟检测
 TIME_STDEV_COEFF = 7
 
-# Minimum response time that can be even considered as delayed (not a complete requirement)
+# Minimum response time that can be even considered as delayed (not a complete requirement)  #最小延迟时间作为延迟
 MIN_VALID_DELAYED_RESPONSE = 0.5
 
-# Standard deviation after which a warning message should be displayed about connection lags
+# Standard deviation after which a warning message should be displayed about connection lags  #标准误差
 WARN_TIME_STDEV = 0.5
 
 # Minimum length of usable union injected response (quick defense against substr fields)
@@ -169,10 +169,10 @@ INFERENCE_EQUALS_CHAR = "="
 # Character used for operation "not-equals" in inference
 INFERENCE_NOT_EQUALS_CHAR = "!="
 
-# String used for representation of unknown DBMS
+# String used for representation of unknown DBMS  #用于表示未知的DBMS
 UNKNOWN_DBMS = "Unknown"
 
-# String used for representation of unknown DBMS version
+# String used for representation of unknown DBMS version  #用于表示未知的DBMS的版本
 UNKNOWN_DBMS_VERSION = "Unknown"
 
 # Dynamicity mark length used in dynamicity removal engine
@@ -181,18 +181,18 @@ DYNAMICITY_MARK_LENGTH = 32
 # Dummy user prefix used in dictionary attack
 DUMMY_USER_PREFIX = "__dummy__"
 
-# Reference: http://en.wikipedia.org/wiki/ISO/IEC_8859-1
+# Reference: http://en.wikipedia.org/wiki/ISO/IEC_8859-1  #默认的页面编码
 DEFAULT_PAGE_ENCODING = "iso-8859-1"
 
 # URL used in dummy runs
 DUMMY_URL = "http://foo/bar?id=1"
 
 # System variables
-IS_WIN = subprocess.mswindows
+IS_WIN = subprocess.mswindows  #判断是否是windows平台
 
 # The name of the operating system dependent module imported. The following names have currently been registered: 'posix', 'nt', 'mac', 'os2', 'ce', 'java', 'riscos'
-PLATFORM = os.name
-PYVERSION = sys.version.split()[0]
+PLATFORM = os.name  #平台的名字
+PYVERSION = sys.version.split()[0]  #平台的版本
 
 # DBMS system databases
 MSSQL_SYSTEM_DBS = ("Northwind", "master", "model", "msdb", "pubs", "tempdb")
@@ -233,7 +233,7 @@ SUPPORTED_OS = ("linux", "windows")
 
 DBMS_ALIASES = ((DBMS.MSSQL, MSSQL_ALIASES), (DBMS.MYSQL, MYSQL_ALIASES), (DBMS.PGSQL, PGSQL_ALIASES), (DBMS.ORACLE, ORACLE_ALIASES), (DBMS.SQLITE, SQLITE_ALIASES), (DBMS.ACCESS, ACCESS_ALIASES), (DBMS.FIREBIRD, FIREBIRD_ALIASES), (DBMS.MAXDB, MAXDB_ALIASES), (DBMS.SYBASE, SYBASE_ALIASES), (DBMS.DB2, DB2_ALIASES), (DBMS.HSQLDB, HSQLDB_ALIASES))
 
-USER_AGENT_ALIASES = ("ua", "useragent", "user-agent")
+USER_AGENT_ALIASES = ("ua", "useragent", "user-agent")  #用户代理的别名
 REFERER_ALIASES = ("ref", "referer", "referrer")
 HOST_ALIASES = ("host",)
 
@@ -287,7 +287,7 @@ BLANK = "<blank>"
 # String representation for current database
 CURRENT_DB = "CD"
 
-# Regular expressions used for finding file paths in error messages
+# Regular expressions used for finding file paths in error messages  #用于在错误信息中发现文件路径
 FILE_PATH_REGEXES = (r" in (file )?<b>(?P<result>.*?)</b> on line", r"(?:[>(\[\s])(?P<result>[A-Za-z]:[\\/][\w.\\/-]*)", r"(?:[>(\[\s])(?P<result>/\w[/\w.-]+)", r"href=['\"]file://(?P<result>/[^'\"]+)")
 
 # Regular expressions used for parsing error messages (--parse-errors)
@@ -326,7 +326,7 @@ BURP_XML_HISTORY_REGEX = r'<port>(\d+)</port>.+?<request base64="true"><!\[CDATA
 # Encoding used for Unicode data
 UNICODE_ENCODING = "utf8"
 
-# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri
+# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri  #统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。
 URI_HTTP_HEADER = "URI"
 
 # Uri format which could be injectable (e.g. www.site.com/id82)
