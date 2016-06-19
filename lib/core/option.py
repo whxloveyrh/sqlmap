@@ -1836,7 +1836,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.cache.regex = {}
     kb.cache.stdev = {}
 
-    kb.captchaDetected = None
+    kb.captchaDetected = None  #验证码检测
 
     kb.chars = AttribDict()
     kb.chars.delimiter = randomStr(length=6, lowercase=True)
@@ -1869,7 +1869,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.extendTests = None
     kb.errorChunkLength = None
     kb.errorIsNone = True
-    kb.falsePositives = []
+    kb.falsePositives = []  #假阳性
     kb.fileReadMode = False
     kb.followSitemapRecursion = None
     kb.forcedDbms = None
@@ -1895,7 +1895,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
 
     kb.locks = AttribDict()
     for _ in ("cache", "count", "index", "io", "limit", "log", "socket", "redirect", "request", "value"):
-        kb.locks[_] = threading.Lock()
+        kb.locks[_] = threading.Lock()  #给对应的线程上锁
 
     kb.matchRatio = None
     kb.maxConnectionsFlag = False
@@ -2205,34 +2205,54 @@ def _mergeOptions(inputOptions, overrideOptions):
     else:
         inputOptionsItems = inputOptions.__dict__.items()
 
+    #将命令行参数信息存储到conf对象中
     for key, value in inputOptionsItems:
         if key not in conf or value not in (None, False) or overrideOptions:
             conf[key] = value
 
     for key, value in conf.items():
         if value is not None:
-            kb.explicitSettings.add(key)
+            kb.explicitSettings.add(key)  #set.add(elem) Add element elem to the set.
 
+    '''
+    如果没有指定参数信息的话，就需要填充一些默认值
+    '''
     for key, value in defaults.items():
         if hasattr(conf, key) and conf[key] is None:
             conf[key] = value
 
+    '''
+    {}.update([other]) Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    '''
     lut = {}
-    for group in optDict.keys():
+    for group in optDict.keys():  #便利字典optDict,取字典optDict的键key
         lut.update((_.upper(), _) for _ in optDict[group])
 
-    envOptions = {}
+    '''
+    os.environ是一个字符串所对应环境的映像字典对象。
+    http://blog.csdn.net/junweifan/article/details/7615591
+    os.environ
+    A mapping object representing the string environment. For example, environ['HOME'] is the pathname of your home directory (on some platforms), and is equivalent to getenv("HOME") in C.
+    '''
+    envOptions = {}  #字典envOptions用于保存系统环境信息
     for key, value in os.environ.items():
         if key.upper().startswith(SQLMAP_ENVIRONMENT_PREFIX):
             _ = key[len(SQLMAP_ENVIRONMENT_PREFIX):].upper()
             if _ in lut:
                 envOptions[lut[_]] = value
 
+    '''
+    当前本机的系统环境信息保存到conf变量中
+    '''
     if envOptions:
         _normalizeOptions(envOptions)
         for key, value in envOptions.items():
             conf[key] = value
 
+    '''
+    {}.update([other]) Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    mergedOptions.update(conf)表示使用字典conf信息更新字典mergedOptions信息
+    '''
     mergedOptions.update(conf)
 
 def _setTrafficOutputFP():
@@ -2594,19 +2614,19 @@ def init():
     based upon command line and configuration file options.
     """
 
-    _useWizardInterface() #为初学者创建按一个向导
-    setVerbosity()  #设定信息显示等级 默认为等级1级
+    _useWizardInterface()        #为初学者创建按一个向导
+    setVerbosity()               #设定信息显示等级 默认为等级1级
     _saveConfig()
-    _setRequestFromFile()  #判断HTTP请求是不是从文件中读取
+    _setRequestFromFile()        #判断HTTP请求是不是从文件中读取
     _cleanupOptions()
     _dirtyPatches()
-    _purgeOutput()  #清理输出目录
-    _checkDependencies() #检查依赖关系
+    _purgeOutput()               #清理输出目录
+    _checkDependencies()         #检查依赖关系
     _createTemporaryDirectory()  #创建一个临时目录
-    _basicOptionValidation()
-    _setProxyList()
-    _setTorProxySettings()
-    _setDNSServer()
+    _basicOptionValidation()     #基本选项信息验证
+    _setProxyList()              #设置代理列表
+    _setTorProxySettings()       #设置（The Onion Router，洋葱路由器）
+    _setDNSServer()              #设置DNS服务器信息
     _adjustLoggingFormatter()
     _setMultipleTargets()
     _setTamperingFunctions()

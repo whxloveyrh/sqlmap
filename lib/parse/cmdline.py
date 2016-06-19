@@ -1430,6 +1430,9 @@ def cmdLineParser(argv=None):
             except ValueError, ex:
                 raise SqlmapSyntaxException, "something went wrong during command line parsing ('%s')" % ex.message
 
+        '''
+        处理非基本的选项
+        '''
         # Hide non-basic options in basic help case
         for i in xrange(len(argv)):
             if argv[i] == "-hh":
@@ -1442,7 +1445,7 @@ def cmdLineParser(argv=None):
             elif re.match(r"\A\d+!\Z", argv[i]) and argv[max(0, i - 1)] == "--threads" or re.match(r"\A--threads.+\d+!\Z", argv[i]):
                 argv[i] = argv[i][:-1]
                 conf.skipThreadCheck = True
-            elif argv[i] == "--version":
+            elif argv[i] == "--version":  #打印版本信息
                 print VERSION_STRING.split('/')[-1]
                 raise SystemExit
             elif argv[i] == "-h":

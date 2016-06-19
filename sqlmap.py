@@ -138,9 +138,9 @@ def main():
         init()  #初始化环境信息
 
         if conf.profile:
-            profile()
+            profile()  #sqlmap程序运行时的环境信息
         elif conf.smokeTest:
-            smokeTest()
+            smokeTest() #冒烟测试
         elif conf.liveTest:
             liveTest()
         else:
