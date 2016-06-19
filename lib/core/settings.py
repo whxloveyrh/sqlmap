@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#-*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -18,7 +18,7 @@ from lib.core.enums import DBMS_DIRECTORY_NAME
 from lib.core.enums import OS
 from lib.core.revision import getRevisionNumber
 
-# sqlmap version (<major>.<minor>.<month>.<monthly commit>)  sqlmap°æ±¾ĞÅÏ¢
+# sqlmap version (<major>.<minor>.<month>.<monthly commit>)  sqlmapç‰ˆæœ¬ä¿¡æ¯
 VERSION = "1.0.6.24"
 REVISION = getRevisionNumber()
 STABLE = VERSION.count('.') <= 2
@@ -29,7 +29,7 @@ ISSUES_PAGE = "https://github.com/sqlmapproject/sqlmap/issues/new"
 GIT_REPOSITORY = "git://github.com/sqlmapproject/sqlmap.git"
 GIT_PAGE = "https://github.com/sqlmapproject/sqlmap"
 
-# colorful banner ¸»ÓĞÉ«²ÊµÄ±êÊ¶
+# colorful banner å¯Œæœ‰è‰²å½©çš„æ ‡è¯†
 BANNER = """\033[01;33m         _
  ___ ___| |_____ ___ ___  \033[01;37m{\033[01;%dm%s\033[01;37m}\033[01;33m
 |_ -| . | |     | .'| . |
@@ -69,19 +69,19 @@ PAYLOAD_DELIMITER = "__PAYLOAD_DELIMITER__"
 CHAR_INFERENCE_MARK = "%c"
 PRINTABLE_CHAR_REGEX = r"[^\x00-\x1f\x7f-\xff]"
 
-# Regular expression used for extraction of table names (useful for (e.g.) MsAccess) ÓÃÓÚÌáÈ¡±íÃûµÄÕıÔò±í´ïÊ½
+# Regular expression used for extraction of table names (useful for (e.g.) MsAccess) ç”¨äºæå–è¡¨åçš„æ­£åˆ™è¡¨è¾¾å¼
 SELECT_FROM_TABLE_REGEX = r"\bSELECT .+? FROM (?P<result>[\w.]+)\b"
 
-# Regular expression used for recognition of textual content-type  #ÓÃÓÚÊ¶±ğÎÄ±¾µÄÄÚÈİÀàĞÍµÄÕıÔò±í´ïÊ½
+# Regular expression used for recognition of textual content-type  #ç”¨äºè¯†åˆ«æ–‡æœ¬çš„å†…å®¹ç±»å‹çš„æ­£åˆ™è¡¨è¾¾å¼
 TEXT_CONTENT_TYPE_REGEX = r"(?i)(text|form|message|xml|javascript|ecmascript|json)"
 
-# Regular expression used for recognition of generic permission messages #ÓÃÓÚÊ¶±ğÍ¨ÓÃµÄÈ¨ÏŞĞÅÏ¢µÄÕıÔò±í´ïÊ½
+# Regular expression used for recognition of generic permission messages #ç”¨äºè¯†åˆ«é€šç”¨çš„æƒé™ä¿¡æ¯çš„æ­£åˆ™è¡¨è¾¾å¼
 PERMISSION_DENIED_REGEX = r"(command|permission|access)\s*(was|is)?\s*denied"
 
 # Regular expression used for recognition of generic maximum connection messages
 MAX_CONNECTIONS_REGEX = r"max.+connections"
 
-# Regular expression used for extracting results from Google search  #ÓÃÓÚÌáÈ¡À´×ÔÓÚGoogleËÑË÷½á¹ûµÄÕıÔò±í´ïÊ½
+# Regular expression used for extracting results from Google search  #ç”¨äºæå–æ¥è‡ªäºGoogleæœç´¢ç»“æœçš„æ­£åˆ™è¡¨è¾¾å¼
 GOOGLE_REGEX = r"webcache\.googleusercontent\.com/search\?q=cache:[^:]+:([^+]+)\+&amp;cd=|url\?\w+=((?![^>]+webcache\.googleusercontent\.com)http[^>]+)&(sa=U|rct=j)"
 
 # Regular expression used for extracting results from DuckDuckGo search
@@ -90,29 +90,29 @@ DUCKDUCKGO_REGEX = r'"u":"([^"]+)'
 # Regular expression used for extracting results from Disconnect Search
 DISCONNECT_SEARCH_REGEX = r'<p class="url wrapword">([^<]+)</p>'
 
-# Dummy user agent for search (if default one returns different results)  #Ğé¼ÙµÄÓÃ»§´úÀí
+# Dummy user agent for search (if default one returns different results)  #è™šå‡çš„ç”¨æˆ·ä»£ç†
 DUMMY_SEARCH_USER_AGENT = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0"
 
-# Regular expression used for extracting content from "textual" tags  #ÓÃÓÚÌáÈ¡À´×ÔÓÚÎÄ±¾µÄ±êÇ©µÄÄÚÈİµÄÕıÔò±í´ïÊ½
+# Regular expression used for extracting content from "textual" tags  #ç”¨äºæå–æ¥è‡ªäºæ–‡æœ¬çš„æ ‡ç­¾çš„å†…å®¹çš„æ­£åˆ™è¡¨è¾¾å¼
 TEXT_TAG_REGEX = r"(?si)<(abbr|acronym|b|blockquote|br|center|cite|code|dt|em|font|h\d|i|li|p|pre|q|strong|sub|sup|td|th|title|tt|u)(?!\w).*?>(?P<result>[^<]+)"
 
-# Regular expression used for recognition of IP addresses #ÓÃÓÚÊ¶±ğIPµØÖ·µÄÕıÔò±í´ïÊ½
+# Regular expression used for recognition of IP addresses #ç”¨äºè¯†åˆ«IPåœ°å€çš„æ­£åˆ™è¡¨è¾¾å¼
 IP_ADDRESS_REGEX = r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"
 
-# Regular expression used for recognition of generic "your ip has been blocked" messages  #ÓÃÓÚÊ¶±ğÍ¨ÓÃµÄIPµØÖ·Ëø¶¨µÄÏûÏ¢
+# Regular expression used for recognition of generic "your ip has been blocked" messages  #ç”¨äºè¯†åˆ«é€šç”¨çš„IPåœ°å€é”å®šçš„æ¶ˆæ¯
 BLOCKED_IP_REGEX = r"(?i)(\A|\b)ip\b.*\b(banned|blocked|block list|firewall)"
 
 # Dumping characters used in GROUP_CONCAT MySQL technique
 CONCAT_ROW_DELIMITER = ','
 CONCAT_VALUE_DELIMITER = '|'
 
-# Coefficient used for a time-based query delay checking (must be >= 7)  #»ùÓÚÊ±¼äµÄ²éÑ¯ÑÓ³Ù¼ì²â
+# Coefficient used for a time-based query delay checking (must be >= 7)  #åŸºäºæ—¶é—´çš„æŸ¥è¯¢å»¶è¿Ÿæ£€æµ‹
 TIME_STDEV_COEFF = 7
 
-# Minimum response time that can be even considered as delayed (not a complete requirement)  #×îĞ¡ÑÓ³ÙÊ±¼ä×÷ÎªÑÓ³Ù
+# Minimum response time that can be even considered as delayed (not a complete requirement)  #æœ€å°å»¶è¿Ÿæ—¶é—´ä½œä¸ºå»¶è¿Ÿ
 MIN_VALID_DELAYED_RESPONSE = 0.5
 
-# Standard deviation after which a warning message should be displayed about connection lags  #±ê×¼Îó²î
+# Standard deviation after which a warning message should be displayed about connection lags  #æ ‡å‡†è¯¯å·®
 WARN_TIME_STDEV = 0.5
 
 # Minimum length of usable union injected response (quick defense against substr fields)
@@ -169,10 +169,10 @@ INFERENCE_EQUALS_CHAR = "="
 # Character used for operation "not-equals" in inference
 INFERENCE_NOT_EQUALS_CHAR = "!="
 
-# String used for representation of unknown DBMS  #ÓÃÓÚ±íÊ¾Î´ÖªµÄDBMS
+# String used for representation of unknown DBMS  #ç”¨äºè¡¨ç¤ºæœªçŸ¥çš„DBMS
 UNKNOWN_DBMS = "Unknown"
 
-# String used for representation of unknown DBMS version  #ÓÃÓÚ±íÊ¾Î´ÖªµÄDBMSµÄ°æ±¾
+# String used for representation of unknown DBMS version  #ç”¨äºè¡¨ç¤ºæœªçŸ¥çš„DBMSçš„ç‰ˆæœ¬
 UNKNOWN_DBMS_VERSION = "Unknown"
 
 # Dynamicity mark length used in dynamicity removal engine
@@ -181,18 +181,18 @@ DYNAMICITY_MARK_LENGTH = 32
 # Dummy user prefix used in dictionary attack
 DUMMY_USER_PREFIX = "__dummy__"
 
-# Reference: http://en.wikipedia.org/wiki/ISO/IEC_8859-1  #Ä¬ÈÏµÄÒ³Ãæ±àÂë
+# Reference: http://en.wikipedia.org/wiki/ISO/IEC_8859-1  #é»˜è®¤çš„é¡µé¢ç¼–ç 
 DEFAULT_PAGE_ENCODING = "iso-8859-1"
 
 # URL used in dummy runs
 DUMMY_URL = "http://foo/bar?id=1"
 
 # System variables
-IS_WIN = subprocess.mswindows  #ÅĞ¶ÏÊÇ·ñÊÇwindowsÆ½Ì¨
+IS_WIN = subprocess.mswindows  #åˆ¤æ–­æ˜¯å¦æ˜¯windowså¹³å°
 
 # The name of the operating system dependent module imported. The following names have currently been registered: 'posix', 'nt', 'mac', 'os2', 'ce', 'java', 'riscos'
-PLATFORM = os.name  #Æ½Ì¨µÄÃû×Ö
-PYVERSION = sys.version.split()[0]  #Æ½Ì¨µÄ°æ±¾
+PLATFORM = os.name  #å¹³å°çš„åå­—
+PYVERSION = sys.version.split()[0]  #å¹³å°çš„ç‰ˆæœ¬
 
 # DBMS system databases
 MSSQL_SYSTEM_DBS = ("Northwind", "master", "model", "msdb", "pubs", "tempdb")
@@ -233,7 +233,7 @@ SUPPORTED_OS = ("linux", "windows")
 
 DBMS_ALIASES = ((DBMS.MSSQL, MSSQL_ALIASES), (DBMS.MYSQL, MYSQL_ALIASES), (DBMS.PGSQL, PGSQL_ALIASES), (DBMS.ORACLE, ORACLE_ALIASES), (DBMS.SQLITE, SQLITE_ALIASES), (DBMS.ACCESS, ACCESS_ALIASES), (DBMS.FIREBIRD, FIREBIRD_ALIASES), (DBMS.MAXDB, MAXDB_ALIASES), (DBMS.SYBASE, SYBASE_ALIASES), (DBMS.DB2, DB2_ALIASES), (DBMS.HSQLDB, HSQLDB_ALIASES))
 
-USER_AGENT_ALIASES = ("ua", "useragent", "user-agent")  #ÓÃ»§´úÀíµÄ±ğÃû
+USER_AGENT_ALIASES = ("ua", "useragent", "user-agent")  #ç”¨æˆ·ä»£ç†çš„åˆ«å
 REFERER_ALIASES = ("ref", "referer", "referrer")
 HOST_ALIASES = ("host",)
 
@@ -287,7 +287,7 @@ BLANK = "<blank>"
 # String representation for current database
 CURRENT_DB = "CD"
 
-# Regular expressions used for finding file paths in error messages  #ÓÃÓÚÔÚ´íÎóĞÅÏ¢ÖĞ·¢ÏÖÎÄ¼şÂ·¾¶
+# Regular expressions used for finding file paths in error messages  #ç”¨äºåœ¨é”™è¯¯ä¿¡æ¯ä¸­å‘ç°æ–‡ä»¶è·¯å¾„
 FILE_PATH_REGEXES = (r" in (file )?<b>(?P<result>.*?)</b> on line", r"(?:[>(\[\s])(?P<result>[A-Za-z]:[\\/][\w.\\/-]*)", r"(?:[>(\[\s])(?P<result>/\w[/\w.-]+)", r"href=['\"]file://(?P<result>/[^'\"]+)")
 
 # Regular expressions used for parsing error messages (--parse-errors)
@@ -326,7 +326,7 @@ BURP_XML_HISTORY_REGEX = r'<port>(\d+)</port>.+?<request base64="true"><!\[CDATA
 # Encoding used for Unicode data
 UNICODE_ENCODING = "utf8"
 
-# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri  #Í³Ò»×ÊÔ´±êÊ¶·û£¨Uniform Resource Identifier£¬»òURI)ÊÇÒ»¸öÓÃÓÚ±êÊ¶Ä³Ò»»¥ÁªÍø×ÊÔ´Ãû³ÆµÄ×Ö·û´®¡£
+# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri  #ç»Ÿä¸€èµ„æºæ ‡è¯†ç¬¦ï¼ˆUniform Resource Identifierï¼Œæˆ–URI)æ˜¯ä¸€ä¸ªç”¨äºæ ‡è¯†æŸä¸€äº’è”ç½‘èµ„æºåç§°çš„å­—ç¬¦ä¸²ã€‚
 URI_HTTP_HEADER = "URI"
 
 # Uri format which could be injectable (e.g. www.site.com/id82)

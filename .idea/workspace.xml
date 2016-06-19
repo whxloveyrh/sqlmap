@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/enums.py" afterPath="$PROJECT_DIR$/lib/core/enums.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/settings.py" afterPath="$PROJECT_DIR$/lib/core/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sqlmap-master.iws" />
@@ -29,8 +29,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="enums.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="enums.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/core/enums.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/core/settings.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.028801844">
               <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
@@ -75,8 +85,8 @@
         <option value="$PROJECT_DIR$/lib/core/agent.py" />
         <option value="$PROJECT_DIR$/lib/request/connect.py" />
         <option value="$PROJECT_DIR$/lib/controller/controller.py" />
-        <option value="$PROJECT_DIR$/lib/core/settings.py" />
         <option value="$PROJECT_DIR$/lib/core/enums.py" />
+        <option value="$PROJECT_DIR$/lib/core/settings.py" />
       </list>
     </option>
   </component>
@@ -388,7 +398,13 @@
       <option name="project" value="LOCAL" />
       <updated>1466261052171</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="come from lab desktop 20160619 09:38:00&#10;modify lib\core\enums.py&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;">
+      <created>1466300322842</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1466300322842</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView">
@@ -406,6 +422,7 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14857745" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991454" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.50790304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -414,7 +431,6 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23418804" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14901665" sideWeight="0.50598294" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -462,7 +478,8 @@
     <MESSAGE value="test first github controller&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
     <MESSAGE value="come from lab desktop&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
     <MESSAGE value="come from lab desktop 20160618 22:43:00&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="come from lab desktop 20160618 22:43:00&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
+    <MESSAGE value="come from lab desktop 20160619 09:38:00&#10;modify lib\core\enums.py&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="come from lab desktop 20160619 09:38:00&#10;modify lib\core\enums.py&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -883,15 +900,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/core/settings.py">
+    <entry file="file://$PROJECT_DIR$/lib/core/enums.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7281106">
-          <caret line="344" column="15" selection-start-line="344" selection-start-column="15" selection-end-line="344" selection-end-column="15" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/core/enums.py">
+    <entry file="file://$PROJECT_DIR$/lib/core/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.028801844">
           <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
