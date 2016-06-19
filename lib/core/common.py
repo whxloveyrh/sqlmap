@@ -1106,6 +1106,7 @@ def checkFile(filename, raiseOnError=True):
 
     valid = True
 
+    # os.path.isfile(path)  #判断路径是否为文件
     try:
         if filename is None or not os.path.isfile(filename):
             valid = False
@@ -1183,6 +1184,9 @@ def setPaths():
     Sets absolute paths for project directories and files
     """
 
+    '''
+    os.path.join(path1[, path2[, ...]])  #把目录和文件名合成一个路径
+    '''
     # sqlmap paths
     paths.SQLMAP_EXTRAS_PATH = os.path.join(paths.SQLMAP_ROOT_PATH, "extra")
     paths.SQLMAP_PROCS_PATH = os.path.join(paths.SQLMAP_ROOT_PATH, "procs")
@@ -1195,6 +1199,9 @@ def setPaths():
     paths.SQLMAP_XML_BANNER_PATH = os.path.join(paths.SQLMAP_XML_PATH, "banner")
     paths.SQLMAP_XML_PAYLOADS_PATH = os.path.join(paths.SQLMAP_XML_PATH, "payloads")
 
+    '''
+    os.path.expanduser(path)  #把path中包含的"~"和"~user"转换成用户目录
+    '''
     _ = os.path.join(os.path.expandvars(os.path.expanduser("~")), ".sqlmap") #把path中包含的"~"和"~user"转换成用户目录
     paths.SQLMAP_OUTPUT_PATH = getUnicode(paths.get("SQLMAP_OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
     paths.SQLMAP_DUMP_PATH = os.path.join(paths.SQLMAP_OUTPUT_PATH, "%s", "dump")
@@ -1224,7 +1231,7 @@ def setPaths():
 
     for path in paths.values():
         if any(path.endswith(_) for _ in (".txt", ".xml", ".zip")):
-            checkFile(path)
+            checkFile(path)  #checkFile()函数的目的在于判断path是否是文件
 
 def weAreFrozen():
     """
