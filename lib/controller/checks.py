@@ -1305,6 +1305,9 @@ def checkWaf():
     infoMsg += "some kind of WAF/IPS/IDS"
     logger.info(infoMsg)
 
+    '''
+    retVal=False返回值默认为False，表示没有防火墙。否则，retVal=表示存在防火墙
+    '''
     retVal = False
     '''
     构建payload，判断是否存在防火墙
@@ -1347,7 +1350,7 @@ def checkWaf():
     return retVal
 
 def identifyWaf():
-    if not conf.identifyWaf:
+    if not conf.identifyWaf: # 当存在防火墙的时候，conf.identifyWaf=True。否则，conf.identifyWaf=False
         return None
 
     if not kb.wafFunctions:

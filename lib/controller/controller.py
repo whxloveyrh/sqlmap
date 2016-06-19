@@ -298,11 +298,11 @@ def start():
 
     for targetUrl, targetMethod, targetData, targetCookie, targetHeaders in kb.targets:
         try: #开始检测
-            conf.url = targetUrl
-            conf.method = targetMethod.upper() if targetMethod else targetMethod
-            conf.data = targetData
-            conf.cookie = targetCookie
-            conf.httpHeaders = list(initialHeaders)
+            conf.url = targetUrl  # -u or --url 测试的目标URL
+            conf.method = targetMethod.upper() if targetMethod else targetMethod  #--method 参数，默认情况下，sqlmap是自动检测，只有当需要检查的方法是put的时候，需要显示指定 --method=PUT
+            conf.data = targetData     # --data 参数，此参数是把数据以POST方式提交，sqlmap会像检测GET参数一样检测POST的参数。详细查看readme.pdf  28pages
+            conf.cookie = targetCookie # --cookie 参数， 当你使用--cookie参数时，当返回一个Set-Cookie头的时候，sqlmap会询问你用哪个cookie来继续接下来的请求。当--level的参数设定为2或者2以上的时候，sqlmap会尝试注入Cookie参数。
+            conf.httpHeaders = list(initialHeaders)  # 参数：--headers  可以通过--headers参数来增加额外的http头
             conf.httpHeaders.extend(targetHeaders or [])
 
             initTargetEnv()  #主要就是完成全局变量conf和kb的初始化工作
@@ -311,6 +311,8 @@ def start():
             testSqlInj = False #表示是否注入过，默认表示注入过(即testSqlInj=false)
 
             '''
+            conf.parameters保存需要进行SQL注入点测试的参数信息，conf.parameters是一个字典
+            kb.testedParams保存已经测试了的参数信息
             测试过的url参数信息会保存到kb.testedParams中（第230行和第259行），所以在进行test之前，会先判断当前的url是否已经test过
             如果没test过的话，则testSqlInj = True，否则testSqlInj = False。
             当testSqlInj = False的时候，表示当前需要进行测试的URL已经测试过了，就不会执行 injection = checkSqlInjection(place, parameter, value)这句代码了
@@ -323,7 +325,7 @@ def start():
                         testSqlInj = True
                         break
             else:
-                paramKey = (conf.hostname, conf.path, None, None)
+                paramKey = (conf.hostname, conf.path, None, None)  #测试其他参数信息，判断是否存在注入信息
                 if paramKey not in kb.testedParams:
                     testSqlInj = True
 

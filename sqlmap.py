@@ -142,7 +142,7 @@ def main():
         elif conf.smokeTest:
             smokeTest() #冒烟测试
         elif conf.liveTest:
-            liveTest()
+            liveTest()  #存活测试
         else:
             try:
                 start()   #检测开始的地方，start()函数位于controller.py中
