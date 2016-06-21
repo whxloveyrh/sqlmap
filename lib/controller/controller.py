@@ -568,6 +568,8 @@ def start():
                                 2.绝对路径获取。
                                 3.XSS的测试
                                 参考网站地址：http://drops.wooyun.org/papers/10652
+                                heuristic <basic> test shows that GET parameter
+                                heuristic <XSS> test shows that GET parameter
                                 '''
                                 check = heuristicCheckSqlInjection(place, parameter)  #进行简单的测试，设置一个payload(攻击点代码)，然后解析请求结果
 
