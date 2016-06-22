@@ -87,7 +87,7 @@ def cmdLineParser(argv=None):
 
         '''从Burp或者WebScarab代理中获取日志
         参数：-l
-        可以直接吧Burp proxy或者WebScarab proxy中的日志直接倒出来交给sqlmap来一个一个检测是否有注入。
+        可以直接把Burp proxy或者WebScarab proxy中的日志直接倒出来交给sqlmap来一个一个检测是否有注入。
         '''
         target.add_option("-l", dest="logFile", help="Parse target(s) from Burp "
                           "or WebScarab proxy log file")
@@ -184,7 +184,7 @@ def cmdLineParser(argv=None):
         '''HTTP User-Agent头
         参数：--user-agent,--random-agent
         默认情况下sqlmap的HTTP请求头中User-Agent值是：sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)
-        可以使用--user-anget参数来修改，同时也可以使用--random-agnet参数来随机的从./txt/user-agents.txt中获取。
+        可以使用--user-anget参数来修改，同时也可以使用--random-agent参数来随机的从./txt/user-agents.txt中获取。
         当--level参数设定为3或者3以上的时候，会尝试对User-Angent进行注入。
         '''
         request.add_option("--user-agent", dest="agent",

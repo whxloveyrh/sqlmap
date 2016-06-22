@@ -263,6 +263,17 @@ def main():
         if conf.get("showTime"):
             dataToStdout("\n[*] shutting down at %s\n\n" % time.strftime("%X"), forceOutput=True)
 
+        '''
+        返回所有匹配的文件路径列表。例如，
+        >>> import glob
+        >>> print glob.glob(r'*.py')
+        ['sqlmap.py', 'sqlmapapi.py']
+        >>> print glob.glob(r'*.py');
+        ['sqlmap.py', 'sqlmapapi.py']
+        >>> print glob.glob(r'E:\SQLMap\*.py')
+        ['E:\\SQLMap\\sqlmap.py', 'E:\\SQLMap\\sqlmapapi.py']
+        >>>
+        '''
         if kb.get("tempDir"):  #kb是一个字典
                 for prefix in (MKSTEMP_PREFIX.IPC, MKSTEMP_PREFIX.TESTING, MKSTEMP_PREFIX.COOKIE_JAR, MKSTEMP_PREFIX.BIG_ARRAY):
                     for filepath in glob.glob(os.path.join(kb.tempDir, "%s*" % prefix)):
