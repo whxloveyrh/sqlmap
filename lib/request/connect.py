@@ -726,7 +726,7 @@ class Connect(object):
         get = None
         post = None
         cookie = None
-        ua = None
+        ua = None          # user-agent
         referer = None
         host = None
         page = None
