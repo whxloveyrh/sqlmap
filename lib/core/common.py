@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -2601,6 +2601,15 @@ def extractRegexResult(regex, content, flags=0):
     'bcdef'
     """
 
+    '''
+    捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。
+    捕获组有两种形式，一种是普通捕获组，另一种是命名捕获组，通常所说的捕获组指的是普通捕获组。语法如下：
+        普通捕获组：(Expression)
+        命名捕获组：(?<name>Expression)
+    普通捕获组在大多数支持正则表达式的语言或工具中都是支持的，而命名捕获组目前只有.NET、PHP、Python等部分语言支持，据说Java会在7.0中提供对这一特性的支持。
+    上面给出的命名捕获组的语法是.NET中的语法，另外在.NET中使用(?’name’Expression)与使用(?<name>Expression)是等价的。
+    在PHP和Python中命名捕获组语法为：(?P<name>Expression)。
+    '''
     retVal = None
 
     if regex and content and "?P<result>" in regex:

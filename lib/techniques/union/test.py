@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -164,6 +164,15 @@ def _unionPosition(comment, place, parameter, prefix, suffix, count, where=PAYLO
 
     positions = range(0, count)
 
+    '''参考：http://blog.sina.com.cn/s/blog_4b5039210100fzl3.html
+    random.shuffle
+    random.shuffle的函数原型为：random.shuffle(x[, random])，用于将一个列表中的元素打乱。
+    >>> p=['This','is','python']
+    >>> random.shuffle(p)
+    >>> p
+    ['This', 'python', 'is']
+    >>>
+    '''
     # Unbiased approach for searching appropriate usable column
     random.shuffle(positions)
 

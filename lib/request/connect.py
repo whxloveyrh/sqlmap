@@ -743,8 +743,8 @@ class Connect(object):
         raise404 = place != PLACE.URI if raise404 is None else raise404
         method = method or conf.method
 
-        value = agent.adjustLateValues(value)
-        payload = agent.extractPayload(value)
+        value = agent.adjustLateValues(value)  # 针对基于时间的注入(time-based injection detection)进行填充SLEEPTIME的值
+        payload = agent.extractPayload(value)  # 提取出分割符之间的注入数据
         threadData = getCurrentThreadData()
 
         if conf.httpHeaders:
@@ -841,35 +841,35 @@ class Connect(object):
                     warnMsg += "GET and POST parameters"
                     singleTimeWarnMessage(warnMsg)
 
-        #place存储的是GET/POST等信息，详细见lib\core\enums.py
+        # place存储的是GET/POST等信息，详细见lib\core\enums.py
         if place:
-            value = agent.removePayloadDelimiters(value)  #删除分隔符
+            value = agent.removePayloadDelimiters(value)  # 删除分隔符
 
         '''
         conf.parameters存储了cookie、GET参数、User-Agent信息等
         '''
-        if PLACE.GET in conf.parameters: #获得请求的参数信息，使用参数get存储
+        if PLACE.GET in conf.parameters:  # 获得请求的参数信息，使用参数get存储
             get = conf.parameters[PLACE.GET] if place != PLACE.GET or not value else value
         elif place == PLACE.GET:  # Note: for (e.g.) checkWaf() when there are no GET parameters
             get = value
 
-        if PLACE.POST in conf.parameters:  #获取post请求的参数信息
+        if PLACE.POST in conf.parameters:  # 获取post请求的参数信息
             post = conf.parameters[PLACE.POST] if place != PLACE.POST or not value else value
         elif place == PLACE.POST:
             post = value
 
-        if PLACE.CUSTOM_POST in conf.parameters: #获取自定义post请求的参数信息
+        if PLACE.CUSTOM_POST in conf.parameters:  # 获取自定义post请求的参数信息
             post = conf.parameters[PLACE.CUSTOM_POST].replace(CUSTOM_INJECTION_MARK_CHAR, "") if place != PLACE.CUSTOM_POST or not value else value
             post = post.replace(ASTERISK_MARKER, '*') if post else post
 
-        #获取cookie信息
+        # 获取cookie信息
         if PLACE.COOKIE in conf.parameters:
             cookie = conf.parameters[PLACE.COOKIE] if place != PLACE.COOKIE or not value else value
 
         '''
         User-Agent作用：告诉HTTP服务器， 客户端使用的操作系统和浏览器的名称和版本.
         '''
-        if PLACE.USER_AGENT in conf.parameters: #获取用户代理信息
+        if PLACE.USER_AGENT in conf.parameters:  # 获取用户代理信息
             ua = conf.parameters[PLACE.USER_AGENT] if place != PLACE.USER_AGENT or not value else value
 
         '''Referer:

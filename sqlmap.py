@@ -107,10 +107,10 @@ def main():
     """
 
     try:
-        checkEnvironment()  #检查系统环境
+        checkEnvironment()  # 检查系统环境
 
-        setPaths()          #设置路径
-        banner()            #打印sqlmap标识信息
+        setPaths()          # 设置路径
+        banner()            # 打印sqlmap标识信息
 
         '''
         cmdLineParser()解析命令行参数
@@ -119,7 +119,7 @@ def main():
         cmdLineOptions.update(cmdLineParser().__dict__)
         initOptions(cmdLineOptions)
 
-        if hasattr(conf, "api"):  #hasattr用于确定一个对象是否具有某一个属性
+        if hasattr(conf, "api"):  # hasattr用于确定一个对象是否具有某一个属性
             '''
             语法：
             hasattr(object,name)->bool
@@ -135,17 +135,17 @@ def main():
         dataToStdout("[!] legal disclaimer: %s\n\n" % LEGAL_DISCLAIMER, forceOutput=True)
         dataToStdout("[*] starting at %s\n\n" % time.strftime("%X"), forceOutput=True)
 
-        init()  #初始化环境信息
+        init()  # 初始化环境信息
 
         if conf.profile:
-            profile()  #sqlmap程序运行时的环境信息
+            profile()    # sqlmap程序运行时的环境信息
         elif conf.smokeTest:
-            smokeTest() #冒烟测试
+            smokeTest()  # 冒烟测试
         elif conf.liveTest:
-            liveTest()  #存活测试
+            liveTest()   # 存活测试
         else:
             try:
-                start()   #检测开始的地方，start()函数位于controller.py中
+                start()   # 检测开始的地方，start()函数位于controller.py中
             except thread.error as ex:
                 if "can't start new thread" in getSafeExString(ex):
                     errMsg = "unable to start new threads. Please check OS (u)limits"

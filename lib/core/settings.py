@@ -326,7 +326,8 @@ BURP_XML_HISTORY_REGEX = r'<port>(\d+)</port>.+?<request base64="true"><!\[CDATA
 # Encoding used for Unicode data
 UNICODE_ENCODING = "utf8"
 
-# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri  #统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。
+# Reference: http://www.w3.org/Protocols/HTTP/Object_Headers.html#uri
+# #统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。
 URI_HTTP_HEADER = "URI"
 
 # Uri format which could be injectable (e.g. www.site.com/id82)
