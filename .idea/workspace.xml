@@ -2,17 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" afterPath="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/controller/checks.py" afterPath="$PROJECT_DIR$/lib/controller/checks.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/common.py" afterPath="$PROJECT_DIR$/lib/core/common.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/request/comparison.py" afterPath="$PROJECT_DIR$/lib/request/comparison.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/request/connect.py" afterPath="$PROJECT_DIR$/lib/request/connect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/settings.py" afterPath="$PROJECT_DIR$/lib/core/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/sqlmap-master.iml" afterPath="$PROJECT_DIR$/.idea/sqlmap-master.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sqlmap.py" afterPath="$PROJECT_DIR$/sqlmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/techniques/union/test.py" afterPath="$PROJECT_DIR$/lib/techniques/union/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/techniques/union/use.py" afterPath="$PROJECT_DIR$/lib/techniques/union/use.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sqlmap-master.iws" />
@@ -42,8 +31,8 @@
       <file leaf-file-name="checks.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/controller/checks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.048824593">
-              <caret line="331" column="46" selection-start-line="331" selection-start-column="46" selection-end-line="331" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.3589365">
+              <caret line="341" column="7" selection-start-line="341" selection-start-column="7" selection-end-line="341" selection-end-column="7" />
               <folding>
                 <element signature="e#166#177#0" expanded="true" />
               </folding>
@@ -547,7 +536,19 @@
       <option name="project" value="LOCAL" />
       <updated>1466557638205</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="come from lab desktop 20160625 23:21:00&#10;&#10;sqlmap-master.iml&#10;workspace.xml&#10;checks.py&#10;common.py&#10;settings.py&#10;comparison.py&#10;connect.py&#10;test.py&#10;use.py&#10;sqlmap.py&#10;01_boolean_blind.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;">
+      <created>1466868071626</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1466868071626</updated>
+    </task>
+    <task id="LOCAL-00012" summary="come from lab desktop 20160625 23:21:00&#10;&#10;hx.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;">
+      <created>1466868113804</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1466868113804</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -561,22 +562,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1924" height="1056" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17656416" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991454" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.50790304" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31772575" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17948718" sideWeight="0.49209693" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17948718" sideWeight="0.49209693" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32887402" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1369863" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23418804" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17656416" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31772575" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1369863" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14901665" sideWeight="0.50598294" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3690078" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -626,7 +627,9 @@
     <MESSAGE value="come from lab desktop 20160619 19:38:00&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
     <MESSAGE value="come from lab desktop 20160619 20:38:00&#10;&#10;update&#10;controller.py&#10;misc.xml&#10;workspace.xml&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
     <MESSAGE value="come from lab desktop 20160622 09:08:00&#10;&#10;update&#10;controller.py&#10;cmdline.py&#10;sqlmap.py&#10;workspace.xml&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="come from lab desktop 20160622 09:08:00&#10;&#10;update&#10;controller.py&#10;cmdline.py&#10;sqlmap.py&#10;workspace.xml&#10;&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
+    <MESSAGE value="come from lab desktop 20160625 23:21:00&#10;&#10;sqlmap-master.iml&#10;workspace.xml&#10;checks.py&#10;common.py&#10;settings.py&#10;comparison.py&#10;connect.py&#10;test.py&#10;use.py&#10;sqlmap.py&#10;01_boolean_blind.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
+    <MESSAGE value="come from lab desktop 20160625 23:21:00&#10;&#10;hx.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="come from lab desktop 20160625 23:21:00&#10;&#10;hx.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1098,8 +1101,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/controller/checks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.048824593">
-          <caret line="331" column="46" selection-start-line="331" selection-start-column="46" selection-end-line="331" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.3589365">
+          <caret line="341" column="7" selection-start-line="341" selection-start-column="7" selection-end-line="341" selection-end-column="7" />
           <folding>
             <element signature="e#166#177#0" expanded="true" />
           </folding>
