@@ -213,7 +213,7 @@ Tag: <test>
 
 <root>
     <!-- Boolean-based blind tests - WHERE/HAVING clause -->
-    <test>
+    <!--<test>
         <title>AND boolean-based blind - WHERE or HAVING clause</title>
         <stype>1</stype>
         <level>1</level>
@@ -243,7 +243,7 @@ Tag: <test>
         <response>
             <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
         </response>
-    </test>
+    </test>-->
 
     <test>
         <title>OR boolean-based blind - WHERE or HAVING clause (NOT)</title>
@@ -312,7 +312,7 @@ Tag: <test>
         </response>
     </test>
 
-    <test>
+   <!-- <test>
         <title>AND boolean-based blind - WHERE or HAVING clause (MySQL comment)</title>
         <stype>1</stype>
         <level>3</level>
@@ -330,9 +330,9 @@ Tag: <test>
         <details>
             <dbms>MySQL</dbms>
         </details>
-    </test>
+    </test>-->
 
-    <test>
+    <!--<test>
         <title>OR boolean-based blind - WHERE or HAVING clause (MySQL comment)</title>
         <stype>1</stype>
         <level>3</level>
@@ -350,7 +350,7 @@ Tag: <test>
         <details>
             <dbms>MySQL</dbms>
         </details>
-    </test>
+    </test>-->
 
     <test>
         <title>OR boolean-based blind - WHERE or HAVING clause (MySQL comment) (NOT)</title>

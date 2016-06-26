@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -1106,6 +1106,7 @@ def checkFile(filename, raiseOnError=True):
 
     valid = True
 
+    # os.path.isfile(path)  #判断路径是否为文件
     try:
         if filename is None or not os.path.isfile(filename):
             valid = False
@@ -1183,6 +1184,9 @@ def setPaths():
     Sets absolute paths for project directories and files
     """
 
+    '''
+    os.path.join(path1[, path2[, ...]])  #把目录和文件名合成一个路径
+    '''
     # sqlmap paths
     paths.SQLMAP_EXTRAS_PATH = os.path.join(paths.SQLMAP_ROOT_PATH, "extra")
     paths.SQLMAP_PROCS_PATH = os.path.join(paths.SQLMAP_ROOT_PATH, "procs")
@@ -1195,6 +1199,9 @@ def setPaths():
     paths.SQLMAP_XML_BANNER_PATH = os.path.join(paths.SQLMAP_XML_PATH, "banner")
     paths.SQLMAP_XML_PAYLOADS_PATH = os.path.join(paths.SQLMAP_XML_PATH, "payloads")
 
+    '''
+    os.path.expanduser(path)  #把path中包含的"~"和"~user"转换成用户目录
+    '''
     _ = os.path.join(os.path.expandvars(os.path.expanduser("~")), ".sqlmap") #把path中包含的"~"和"~user"转换成用户目录
     paths.SQLMAP_OUTPUT_PATH = getUnicode(paths.get("SQLMAP_OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
     paths.SQLMAP_DUMP_PATH = os.path.join(paths.SQLMAP_OUTPUT_PATH, "%s", "dump")
@@ -1224,7 +1231,7 @@ def setPaths():
 
     for path in paths.values():
         if any(path.endswith(_) for _ in (".txt", ".xml", ".zip")):
-            checkFile(path)
+            checkFile(path)  #checkFile()函数的目的在于判断path是否是文件
 
 def weAreFrozen():
     """
@@ -2594,6 +2601,15 @@ def extractRegexResult(regex, content, flags=0):
     'bcdef'
     """
 
+    '''
+    捕获组就是把正则表达式中子表达式匹配的内容，保存到内存中以数字编号或显式命名的组里，方便后面引用。当然，这种引用既可以是在正则表达式内部，也可以是在正则表达式外部。
+    捕获组有两种形式，一种是普通捕获组，另一种是命名捕获组，通常所说的捕获组指的是普通捕获组。语法如下：
+        普通捕获组：(Expression)
+        命名捕获组：(?<name>Expression)
+    普通捕获组在大多数支持正则表达式的语言或工具中都是支持的，而命名捕获组目前只有.NET、PHP、Python等部分语言支持，据说Java会在7.0中提供对这一特性的支持。
+    上面给出的命名捕获组的语法是.NET中的语法，另外在.NET中使用(?’name’Expression)与使用(?<name>Expression)是等价的。
+    在PHP和Python中命名捕获组语法为：(?P<name>Expression)。
+    '''
     retVal = None
 
     if regex and content and "?P<result>" in regex:
