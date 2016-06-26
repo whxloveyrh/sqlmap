@@ -1009,7 +1009,7 @@ class Connect(object):
             while True:
                 try:
                     compiler.parse(unicodeencode(conf.evalCode.replace(';', '\n')))
-                except SyntaxError, ex:
+                except SyntaxError, ex:  # SyntaxError语法错误
                     original = replacement = ex.text.strip()
                     for _ in re.findall(r"[A-Za-z_]+", original)[::-1]:
                         if _ in keywords:

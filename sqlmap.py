@@ -77,7 +77,7 @@ def modulePath():
 
     try:
         _ = sys.executable if weAreFrozen() else __file__
-    except NameError:
+    except NameError:  # 尝试访问一个未声明的变量，所抛出的异常
         _ = inspect.getsourcefile(modulePath)
 
     return getUnicode(os.path.dirname(os.path.realpath(_)), encoding=sys.getfilesystemencoding())

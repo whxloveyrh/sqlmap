@@ -142,7 +142,7 @@ class ConnectionManager:
         try:
             try:
                 host = self._connmap[connection]
-            except KeyError:
+            except KeyError:  # 字典关键字不存在
                 pass
             else:
                 del self._connmap[connection]

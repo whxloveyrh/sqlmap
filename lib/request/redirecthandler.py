@@ -132,7 +132,7 @@ class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
                 # Dirty hack for http://bugs.python.org/issue15701
                 try:
                     result.info()
-                except AttributeError:
+                except AttributeError:  # 访问未知对象属性
                     def _(self):
                         return getattr(self, "hdrs") or {}
                     result.info = types.MethodType(_, result)

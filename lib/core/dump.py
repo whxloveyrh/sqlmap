@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -486,7 +486,7 @@ class Dump(object):
                                 continue
 
                             int(value)
-                        except ValueError:
+                        except ValueError:  # 数值错误
                             colType = None
                             break
 

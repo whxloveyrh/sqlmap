@@ -899,7 +899,7 @@ def dataToStdout(data, forceOutput=False, bold=False, content_type=None, status=
 
             try:
                 sys.stdout.flush()
-            except IOError:
+            except IOError:  # 输入输出错误
                 pass
 
             if kb.get("multiThreadMode"):
@@ -2204,7 +2204,7 @@ def getPartRun(alias=True):
                 break
 
     # Reference: http://coding.derkeiler.com/Archive/Python/comp.lang.python/2004-06/2267.html
-    except TypeError:
+    except TypeError:  # 类型错误
         pass
 
     # Return the INI tag to consider for common outputs (e.g. 'Databases')
