@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- conding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -8,7 +8,7 @@ See the file 'doc/COPYING' for copying permission
 try:
     import _mssql
     import pymssql
-except ImportError:
+except ImportError:  # 无法引入模块或者包，基本是路径问题
     pass
 
 import logging

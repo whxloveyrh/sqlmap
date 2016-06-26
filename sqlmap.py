@@ -63,7 +63,7 @@ try:
     from lib.parse.cmdline import cmdLineParser
     from lib.utils.api import setRestAPILog
     from lib.utils.api import StdDbOut
-except KeyboardInterrupt:
+except KeyboardInterrupt:  # Ctrl+C被按下
     errMsg = "user aborted"
     logger.error(errMsg)
 
@@ -158,7 +158,22 @@ def main():
         errMsg = "user quit"
         try:
             logger.error(errMsg)
-        except KeyboardInterrupt:
+            '''
+            os._exit() 直接退出 Python 解释器，其后的代码都不执行。
+            sys.exit() 引发一个 SystemExit 异常，没有捕获这个异常，会直接退出；捕获这个异常可以做一些额外的清理工作。
+            exit() 跟 C 语言等其他语言的 exit() 应该是一样的。
+
+            Python退出程序的方式有两种：os._exit()， sys.exit()
+            1）os._exit() 直接退出 Python程序，其后的代码也不会继续执行。
+            2）sys.exit() 引发一个 SystemExit异常，若没有捕获这个异常，Python解释器会直接退出；捕获这个异常可以做一些额外的清理工作。0为正常退出，其他数值（1-127）为不正常，可抛异常事件供捕获。
+            3) exit() 跟 C 语言等其他语言的 exit() 应该是一样的。
+            os._exit() 调用 C 语言的 _exit() 函数。
+            __builtin__.exit 是一个 Quitter 对象，这个对象的 __call__ 方法会抛出一个 SystemExit 异常。
+            一般来说
+            os._exit() 用于在线程中退出
+            sys.exit() 用于在主线程中退出。
+            '''
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
     except (SqlmapSilentQuitException, bdb.BdbQuit):
@@ -171,17 +186,17 @@ def main():
         errMsg = getSafeExString(ex)
         try:
             logger.critical(errMsg)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
         raise SystemExit
 
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:  # Ctrl+C被按下
         print
 
         errMsg = "user aborted"
         try:
             logger.error(errMsg)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
     except EOFError:
@@ -190,7 +205,7 @@ def main():
 
         try:
             logger.error(errMsg)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
     except SystemExit:
@@ -253,7 +268,7 @@ def main():
                 dataToStdout(excMsg)
                 createGithubIssue(errMsg, excMsg)
 
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
     finally:
@@ -287,7 +302,7 @@ def main():
         if conf.get("hashDB"):   #conf是一个字典
             try:
                 conf.hashDB.flush(True)
-            except KeyboardInterrupt:
+            except KeyboardInterrupt:  # Ctrl+C被按下
                 pass
 
         if cmdLineOptions.get("sqlmapShell"):
@@ -299,7 +314,7 @@ def main():
         if hasattr(conf, "api"):
             try:
                 conf.database_cursor.disconnect()
-            except KeyboardInterrupt:
+            except KeyboardInterrupt:  # Ctrl+C被按下
                 pass
 
         if conf.get("dumper"):
@@ -310,7 +325,7 @@ def main():
             _ = time.time()
             while threading.activeCount() > 1 and (time.time() - _) > THREAD_FINALIZATION_TIMEOUT:
                 time.sleep(0.01)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
         # Reference: http://stackoverflow.com/questions/1635080/terminate-a-multi-thread-python-program
