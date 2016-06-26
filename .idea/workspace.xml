@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="come from lab desktop 20160625 23:21:00&#10;&#10;hx.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/sqlmap-master.iml" afterPath="$PROJECT_DIR$/.idea/sqlmap-master.iml" />
+    <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/controller/checks.py" afterPath="$PROJECT_DIR$/lib/controller/checks.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/controller/controller.py" afterPath="$PROJECT_DIR$/lib/controller/controller.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/agent.py" afterPath="$PROJECT_DIR$/lib/core/agent.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/common.py" afterPath="$PROJECT_DIR$/lib/core/common.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/defaults.py" afterPath="$PROJECT_DIR$/lib/core/defaults.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/enums.py" afterPath="$PROJECT_DIR$/lib/core/enums.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/option.py" afterPath="$PROJECT_DIR$/lib/core/option.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/optiondict.py" afterPath="$PROJECT_DIR$/lib/core/optiondict.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/settings.py" afterPath="$PROJECT_DIR$/lib/core/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/testing.py" afterPath="$PROJECT_DIR$/lib/core/testing.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/parse/cmdline.py" afterPath="$PROJECT_DIR$/lib/parse/cmdline.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/request/comparison.py" afterPath="$PROJECT_DIR$/lib/request/comparison.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/request/connect.py" afterPath="$PROJECT_DIR$/lib/request/connect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/techniques/union/test.py" afterPath="$PROJECT_DIR$/lib/techniques/union/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/techniques/union/use.py" afterPath="$PROJECT_DIR$/lib/techniques/union/use.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sqlmap.py" afterPath="$PROJECT_DIR$/sqlmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" afterPath="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" />
     </list>
     <ignored path="sqlmap-master.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -526,7 +507,14 @@
       <option name="project" value="LOCAL" />
       <updated>1466868113804</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="come from lab desktop 20160625 23:21:00&#10;&#10;hx.xml&#10;Signed-off-by: wanghx &lt;wang010366@vip.qq.com&gt;&#10;">
+      <created>1466941180743</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1466941180743</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
