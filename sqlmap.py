@@ -104,6 +104,9 @@ def checkEnvironment():
 def main():
     """
     Main function of sqlmap when running from command line.
+    http://python.usyiyi.cn/
+    http://blog.csdn.net/pipisorry/article/details/39909057/
+    python异常类型:http://www.cnblogs.com/zhangpengshou/p/3565087.html
     """
 
     try:
