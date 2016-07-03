@@ -1036,7 +1036,7 @@ def heuristicCheckSqlInjection(place, parameter):
 
     kb.heuristicMode = True
 
-    payload = "%s%s%s" % (prefix, randStr, suffix)  #根据前缀和后缀，已经随机的字符，产生一个payload(攻击点)
+    payload = "%s%s%s" % (prefix, randStr, suffix)  # 根据前缀和后缀，已经随机的字符，产生一个payload(攻击点)
     payload = agent.payload(place, parameter, newValue=payload)
     page, _ = Request.queryPage(payload, place, content=True, raise404=False)
 
@@ -1046,8 +1046,8 @@ def heuristicCheckSqlInjection(place, parameter):
     kb.heuristicPage = page
     kb.heuristicMode = False
 
-    parseFilePaths(page)  #解析网页,查看是否会爆出绝对路径
-    result = wasLastResponseDBMSError()  #wasLastResponseDBMSError()函数主要是判断response中是否包含了数据库报错信息
+    parseFilePaths(page)  # 解析网页,查看是否会爆出绝对路径
+    result = wasLastResponseDBMSError()  # wasLastResponseDBMSError()函数主要是判断response中是否包含了数据库报错信息
 
     infoMsg = "heuristic (basic) test shows that %s parameter " % paramType
     infoMsg += "'%s' might " % parameter
