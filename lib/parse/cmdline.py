@@ -57,6 +57,7 @@ def cmdLineParser(argv=None):
     usage = "%s%s [options]" % ("python " if not IS_WIN else "", \
             "\"%s\"" % _ if " " in _ else _)
 
+    # optparse模块主要是用来解析处理命令行选项的
     parser = OptionParser(usage=usage)
 
     try:

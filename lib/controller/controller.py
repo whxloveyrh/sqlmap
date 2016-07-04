@@ -67,6 +67,7 @@ from lib.core.target import initTargetEnv
 from lib.core.target import setupTargetEnv
 from thirdparty.pagerank.pagerank import get_pagerank
 
+
 def _selectInjection():
     """
     Selection function for injection place, parameters and type.
@@ -129,6 +130,7 @@ def _selectInjection():
 
         kb.injection = kb.injections[index]
 
+
 def _formatInjection(inj):
     paramType = conf.method if conf.method not in (None, HTTPMETHOD.GET, HTTPMETHOD.POST) else inj.place
     data = "Parameter: %s (%s)\n" % (inj.parameter, paramType)
@@ -155,6 +157,7 @@ def _formatInjection(inj):
 
     return data
 
+
 def _showInjections():
     if kb.testQueryCount > 0:
         header = "sqlmap identified the following injection point(s) with "
@@ -178,6 +181,7 @@ def _showInjections():
         warnMsg += "included in shown payload content(s)"
         logger.warn(warnMsg)
 
+
 def _randomFillBlankFields(value):
     retVal = value
 
@@ -194,6 +198,7 @@ def _randomFillBlankFields(value):
                         retVal = retVal.replace(item, "%s%s" % (item, randomStr()))
 
     return retVal
+
 
 def _saveToHashDB():
     injections = hashDBRetrieve(HASHDB_KEYS.KB_INJECTIONS, True)
@@ -218,6 +223,7 @@ def _saveToHashDB():
 
     if not hashDBRetrieve(HASHDB_KEYS.KB_DYNAMIC_MARKINGS):
         hashDBWrite(HASHDB_KEYS.KB_DYNAMIC_MARKINGS, kb.dynamicMarkings, True)
+
 
 def _saveToResultsFile():
     if not conf.resultsFP:
@@ -245,6 +251,7 @@ def _saveToResultsFile():
         line = "%s,,,,%s" % (conf.url, os.linesep)
         conf.resultsFP.writelines(line)
 
+
 def start():
     """
     This function calls a function that performs checks on both URL
@@ -257,11 +264,11 @@ def start():
     通过参数"-d"指定要连接的数据库
     eg：-d "mysql:123123//root:@127.0.0.1:3306/security"
     '''
-    if conf.direct: #调用时，使用了-d选项,那么sqlmap就会会直接进入action()函数中，连接数据库
+    if conf.direct:         # 调用时，使用了-d选项,那么sqlmap就会会直接进入action()函数中，连接数据库
         '''
         for example: python sqlmap.py -d "mysql://admin:admin@192.168.75.128:3306/testdb" -f --banner --dbs --user
         '''
-        initTargetEnv()   #函数主要就是完成全局变量conf和kb的初始化工作
+        initTargetEnv()     # 函数主要就是完成全局变量conf和kb的初始化工作
         '''
         setupTargetEnv()
         该函数主要包含3个子功能：
@@ -289,7 +296,7 @@ def start():
         logger.error(errMsg)
         return False
 
-    if kb.targets and len(kb.targets) > 1:  #需要测试多个目标URL
+    if kb.targets and len(kb.targets) > 1:  # 需要测试多个目标URL
         infoMsg = "sqlmap got a total of %d targets" % len(kb.targets)
         logger.info(infoMsg)
 
@@ -297,18 +304,18 @@ def start():
     initialHeaders = list(conf.httpHeaders)
 
     for targetUrl, targetMethod, targetData, targetCookie, targetHeaders in kb.targets:
-        try: #开始检测
-            conf.url = targetUrl  # -u or --url 测试的目标URL
-            conf.method = targetMethod.upper() if targetMethod else targetMethod  #--method 参数，默认情况下，sqlmap是自动检测，只有当需要检查的方法是put的时候，需要显示指定 --method=PUT
-            conf.data = targetData     # --data 参数，此参数是把数据以POST方式提交，sqlmap会像检测GET参数一样检测POST的参数。详细查看readme.pdf  28pages
-            conf.cookie = targetCookie # --cookie 参数， 当你使用--cookie参数时，当返回一个Set-Cookie头的时候，sqlmap会询问你用哪个cookie来继续接下来的请求。当--level的参数设定为2或者2以上的时候，sqlmap会尝试注入Cookie参数。
-            conf.httpHeaders = list(initialHeaders)  # 参数：--headers  可以通过--headers参数来增加额外的http头
+        try:    # 开始检测
+            conf.url = targetUrl                                                    # -u or --url 测试的目标URL
+            conf.method = targetMethod.upper() if targetMethod else targetMethod    # --method 参数，默认情况下，sqlmap是自动检测，只有当需要检查的方法是put的时候，需要显示指定 --method=PUT
+            conf.data = targetData                                                  # --data 参数，此参数是把数据以POST方式提交，sqlmap会像检测GET参数一样检测POST的参数。详细查看readme.pdf  28pages
+            conf.cookie = targetCookie                                              # --cookie 参数， 当你使用--cookie参数时，当返回一个Set-Cookie头的时候，sqlmap会询问你用哪个cookie来继续接下来的请求。当--level的参数设定为2或者2以上的时候，sqlmap会尝试注入Cookie参数。
+            conf.httpHeaders = list(initialHeaders)                                 # 参数：--headers  可以通过--headers参数来增加额外的http头
             conf.httpHeaders.extend(targetHeaders or [])
 
-            initTargetEnv()  #主要就是完成全局变量conf和kb的初始化工作
-            parseTargetUrl() #主要完成针对目标网址的解析工作，如获取协议名、路径、端口、请求参数等信息
+            initTargetEnv()     # 主要就是完成全局变量conf和kb的初始化工作
+            parseTargetUrl()    # 主要完成针对目标网址的解析工作，如获取协议名、路径、端口、请求参数等信息
 
-            testSqlInj = False #表示是否注入过，默认表示注入过(即testSqlInj=false)
+            testSqlInj = False  # 表示是否注入过，默认表示注入过(即testSqlInj=false)
 
             '''
             conf.parameters保存需要进行SQL注入点测试的参数信息，conf.parameters是一个字典
@@ -325,7 +332,7 @@ def start():
                         testSqlInj = True
                         break
             else:
-                paramKey = (conf.hostname, conf.path, None, None)  #测试其他参数信息，判断是否存在注入信息
+                paramKey = (conf.hostname, conf.path, None, None)  # 测试其他参数信息，判断是否存在注入信息
                 if paramKey not in kb.testedParams:
                     testSqlInj = True
 
@@ -337,12 +344,12 @@ def start():
                     kb.skipVulnHost = readInput(message, default="Y").upper() != 'N'
                 testSqlInj = not kb.skipVulnHost
 
-            if not testSqlInj:  #表示当前需要测试的URL已经测试过了，不需要进行测试了
+            if not testSqlInj:          # 表示当前需要测试的URL已经测试过了，不需要进行测试了
                 infoMsg = "skipping '%s'" % targetUrl
                 logger.info(infoMsg)
                 continue
 
-            if conf.multipleTargets:  #当检测的目标存在多个的时候
+            if conf.multipleTargets:    # 当检测的目标存在多个的时候
                 hostCount += 1
 
                 if conf.forms and conf.method:
@@ -379,7 +386,7 @@ def start():
                                 test = _randomFillBlankFields(test)
                                 conf.url = "%s?%s" % (firstPart, test)
 
-                        parseTargetUrl()  #函数主要完成针对目标网址的解析工作，如获取协议名、路径、端口、请求参数等信息
+                        parseTargetUrl()  # parseTargetUrl()函数主要完成针对目标网址的解析工作，如获取协议名、路径、端口、请求参数等信息
 
                     elif test[0] in ("n", "N"):
                         continue
@@ -407,7 +414,7 @@ def start():
             2.将get或post发送的数据解析成字典形式，并保存到conf.paramDict中
             3.读取session文件（如果存在的话），并提起文件中的数据，保存到kb变量中
             '''
-            setupTargetEnv()  #设置目标系统的环境信息
+            setupTargetEnv()  # 设置目标系统的环境信息
 
             '''
             checkConnection()函数主要是判断目标URL是否能够正常连接
@@ -415,16 +422,16 @@ def start():
             if not checkConnection(suppressOutput=conf.forms) or not checkString() or not checkRegexp():
                 continue
 
-            #Determines if a web server is protected by an IPS (Intrusion Prevention System), IDS (Intrusion Detection System) or WAF (Web Application Firewall)
-            checkWaf()   #检测WAF(Web Application FireWall),检测方法是NMAP的http-waf-detect.nse，判断系统是否被防火墙所保护
+            # Determines if a web server is protected by an IPS (Intrusion Prevention System), IDS (Intrusion Detection System) or WAF (Web Application Firewall)
+            checkWaf()   # 检测WAF(Web Application FireWall),检测方法是NMAP的http-waf-detect.nse，判断系统是否被防火墙所保护
 
-            #conf.identifyWaf=True表示需要检测后台防火墙的类型,否则，表示不检测防火墙类型
-            #判断防火墙的类型
-            if conf.identifyWaf:  #conf.identifyWaf表示sqlmap的参数 --identify-waf,如果指定了此参数，就会进入identifyWaf()函数中
-                identifyWaf()     #主要检测的WAF(防火墙)都在sqlmap的waf目录下面
+            # conf.identifyWaf=True表示需要检测后台防火墙的类型,否则，表示不检测防火墙类型
+            # 判断防火墙的类型
+            if conf.identifyWaf:  # conf.identifyWaf表示sqlmap的参数 --identify-waf,如果指定了此参数，就会进入identifyWaf()函数中
+                identifyWaf()     # 主要检测的WAF(防火墙)都在sqlmap的waf目录下面
 
             if conf.nullConnection:
-                checkNullConnection()  #空连接就是不用密码和用户名的IPC(Internet Process Connection) 连接，在Windows 下，它是用 Net 命令来实现的．
+                checkNullConnection()  # 空连接就是不用密码和用户名的IPC(Internet Process Connection) 连接，在Windows 下，它是用 Net 命令来实现的．
 
             if (len(kb.injections) == 0 or (len(kb.injections) == 1 and kb.injections[0].place is None)) \
                 and (kb.injection.place is None or kb.injection.parameter is None):
@@ -432,7 +439,7 @@ def start():
                 if not any((conf.string, conf.notString, conf.regexp)) and PAYLOAD.TECHNIQUE.BOOLEAN in conf.tech:
                     # NOTE: this is not needed anymore, leaving only to display
                     # a warning message to the user in case the page is not stable
-                    #判断页面是否是稳定页面(何谓稳定页面--两次相同的URL请求，返回的页面信息没有发生变化，如新浪微博的页面就不是稳定的，因为每次刷新过后，页面的内容会发生变化)
+                    # 判断页面是否是稳定页面(何谓稳定页面--两次相同的URL请求，返回的页面信息没有发生变化，如新浪微博的页面就不是稳定的，因为每次刷新过后，页面的内容会发生变化)
                     checkStability()
 
                 # Do a little prioritization reorder of a testable parameter list
@@ -453,7 +460,7 @@ def start():
                 它也可以指定用逗号分隔的列表的具体参数来测试。
                 parameters存储GET/POST/HTTP Cookie/HTTP User-Agent header/HTTP Referer header等信息
                 '''
-                for place in parameters:  #检测在哪些参数位置可以进行注入的
+                for place in parameters:  # 检测在哪些参数位置可以进行注入的
                     # Test User-Agent and Referer headers only if
                     # --level >= 3
                     skip = (place == PLACE.USER_AGENT and conf.level < 3)
@@ -582,7 +589,6 @@ def start():
                                 infoMsg = "testing for SQL injection on %s " % paramType
                                 infoMsg += "parameter '%s'" % parameter
                                 logger.info(infoMsg)
-
 
                                 '''
                                 在调用checkSqlInjection注入之前，就已经判断出数据库的类型了。

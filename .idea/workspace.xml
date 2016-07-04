@@ -3,6 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/controller/controller.py" afterPath="$PROJECT_DIR$/lib/controller/controller.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/option.py" afterPath="$PROJECT_DIR$/lib/core/option.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/profiling.py" afterPath="$PROJECT_DIR$/lib/core/profiling.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/core/testing.py" afterPath="$PROJECT_DIR$/lib/core/testing.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/parse/cmdline.py" afterPath="$PROJECT_DIR$/lib/parse/cmdline.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sqlmap.py" afterPath="$PROJECT_DIR$/sqlmap.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/thirdparty/colorama/initialise.py" afterPath="$PROJECT_DIR$/thirdparty/colorama/initialise.py" />
     </list>
     <ignored path="sqlmap-master.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,31 +35,132 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="sqlmap.conf" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sqlmap.conf">
+      <file leaf-file-name="controller.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/controller/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="315" column="9" selection-start-line="315" selection-start-column="9" selection-end-line="315" selection-end-column="9" />
+            <state relative-caret-position="2717">
+              <caret line="538" column="11" selection-start-line="538" selection-start-column="11" selection-end-line="538" selection-end-column="11" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitattributes" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <file leaf-file-name="update.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/core/update.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="171">
+              <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sqlmap.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="templates.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/request/templates.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sqlmap.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sqlmap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="2850">
+              <caret line="150" column="20" selection-start-line="150" selection-start-column="20" selection-end-line="150" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testing.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/core/testing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="113" column="4" selection-start-line="113" selection-start-column="4" selection-end-line="113" selection-end-column="4" />
+              <folding>
+                <element signature="n#!!doc" expanded="false" />
+                <element signature="e#44#164#1" expanded="false" />
+                <element signature="e#1130#1200#0" expanded="false" />
+                <element signature="e#1224#3022#0" expanded="false" />
+                <element signature="e#1224#1281#1" expanded="false" />
+                <element signature="e#1394#1519#0" expanded="false" />
+                <element signature="e#1588#2843#0" expanded="false" />
+                <element signature="e#1702#2843#0" expanded="false" />
+                <element signature="e#1793#2646#0" expanded="false" />
+                <element signature="e#2014#2077#0" expanded="false" />
+                <element signature="e#2137#2356#0" expanded="false" />
+                <element signature="e#2399#2646#0" expanded="false" />
+                <element signature="e#2399#2414#0" expanded="false" />
+                <element signature="e#3066#3533#0" expanded="false" />
+                <element signature="e#3104#3516#0" expanded="false" />
+                <element signature="e#3160#3516#0" expanded="false" />
+                <element signature="e#3266#3516#0" expanded="false" />
+                <element signature="e#3556#3635#1" expanded="false" />
+                <element signature="e#3889#4145#0" expanded="false" />
+                <element signature="e#3922#4145#0" expanded="false" />
+                <element signature="e#3968#4145#0" expanded="false" />
+                <element signature="e#4224#4513#0" expanded="false" />
+                <element signature="e#4257#4513#0" expanded="false" />
+                <element signature="e#4303#4513#0" expanded="false" />
+                <element signature="e#4396#4513#0" expanded="false" />
+                <element signature="e#4579#7742#0" expanded="false" />
+                <element signature="e#5070#5384#0" expanded="false" />
+                <element signature="e#5152#5384#0" expanded="false" />
+                <element signature="e#5245#5384#0" expanded="false" />
+                <element signature="e#5445#5859#0" expanded="false" />
+                <element signature="e#5541#5859#0" expanded="false" />
+                <element signature="e#6399#6466#0" expanded="false" />
+                <element signature="e#6507#6557#0" expanded="false" />
+                <element signature="e#6584#7681#0" expanded="false" />
+                <element signature="e#7113#7332#0" expanded="false" />
+                <element signature="e#7391#7592#0" expanded="false" />
+                <element signature="e#7958#8783#0" expanded="false" />
+                <element signature="e#8598#8733#0" expanded="false" />
+                <element signature="e#8646#8733#0" expanded="false" />
+                <element signature="e#8807#8852#0" expanded="false" />
+                <element signature="e#8879#10557#0" expanded="false" />
+                <element signature="e#9210#9324#0" expanded="false" />
+                <element signature="e#9362#9466#0" expanded="false" />
+                <element signature="e#9503#9605#0" expanded="false" />
+                <element signature="e#9820#10470#0" expanded="false" />
+                <element signature="e#9994#10391#0" expanded="false" />
+                <element signature="e#10133#10271#0" expanded="false" />
+                <element signature="e#10204#10271#0" expanded="false" />
+                <element signature="e#10328#10391#0" expanded="false" />
+                <element signature="e#10594#10800#0" expanded="false" />
+                <element signature="e#10640#10781#0" expanded="false" />
+                <element signature="e#10698#10781#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="profiling.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/core/profiling.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding>
+                <element signature="e#23#143#1" expanded="false" />
+                <element signature="e#422#514#1" expanded="false" />
+                <element signature="e#533#679#0" expanded="false" />
+                <element signature="e#715#959#0" expanded="false" />
+                <element signature="e#1868#1923#0" expanded="false" />
+                <element signature="e#2417#2473#0" expanded="false" />
+                <element signature="e#2706#2773#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="option.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/core/option.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="32262">
+              <caret line="1848" column="5" selection-start-line="1848" selection-start-column="4" selection-end-line="1848" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -87,9 +195,6 @@
         <option value="$PROJECT_DIR$/lib/core/agent.py" />
         <option value="$PROJECT_DIR$/lib/core/defaults.py" />
         <option value="$PROJECT_DIR$/lib/core/optiondict.py" />
-        <option value="$PROJECT_DIR$/lib/core/option.py" />
-        <option value="$PROJECT_DIR$/lib/controller/controller.py" />
-        <option value="$PROJECT_DIR$/lib/parse/cmdline.py" />
         <option value="$PROJECT_DIR$/lib/request/connect.py" />
         <option value="$PROJECT_DIR$/lib/request/comparison.py" />
         <option value="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" />
@@ -98,7 +203,6 @@
         <option value="$PROJECT_DIR$/lib/techniques/union/test.py" />
         <option value="$PROJECT_DIR$/lib/techniques/union/use.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/sqlmap.py" />
         <option value="$PROJECT_DIR$/plugins/dbms/mssqlserver/connector.py" />
         <option value="$PROJECT_DIR$/lib/request/redirecthandler.py" />
         <option value="$PROJECT_DIR$/lib/controller/checks.py" />
@@ -106,6 +210,13 @@
         <option value="$PROJECT_DIR$/tamper/chardoubleencode.py" />
         <option value="$PROJECT_DIR$/doc/WEBSITE.md" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/sqlmap.py" />
+        <option value="$PROJECT_DIR$/thirdparty/colorama/initialise.py" />
+        <option value="$PROJECT_DIR$/lib/parse/cmdline.py" />
+        <option value="$PROJECT_DIR$/lib/core/option.py" />
+        <option value="$PROJECT_DIR$/lib/core/testing.py" />
+        <option value="$PROJECT_DIR$/lib/core/profiling.py" />
+        <option value="$PROJECT_DIR$/lib/controller/controller.py" />
       </list>
     </option>
   </component>
@@ -164,6 +275,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -182,12 +296,23 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sqlmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sqlmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="txt" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches">
-        <subPane />
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -602,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1467545623635</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Merge branch 'master' of https://github.com/whxloveyrh/sqlmap&#10;sqlmap.py&#10;connector.py&#10;">
+      <created>1467546247578</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1467546247578</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TodoView">
@@ -616,13 +748,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="744" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2366958" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991454" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3258786" sideWeight="0.51231134" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747602" sideWeight="0.49722" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280255" sideWeight="0.49209693" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747602" sideWeight="0.49209693" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32484075" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1369863" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40734825" sideWeight="0.48768863" order="7" side_tool="false" content_ui="tabs" />
@@ -635,30 +767,31 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31623933" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3146965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991454" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991454" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32850778" sideWeight="0.50790304" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32820514" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32850778" sideWeight="0.49209693" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23418804" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14901665" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3258786" sideWeight="0.51231134" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747602" sideWeight="0.49722" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747602" sideWeight="0.49209693" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32484075" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40734825" sideWeight="0.48768863" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2366958" sideWeight="0.4940171" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31965813" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31623933" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1369863" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14901665" sideWeight="0.50598294" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3965812" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36752138" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -707,7 +840,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/lib/core/option.py</url>
-          <line>2667</line>
+          <line>2726</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -737,7 +870,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/lib/controller/controller.py</url>
-          <line>247</line>
+          <line>254</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -788,160 +921,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/utils/crawler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2185">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/connector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-713">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/filesystem.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/fingerprint.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2622">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/syntax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/takeover.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-86">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/dbms/access/enumeration.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1036">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/generic/connector.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-960">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/generic/custom.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1767">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/generic/databases.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3116">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/procs/oracle/dns_request.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shell/backdoor.asp_">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/base64encode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/between.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-133">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/bluecoat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-171">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/chardoubleencode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/charencode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-266">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/commalessmid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tamper/equaltolike.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-190">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/user-agents.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/smalldict.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/txt/keywords.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/udf/mysql/linux/64/lib_mysqludf_sys.so_">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1002,7 +981,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-950">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1010,7 +988,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2413">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1088,7 +1065,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-551">
           <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1106,19 +1082,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitattributes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1127,21 +1094,12 @@
         <state split_layout="FIRST">
           <first_editor relative-caret-position="282">
             <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
       <provider editor-type-id="MarkdownFxPreviewEditor">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlmap.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="315" column="9" selection-start-line="315" selection-start-column="9" selection-end-line="315" selection-end-column="9" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -1152,10 +1110,246 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/txt/common-outputs.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3971">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sqlmap.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="197" column="21" selection-start-line="197" selection-start-column="21" selection-end-line="197" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/inspect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-589">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/logging/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="1199" column="8" selection-start-line="1199" selection-start-column="8" selection-end-line="1199" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/utils/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-504">
+          <caret line="206" column="8" selection-start-line="206" selection-start-column="8" selection-end-line="206" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/thirdparty/colorama/ansitowin32.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/thirdparty/colorama/initialise.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="92" column="27" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/optparse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7780">
+          <caret line="1190" column="8" selection-start-line="1190" selection-start-column="8" selection-end-line="1190" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/dicts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="3794" column="26" selection-start-line="3794" selection-start-column="26" selection-end-line="3794" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2016.1/python_stubs/-2125986627/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="2545" column="8" selection-start-line="2545" selection-start-column="8" selection-end-line="2545" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txt/keywords.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1045">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/enums.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="411" column="6" selection-start-line="411" selection-start-column="6" selection-end-line="411" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="405" column="0" selection-start-line="405" selection-start-column="0" selection-end-line="405" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/parse/cmdline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27265">
+          <caret line="1504" column="13" selection-start-line="1504" selection-start-column="13" selection-end-line="1504" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/log.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10">
+          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/update.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/option.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="32262">
+          <caret line="1848" column="5" selection-start-line="1848" selection-start-column="4" selection-end-line="1848" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/profiling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="e#23#143#1" expanded="false" />
+            <element signature="e#422#514#1" expanded="false" />
+            <element signature="e#533#679#0" expanded="false" />
+            <element signature="e#715#959#0" expanded="false" />
+            <element signature="e#1868#1923#0" expanded="false" />
+            <element signature="e#2417#2473#0" expanded="false" />
+            <element signature="e#2706#2773#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/request/templates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/core/testing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="113" column="4" selection-start-line="113" selection-start-column="4" selection-end-line="113" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#44#164#1" expanded="false" />
+            <element signature="e#1130#1200#0" expanded="false" />
+            <element signature="e#1224#3022#0" expanded="false" />
+            <element signature="e#1224#1281#1" expanded="false" />
+            <element signature="e#1394#1519#0" expanded="false" />
+            <element signature="e#1588#2843#0" expanded="false" />
+            <element signature="e#1702#2843#0" expanded="false" />
+            <element signature="e#1793#2646#0" expanded="false" />
+            <element signature="e#2014#2077#0" expanded="false" />
+            <element signature="e#2137#2356#0" expanded="false" />
+            <element signature="e#2399#2646#0" expanded="false" />
+            <element signature="e#2399#2414#0" expanded="false" />
+            <element signature="e#3066#3533#0" expanded="false" />
+            <element signature="e#3104#3516#0" expanded="false" />
+            <element signature="e#3160#3516#0" expanded="false" />
+            <element signature="e#3266#3516#0" expanded="false" />
+            <element signature="e#3556#3635#1" expanded="false" />
+            <element signature="e#3889#4145#0" expanded="false" />
+            <element signature="e#3922#4145#0" expanded="false" />
+            <element signature="e#3968#4145#0" expanded="false" />
+            <element signature="e#4224#4513#0" expanded="false" />
+            <element signature="e#4257#4513#0" expanded="false" />
+            <element signature="e#4303#4513#0" expanded="false" />
+            <element signature="e#4396#4513#0" expanded="false" />
+            <element signature="e#4579#7742#0" expanded="false" />
+            <element signature="e#5070#5384#0" expanded="false" />
+            <element signature="e#5152#5384#0" expanded="false" />
+            <element signature="e#5245#5384#0" expanded="false" />
+            <element signature="e#5445#5859#0" expanded="false" />
+            <element signature="e#5541#5859#0" expanded="false" />
+            <element signature="e#6399#6466#0" expanded="false" />
+            <element signature="e#6507#6557#0" expanded="false" />
+            <element signature="e#6584#7681#0" expanded="false" />
+            <element signature="e#7113#7332#0" expanded="false" />
+            <element signature="e#7391#7592#0" expanded="false" />
+            <element signature="e#7958#8783#0" expanded="false" />
+            <element signature="e#8598#8733#0" expanded="false" />
+            <element signature="e#8646#8733#0" expanded="false" />
+            <element signature="e#8807#8852#0" expanded="false" />
+            <element signature="e#8879#10557#0" expanded="false" />
+            <element signature="e#9210#9324#0" expanded="false" />
+            <element signature="e#9362#9466#0" expanded="false" />
+            <element signature="e#9503#9605#0" expanded="false" />
+            <element signature="e#9820#10470#0" expanded="false" />
+            <element signature="e#9994#10391#0" expanded="false" />
+            <element signature="e#10133#10271#0" expanded="false" />
+            <element signature="e#10204#10271#0" expanded="false" />
+            <element signature="e#10328#10391#0" expanded="false" />
+            <element signature="e#10594#10800#0" expanded="false" />
+            <element signature="e#10640#10781#0" expanded="false" />
+            <element signature="e#10698#10781#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sqlmap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="2850">
+          <caret line="150" column="20" selection-start-line="150" selection-start-column="20" selection-end-line="150" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/controller/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2717">
+          <caret line="538" column="11" selection-start-line="538" selection-start-column="11" selection-end-line="538" selection-end-column="11" />
           <folding />
         </state>
       </provider>

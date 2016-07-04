@@ -202,7 +202,7 @@ def main():
         except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
-    except EOFError:
+    except EOFError:  # 遇到文件末尾引发的异常
         print
         errMsg = "exit"
 
