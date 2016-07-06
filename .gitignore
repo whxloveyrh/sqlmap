@@ -3,4 +3,5 @@ output/
 .sqlmap_history
 traffic.txt
 .idea/*
+.idea/workspace.xml
 *~
