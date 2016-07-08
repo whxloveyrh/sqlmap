@@ -1,5 +1,17 @@
-1. google dork
+1. Google dork的作用
 2. [认识SQL注入的类型](http://www.codesec.net/view/211276.html)
+SQL注入的原理:用户在正常请求中伪造一些程序命令,绕过防火墙,传输到相应的应用程序中,进入数据库中。从而执行一些非授权的SQL代码,以此达到修改、窃取或者破坏数据库信息的目的。
+[SQL注入分类](www.freebuf.com/articles/web/98119.html)
+    1. 注入途径分类
+        1. 通过WEB端对数据库进行注入攻击
+        2. 直接访问数据库进行注入攻击
+    2. 注入方式分类
+        1. SQL Manipulation
+        2. Code Injection
+        3. Function Call Injection
+        4. Buffer Overflows
+    SQL Manipulation和Code Injection多出现在WEB端的SQL注入上面。
+    Function Call Injection 和 Buffer Overflows主要用于直接对数据库自身进行攻击的方式,对数据库的安全威胁更加致命。
 3. BISECTION METHOD
 4. http://del.icio.us/inquis/sqlinjection Links 1 through 10 of 222 by Bernardo Damele A. G. tagged sqlinjection
 5. 项目框架结构
@@ -9,7 +21,7 @@
     plugins:    项目的插件,主要包括连接数据库、枚举数据库信息,接管数据库
     procs:      项目所需要使用的存储过程
     shell:      项目shell相关的信息
-    tamper:     项目进行注入的时候,绕过防火墙的一些基本伪装
+    tamper:     项目进行注入的时候,绕过防火墙的一些基本伪装技术
     thirdparty: 项目的第三方库文件,主要包括后台颜色输出控制
     txt:        项目进行暴力破解所需要的文件,主要包括常见列名、常见表名、常见的输出、用户代理、密码字典等等
     udf:        项目的用户自定义功能函数,主要用于在后台数据库系统中执行
@@ -18,7 +30,7 @@
     .gitattributes 版本控制相关的信息
     .gitgnore      版本控制时,进行忽略的信息
     .travis.yml:   项目版本信息
-    readme.md:  项目的用户手册
+    readme.md:     项目的用户手册
     sqlmap.conf:   项目的默认配置信息
     sqlmap.py      项目测试入口
     sqlmapapi.py   项目测试入口
@@ -58,4 +70,26 @@ Git 可以管理所有文件的变更， 但并不是所有文件都有意义。
 -delta 让 Git 在 pack 时不进行压缩，减少 git commit 等操作时的系统时间消耗，
 pack 是为了减少空间占用，压缩二进制文件显然达不到这个目的。
 
+8. SQL注入技术分类,以及每一种注入技术的作用
+基于时间的注入(time-based injection):
+参考网址:[User-Agent注入攻击和基于时间的注入](www.freebuf.com/articles/web/105124.html)
+作用:用于猜测数据库名、表名、字段名、数据信息
+基于错误的注入(error-based injection):
+参考网址:
+作用:
+基于bool的注入(boolean-based injection):
+参考网址:
+作用:
+基于union的注入(union-based injection):
+参考网址:
+作用:进行拖数据操作
+
+9. SQL注入的目的: 提权和获取数据
+
+10. 网络安全方面的网站
+ 10.1 www.freebuf.com
+ 10.2 www.wooyun.org
+ 10.3 drops.wooyun.org
+ 10.4 www.shack2.org
+ 10.5 www.shack2.org/article/142279387.html
 
