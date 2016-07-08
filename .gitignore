@@ -2,4 +2,6 @@
 output/
 .sqlmap_history
 traffic.txt
+.idea/*
 *~
+.idea/vcs.xml
