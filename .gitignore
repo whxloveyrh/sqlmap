@@ -4,4 +4,8 @@ output/
 traffic.txt
 .idea/*
 .idea/workspace.xml
+.idea/vcs.xml
+.idea/misc.xml
+.idea/sqlmap-master.iml
+.idea/modules.xml
 *~
