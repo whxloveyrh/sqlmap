@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#-*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -36,10 +36,12 @@ from lib.core.optiondict import optDict
 from lib.core.settings import UNICODE_ENCODING
 from lib.parse.cmdline import cmdLineParser
 
+
 class Failures(object):
     failedItems = None
     failedParseOn = None
     failedTraceBack = None
+
 
 def smokeTest():
     """
@@ -92,6 +94,7 @@ def smokeTest():
 
     return retVal
 
+
 def adjustValueType(tagName, value):
     for family in optDict.keys():
         for name, type_ in optDict[family].items():
@@ -106,6 +109,7 @@ def adjustValueType(tagName, value):
                     value = float(value)
                 break
     return value
+
 
 def liveTest():
     """
@@ -168,7 +172,7 @@ def liveTest():
                 parse.append((value, parse_from_console_output))
 
         conf.verbose = global_.get("verbose", 1)
-        setVerbosity()
+        setVerbosity()  #设置sqlmap输出信息的显示等级
 
         msg = "running live test case: %s (%d/%d)" % (name, count, length)
         logger.info(msg)
@@ -231,6 +235,7 @@ def liveTest():
 
     return retVal
 
+
 def initCase(switches, count):
     Failures.failedItems = []
     Failures.failedParseOn = None
@@ -254,8 +259,10 @@ def initCase(switches, count):
     initOptions(cmdLineOptions, True)
     init()
 
+
 def cleanCase():
     shutil.rmtree(paths.SQLMAP_OUTPUT_PATH, True)
+
 
 def runCase(parse):
     retVal = True
@@ -311,6 +318,7 @@ def runCase(parse):
         Failures.failedParseOn = console
 
     return retVal
+
 
 def replaceVars(item, vars_):
     retVal = item

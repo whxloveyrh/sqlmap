@@ -164,6 +164,7 @@ proxyHandler = urllib2.ProxyHandler()
 redirectHandler = SmartRedirectHandler()
 rangeHandler = HTTPRangeHandler()
 
+
 def _feedTargetsDict(reqFile, addedTargetUrls):
     """
     Parses web scarab and burp logs and adds results to the target URL list
@@ -355,6 +356,7 @@ def _feedTargetsDict(reqFile, addedTargetUrls):
         errMsg += "in provided file ('%s')" % reqFile
         raise SqlmapGenericException(errMsg)
 
+
 def _loadQueries():
     """
     Loads queries from 'xml/queries.xml' file.
@@ -392,6 +394,7 @@ def _loadQueries():
 
     for node in tree.findall("*"):
         queries[node.attrib['value']] = iterate(node)
+
 
 def _setMultipleTargets():
     """
@@ -438,6 +441,7 @@ def _setMultipleTargets():
         infoMsg += "targets list ready to be tested"
         logger.info(infoMsg)
 
+
 def _adjustLoggingFormatter():
     """
     Solves problem of line deletition caused by overlapping logging messages
@@ -457,6 +461,7 @@ def _adjustLoggingFormatter():
 
     FORMATTER._format = FORMATTER.format
     FORMATTER.format = format
+
 
 def _setRequestFromFile():
     """
@@ -481,6 +486,7 @@ def _setRequestFromFile():
 
     _feedTargetsDict(conf.requestFile, addedTargetUrls)
 
+
 def _setCrawler():
     if not conf.crawlDepth:
         return
@@ -503,6 +509,7 @@ def _setCrawler():
             except Exception, ex:
                 errMsg = "problem occurred while crawling at '%s' ('%s')" % (target, getSafeExString(ex))
                 logger.error(errMsg)
+
 
 def _doSearch():
     """
@@ -565,6 +572,7 @@ def _doSearch():
             else:
                 conf.googlePage += 1
 
+
 def _setBulkMultipleTargets():
     if not conf.bulkFile:
         return
@@ -589,6 +597,7 @@ def _setBulkMultipleTargets():
         warnMsg = "no usable links found (with GET parameters)"
         logger.warn(warnMsg)
 
+
 def _setSitemapTargets():
     if not conf.sitemapUrl:
         return
@@ -605,6 +614,7 @@ def _setSitemapTargets():
     if not found and not conf.forms and not conf.crawlDepth:
         warnMsg = "no usable links found (with GET parameters)"
         logger.warn(warnMsg)
+
 
 def _findPageForms():
     if not conf.forms or conf.crawlDepth:
@@ -642,6 +652,7 @@ def _findPageForms():
                 errMsg = "problem occurred while searching for forms at '%s' ('%s')" % (target, getSafeExString(ex))
                 logger.error(errMsg)
 
+
 def _setDBMSAuthentication():
     """
     Check and set the DBMS authentication credentials to run statements as
@@ -663,6 +674,7 @@ def _setDBMSAuthentication():
 
     conf.dbmsUsername = match.group(1)
     conf.dbmsPassword = match.group(2)
+
 
 def _setMetasploit():
     if not conf.osPwn and not conf.osSmb and not conf.osBof:
@@ -775,6 +787,7 @@ def _setMetasploit():
         errMsg += "You can get it at 'http://www.metasploit.com/download/'"
         raise SqlmapFilePathException(errMsg)
 
+
 def _setWriteFile():
     if not conf.wFile:
         return
@@ -792,6 +805,7 @@ def _setWriteFile():
         raise SqlmapMissingMandatoryOptionException(errMsg)
 
     conf.wFileType = getFileType(conf.wFile)
+
 
 def _setOS():
     """
@@ -816,6 +830,7 @@ def _setOS():
 
     Backend.setOs(conf.os)
 
+
 def _setTechnique():
     validTechniques = sorted(getPublicTypeMembers(PAYLOAD.TECHNIQUE), key=lambda x: x[1])
     validLetters = [_[0][0].upper() for _ in validTechniques]
@@ -836,6 +851,7 @@ def _setTechnique():
                     break
 
         conf.tech = _
+
 
 def _setDBMS():
     """
@@ -867,10 +883,13 @@ def _setDBMS():
             conf.dbms = dbms
 
             break
+
 '''
 在_setTamperingFunctions函数中加载了我们配置的tamper函数。
 然后会把tamper函数添加到了kb.tamperFunctions里面以被后续使用。
 '''
+
+
 def _setTamperingFunctions():
     """
     Loads tampering functions from given script(s)
@@ -967,6 +986,7 @@ def _setTamperingFunctions():
             for _, function in priorities:
                 kb.tamperFunctions.append(function)
 
+
 def _setWafFunctions():
     """
     Loads WAF/IDS/IPS detecting functions from script(s)
@@ -1003,9 +1023,11 @@ def _setWafFunctions():
 
         kb.wafFunctions = sorted(kb.wafFunctions, key=lambda _: "generic" in _[1].lower())
 
+
 def _setThreads():
     if not isinstance(conf.threads, int) or conf.threads <= 0:
         conf.threads = 1
+
 
 def _setDNSCache():
     """
@@ -1023,6 +1045,7 @@ def _setDNSCache():
     if not hasattr(socket, "_getaddrinfo"):
         socket._getaddrinfo = socket.getaddrinfo
         socket.getaddrinfo = _getaddrinfo
+
 
 def _setSocketPreConnect():
     """
@@ -1071,6 +1094,7 @@ def _setSocketPreConnect():
         thread = threading.Thread(target=_)
         setDaemon(thread)
         thread.start()
+
 
 def _setHTTPHandlers():
     """
@@ -1185,6 +1209,7 @@ def _setHTTPHandlers():
     opener = urllib2.build_opener(*handlers)
     urllib2.install_opener(opener)
 
+
 def _setSafeVisit():
     """
     Check and set the safe visit options.
@@ -1244,6 +1269,7 @@ def _setSafeVisit():
         errMsg = "please provide a valid value (>0) for safe frequency (--safe-freq) while using safe visit features"
         raise SqlmapSyntaxException(errMsg)
 
+
 def _setPrefixSuffix():
     if conf.prefix is not None and conf.suffix is not None:
         # Create a custom boundary object for user's supplied prefix
@@ -1272,6 +1298,7 @@ def _setPrefixSuffix():
         # to be tested for
         conf.boundaries = [boundary]
 
+
 def _setAuthCred():
     """
     Adds authentication credentials (if any) for current target to the password manager
@@ -1280,6 +1307,7 @@ def _setAuthCred():
 
     if kb.passwordMgr and all(_ is not None for _ in (conf.scheme, conf.hostname, conf.port, conf.authUsername, conf.authPassword)):
         kb.passwordMgr.add_password(None, "%s://%s:%d" % (conf.scheme, conf.hostname, conf.port), conf.authUsername, conf.authPassword)
+
 
 def _setHTTPAuthentication():
     """
@@ -1366,6 +1394,7 @@ def _setHTTPAuthentication():
         checkFile(_)
         authHandler = HTTPSPKIAuthHandler(_)
 
+
 def _setHTTPExtraHeaders():
     if conf.headers:
         debugMsg = "setting extra HTTP headers"
@@ -1398,6 +1427,7 @@ def _setHTTPExtraHeaders():
         conf.httpHeaders.append((HTTP_HEADER.CACHE_CONTROL, "no-cache,no-store"))
         conf.httpHeaders.append((HTTP_HEADER.PRAGMA, "no-cache"))
 
+
 def _defaultHTTPUserAgent():
     """
     @return: default sqlmap HTTP User-Agent header
@@ -1412,6 +1442,7 @@ def _defaultHTTPUserAgent():
     # Internet Explorer 7.0 running on Windows 2003 Service Pack 2 english
     # updated at March 2009
     #return "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)"
+
 
 def _setHTTPUserAgent():
     """
@@ -1483,6 +1514,7 @@ def _setHTTPUserAgent():
 
         conf.httpHeaders.append((HTTP_HEADER.USER_AGENT, userAgent))
 
+
 def _setHTTPReferer():
     """
     Set the HTTP Referer
@@ -1493,6 +1525,7 @@ def _setHTTPReferer():
         logger.debug(debugMsg)
 
         conf.httpHeaders.append((HTTP_HEADER.REFERER, conf.referer))
+
 
 def _setHTTPHost():
     """
@@ -1505,6 +1538,7 @@ def _setHTTPHost():
 
         conf.httpHeaders.append((HTTP_HEADER.HOST, conf.host))
 
+
 def _setHTTPCookies():
     """
     Set the HTTP Cookie header
@@ -1515,6 +1549,7 @@ def _setHTTPCookies():
         logger.debug(debugMsg)
 
         conf.httpHeaders.append((HTTP_HEADER.COOKIE, conf.cookie))
+
 
 def _setHTTPTimeout():
     """
@@ -1538,6 +1573,7 @@ def _setHTTPTimeout():
 
     socket.setdefaulttimeout(conf.timeout)
 
+
 def _checkDependencies():
     """
     Checks for missing dependencies.
@@ -1545,6 +1581,7 @@ def _checkDependencies():
 
     if conf.dependencies:
         checkDependencies()
+
 
 def _createTemporaryDirectory():
     """
@@ -1587,6 +1624,7 @@ def _createTemporaryDirectory():
 
     if not os.path.isdir(tempfile.tempdir):
         os.makedirs(tempfile.tempdir)
+
 
 def _cleanupOptions():
     """
@@ -1759,12 +1797,14 @@ def _cleanupOptions():
     threadData = getCurrentThreadData()
     threadData.reset()
 
+
 def _dirtyPatches():
     """
     Place for "dirty" Python related patches
     """
 
     httplib._MAXLINE = 1 * 1024 * 1024  # to accept overly long result lines (e.g. SQLi results in HTTP header responses)
+
 
 def _purgeOutput():
     """
@@ -1773,6 +1813,7 @@ def _purgeOutput():
 
     if conf.purgeOutput:
         purge(paths.SQLMAP_OUTPUT_PATH)
+
 
 def _setConfAttributes():
     """
@@ -1810,6 +1851,7 @@ def _setConfAttributes():
     conf.trafficFP = None
     conf.wFileType = None
 
+
 def _setKnowledgeBaseAttributes(flushAll=True):
     """
     This function set some needed attributes into the knowledge base
@@ -1836,7 +1878,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.cache.regex = {}
     kb.cache.stdev = {}
 
-    kb.captchaDetected = None
+    kb.captchaDetected = None  # 验证码检测
 
     kb.chars = AttribDict()
     kb.chars.delimiter = randomStr(length=6, lowercase=True)
@@ -1869,7 +1911,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
     kb.extendTests = None
     kb.errorChunkLength = None
     kb.errorIsNone = True
-    kb.falsePositives = []
+    kb.falsePositives = []  # 假阳性
     kb.fileReadMode = False
     kb.followSitemapRecursion = None
     kb.forcedDbms = None
@@ -1895,7 +1937,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
 
     kb.locks = AttribDict()
     for _ in ("cache", "count", "index", "io", "limit", "log", "socket", "redirect", "request", "value"):
-        kb.locks[_] = threading.Lock()
+        kb.locks[_] = threading.Lock()  # 给对应的线程上锁
 
     kb.matchRatio = None
     kb.maxConnectionsFlag = False
@@ -1982,6 +2024,7 @@ def _setKnowledgeBaseAttributes(flushAll=True):
         kb.wafFunctions = []
         kb.wordlists = None
 
+
 def _useWizardInterface():
     """
     Presents simple wizard interface for beginner users
@@ -2047,6 +2090,7 @@ def _useWizardInterface():
 
     dataToStdout("\nsqlmap is running, please wait..\n\n")
 
+
 def _saveConfig():
     """
     Saves the command line options to a sqlmap configuration INI file
@@ -2110,9 +2154,17 @@ def _saveConfig():
     infoMsg = "saved command line options to the configuration file '%s'" % conf.saveConfig
     logger.info(infoMsg)
 
+
 def setVerbosity():
     """
     This function set the verbosity of sqlmap output messages.
+    0、只显示python错误以及严重的信息。
+    1、同时显示基本信息和警告信息。（默认）
+    2、同时显示debug信息。
+    3、同时显示注入的payload。
+    4、同时显示HTTP请求。
+    5、同时显示HTTP响应头。
+    6、同时显示HTTP响应页面。
     """
 
     if conf.verbose is None:
@@ -2135,6 +2187,7 @@ def setVerbosity():
         logger.setLevel(CUSTOM_LOGGING.TRAFFIC_OUT)
     elif conf.verbose >= 5:
         logger.setLevel(CUSTOM_LOGGING.TRAFFIC_IN)
+
 
 def _normalizeOptions(inputOptions):
     """
@@ -2173,6 +2226,7 @@ def _normalizeOptions(inputOptions):
 
             inputOptions[key] = value
 
+
 def _mergeOptions(inputOptions, overrideOptions):
     """
     Merge command line options with configuration file and default options.
@@ -2198,35 +2252,56 @@ def _mergeOptions(inputOptions, overrideOptions):
     else:
         inputOptionsItems = inputOptions.__dict__.items()
 
+    # 将命令行参数信息存储到conf对象中
     for key, value in inputOptionsItems:
         if key not in conf or value not in (None, False) or overrideOptions:
             conf[key] = value
 
     for key, value in conf.items():
         if value is not None:
-            kb.explicitSettings.add(key)
+            kb.explicitSettings.add(key)  # set.add(elem) Add element elem to the set.
 
+    '''
+    如果没有指定参数信息的话，就需要填充一些默认值
+    '''
     for key, value in defaults.items():
         if hasattr(conf, key) and conf[key] is None:
             conf[key] = value
 
+    '''
+    {}.update([other]) Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    '''
     lut = {}
-    for group in optDict.keys():
+    for group in optDict.keys():  # 遍历字典optDict,取字典optDict的键key
         lut.update((_.upper(), _) for _ in optDict[group])
 
-    envOptions = {}
+    '''
+    os.environ是一个字符串所对应环境的映像字典对象。
+    http://blog.csdn.net/junweifan/article/details/7615591
+    os.environ
+    A mapping object representing the string environment. For example, environ['HOME'] is the pathname of your home directory (on some platforms), and is equivalent to getenv("HOME") in C.
+    '''
+    envOptions = {}  # 字典envOptions用于保存系统环境信息
     for key, value in os.environ.items():
         if key.upper().startswith(SQLMAP_ENVIRONMENT_PREFIX):
             _ = key[len(SQLMAP_ENVIRONMENT_PREFIX):].upper()
             if _ in lut:
                 envOptions[lut[_]] = value
 
+    '''
+    当前本机的系统环境信息保存到conf变量中
+    '''
     if envOptions:
         _normalizeOptions(envOptions)
         for key, value in envOptions.items():
             conf[key] = value
 
+    '''
+    {}.update([other]) Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    mergedOptions.update(conf)表示使用字典conf信息更新字典mergedOptions信息
+    '''
     mergedOptions.update(conf)
+
 
 def _setTrafficOutputFP():
     if conf.trafficFile:
@@ -2234,6 +2309,7 @@ def _setTrafficOutputFP():
         logger.info(infoMsg)
 
         conf.trafficFP = openFile(conf.trafficFile, "w+")
+
 
 def _setDNSServer():
     if not conf.dnsName:
@@ -2259,6 +2335,7 @@ def _setDNSServer():
         errMsg += "for incoming address resolution attempts"
         raise SqlmapMissingPrivileges(errMsg)
 
+
 def _setProxyList():
     if not conf.proxyFile:
         return
@@ -2268,6 +2345,7 @@ def _setProxyList():
         _, type_, address, port = match.groups()
         conf.proxyList.append("%s://%s:%s" % (type_ or "http", address, port))
 
+
 def _setTorProxySettings():
     if not conf.tor:
         return
@@ -2276,6 +2354,7 @@ def _setTorProxySettings():
         _setTorHttpProxySettings()
     else:
         _setTorSocksProxySettings()
+
 
 def _setTorHttpProxySettings():
     infoMsg = "setting Tor HTTP proxy settings"
@@ -2312,6 +2391,7 @@ def _setTorHttpProxySettings():
         warnMsg += "(e.g. Vidalia)"
         logger.warn(warnMsg)
 
+
 def _setTorSocksProxySettings():
     infoMsg = "setting Tor SOCKS proxy settings"
     logger.info(infoMsg)
@@ -2319,6 +2399,7 @@ def _setTorSocksProxySettings():
     # Has to be SOCKS5 to prevent DNS leaks (http://en.wikipedia.org/wiki/Tor_%28anonymity_network%29)
     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5 if conf.torType == PROXY_TYPE.SOCKS5 else socks.PROXY_TYPE_SOCKS4, LOCALHOST, conf.torPort or DEFAULT_TOR_SOCKS_PORT)
     socks.wrapmodule(urllib2)
+
 
 def _checkWebSocket():
     if conf.url and (conf.url.startswith("ws:/") or conf.url.startswith("wss:/")):
@@ -2328,6 +2409,7 @@ def _checkWebSocket():
             errMsg = "sqlmap requires third-party module 'websocket-client' "
             errMsg += "in order to use WebSocket funcionality"
             raise SqlmapMissingDependence(errMsg)
+
 
 def _checkTor():
     if not conf.checkTor:
@@ -2347,6 +2429,7 @@ def _checkTor():
     else:
         infoMsg = "Tor is properly being used"
         logger.info(infoMsg)
+
 
 def _basicOptionValidation():
     if conf.limitStart is not None and not (isinstance(conf.limitStart, int) and conf.limitStart > 0):
@@ -2567,6 +2650,7 @@ def _basicOptionValidation():
             errMsg = "cookies file '%s' does not exist" % conf.loadCookies
             raise SqlmapFilePathException(errMsg)
 
+
 def _resolveCrossReferences():
     lib.core.threads.readInput = readInput
     lib.core.common.getPageTemplate = getPageTemplate
@@ -2576,10 +2660,12 @@ def _resolveCrossReferences():
     lib.controller.checks.setVerbosity = setVerbosity
     lib.controller.checks.setWafFunctions = _setWafFunctions
 
+
 def initOptions(inputOptions=AttribDict(), overrideOptions=False):
-    _setConfAttributes()   #设置conf参数 conf会保存一些用户输入的一些参数，比如url,端口等。
-    _setKnowledgeBaseAttributes()  #设置KB参数 KB会保存注入时的一些参数，其中有两个是比较特殊的参数kb.chars.start和kb.chars.stop,这两个是随机字符串。
-    _mergeOptions(inputOptions, overrideOptions)
+    _setConfAttributes()                            # 设置conf参数 conf会保存一些用户输入的一些参数，比如url,端口等。
+    _setKnowledgeBaseAttributes()                   # 设置KB参数 KB会保存注入时的一些参数，其中有两个是比较特殊的参数kb.chars.start和kb.chars.stop,这两个是随机字符串。
+    _mergeOptions(inputOptions, overrideOptions)    # 合并自定义和系统默认的参数信息
+
 
 def init():
     """
@@ -2587,23 +2673,23 @@ def init():
     based upon command line and configuration file options.
     """
 
-    _useWizardInterface()
-    setVerbosity()  #设定信息显示等级 默认为等级1级
+    _useWizardInterface()        # 为初学者创建按一个向导
+    setVerbosity()               # 设定信息显示等级 默认为等级1级
     _saveConfig()
-    _setRequestFromFile()
+    _setRequestFromFile()        # 判断HTTP请求是不是从文件中读取
     _cleanupOptions()
     _dirtyPatches()
-    _purgeOutput()
-    _checkDependencies()
-    _createTemporaryDirectory()
-    _basicOptionValidation()
-    _setProxyList()
-    _setTorProxySettings()
-    _setDNSServer()
-    _adjustLoggingFormatter()
-    _setMultipleTargets()
-    _setTamperingFunctions()
-    _setWafFunctions()
+    _purgeOutput()               # 清理输出目录
+    _checkDependencies()         # 检查依赖关系
+    _createTemporaryDirectory()  # 创建一个临时目录
+    _basicOptionValidation()     # 基本选项信息验证
+    _setProxyList()              # 设置代理列表
+    _setTorProxySettings()       # 设置（The Onion Router，洋葱路由器）
+    _setDNSServer()              # 设置DNS服务器信息
+    _adjustLoggingFormatter()    # 设置日志输出格式
+    _setMultipleTargets()        # 设置多目标检测模式
+    _setTamperingFunctions()     # 设置绕过防火墙处理
+    _setWafFunctions()           # 设置防火墙信息, --identify-waf 显示检测防火墙
     _setTrafficOutputFP()
     _resolveCrossReferences()
     _checkWebSocket()
@@ -2612,13 +2698,13 @@ def init():
     parseTargetDirect()
 
     if any((conf.url, conf.logFile, conf.bulkFile, conf.sitemapUrl, conf.requestFile, conf.googleDork, conf.liveTest)):
-        _setHTTPTimeout()
-        _setHTTPExtraHeaders()
-        _setHTTPCookies()
-        _setHTTPReferer()
-        _setHTTPHost()
-        _setHTTPUserAgent()
-        _setHTTPAuthentication()
+        _setHTTPTimeout()           # 设置超时时间
+        _setHTTPExtraHeaders()      # 设置额外的请求头信息
+        _setHTTPCookies()           # 设置Cookie信息
+        _setHTTPReferer()           # 设置referer信息
+        _setHTTPHost()              # 设置host信息
+        _setHTTPUserAgent()         # 设置User-Agent(浏览器)信息
+        _setHTTPAuthentication()    # 设置认证信息
         _setHTTPHandlers()
         _setDNSCache()
         _setSocketPreConnect()
@@ -2629,16 +2715,16 @@ def init():
         _checkTor()
         _setCrawler()
         _findPageForms()
-        _setDBMS()
-        _setTechnique()
+        _setDBMS()                  # 指定后台数据库
+        _setTechnique()             # 指定检测的注入技术
 
     _setThreads()
-    _setOS()
+    _setOS()                        # 指定后台操作系统信息
     _setWriteFile()
     _setMetasploit()
     _setDBMSAuthentication()
     loadBoundaries()
-    loadPayloads()
-    _setPrefixSuffix()
-    update()
-    _loadQueries()
+    loadPayloads()                  # 导入payload信息
+    _setPrefixSuffix()              # 手动的设置前缀和后缀
+    update()                        # 进行项目更新操作
+    _loadQueries()                  # 导入查询信息xml/queries.xml

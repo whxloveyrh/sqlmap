@@ -37,10 +37,10 @@ test中的clause与where属性与boundary中的clause与where属性功能是相�
 其dbms_version子节所代表的适用的数据库版本。
 8 response属性
 这一属性下的子节点标记着当前测试的Payload测试手法。
-    grep        ：报错注入
-    comparison  ：布尔类型忙注入
-    time        ：延时注入
-    char        ：联合查询注入
+    grep        ：报错注入 + 基于内联查询注入
+    comparison  ：布尔类型盲注入
+    time        ：延时注入 + 基于堆栈的注入检测
+    union       ：联合查询注入
 
 
 SQLMAP当中的checkSqlInjection函数即是用这一属性作为判断依据来进入不同的处理分支。
@@ -213,7 +213,7 @@ Tag: <test>
 
 <root>
     <!-- Boolean-based blind tests - WHERE/HAVING clause -->
-    <test>
+    <!--<test>
         <title>AND boolean-based blind - WHERE or HAVING clause</title>
         <stype>1</stype>
         <level>1</level>
@@ -243,7 +243,7 @@ Tag: <test>
         <response>
             <comparison>OR [RANDNUM]=[RANDNUM1]</comparison>
         </response>
-    </test>
+    </test>-->
 
     <test>
         <title>OR boolean-based blind - WHERE or HAVING clause (NOT)</title>
@@ -312,7 +312,7 @@ Tag: <test>
         </response>
     </test>
 
-    <test>
+   <!-- <test>
         <title>AND boolean-based blind - WHERE or HAVING clause (MySQL comment)</title>
         <stype>1</stype>
         <level>3</level>
@@ -330,9 +330,9 @@ Tag: <test>
         <details>
             <dbms>MySQL</dbms>
         </details>
-    </test>
+    </test>-->
 
-    <test>
+    <!--<test>
         <title>OR boolean-based blind - WHERE or HAVING clause (MySQL comment)</title>
         <stype>1</stype>
         <level>3</level>
@@ -350,7 +350,7 @@ Tag: <test>
         <details>
             <dbms>MySQL</dbms>
         </details>
-    </test>
+    </test>-->
 
     <test>
         <title>OR boolean-based blind - WHERE or HAVING clause (MySQL comment) (NOT)</title>

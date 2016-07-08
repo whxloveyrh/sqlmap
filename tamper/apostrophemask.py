@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
@@ -9,9 +10,12 @@ from lib.core.enums import PRIORITY
 
 __priority__ = PRIORITY.LOWEST
 
+
 def dependencies():
     pass
 
+
+# 用utf-8编码替换引号
 def tamper(payload, **kwargs):
     """
     Replaces apostrophe character with its UTF-8 full width counterpart

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
@@ -11,9 +12,12 @@ from lib.core.enums import PRIORITY
 
 __priority__ = PRIORITY.HIGHEST
 
+
 def dependencies():
     pass
 
+
+# 过滤'>',使用GREATEST()函数替换大于符号
 def tamper(payload, **kwargs):
     """
     Replaces greater than operator ('>') with 'GREATEST' counterpart

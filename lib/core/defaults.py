@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#-*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -11,7 +11,7 @@ _defaults = {
    "csvDel":       ",",
    "timeSec":      5,
    "googlePage":   1,
-   "verbose":      1,
+   "verbose":      1,  #信息显示等级，默认等级为1
    "delay":        0,
    "timeout":      30,
    "retries":      3,

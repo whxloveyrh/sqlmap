@@ -158,6 +158,9 @@ def _comparison(page, headers, code, getRatioValue, pageLength):
                 break
 
         ratio = round(seqMatcher.quick_ratio(), 3)
+        if ratio < LOWER_RATIO_BOUND:
+            print(seq1)
+            print(seq2)
 
     # If the url is stable and we did not set yet the match ratio and the
     # current injected value changes the url page content

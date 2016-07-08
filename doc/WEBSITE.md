@@ -1,0 +1,95 @@
+1. Google dork的作用
+2. [认识SQL注入的类型](http://www.codesec.net/view/211276.html)
+SQL注入的原理:用户在正常请求中伪造一些程序命令,绕过防火墙,传输到相应的应用程序中,进入数据库中。从而执行一些非授权的SQL代码,以此达到修改、窃取或者破坏数据库信息的目的。
+[SQL注入分类](www.freebuf.com/articles/web/98119.html)
+    1. 注入途径分类
+        1. 通过WEB端对数据库进行注入攻击
+        2. 直接访问数据库进行注入攻击
+    2. 注入方式分类
+        1. SQL Manipulation
+        2. Code Injection
+        3. Function Call Injection
+        4. Buffer Overflows
+    SQL Manipulation和Code Injection多出现在WEB端的SQL注入上面。
+    Function Call Injection 和 Buffer Overflows主要用于直接对数据库自身进行攻击的方式,对数据库的安全威胁更加致命。
+3. BISECTION METHOD
+4. http://del.icio.us/inquis/sqlinjection Links 1 through 10 of 222 by Bernardo Damele A. G. tagged sqlinjection
+5. 项目框架结构
+    doc:        项目的一些说明文档,主要包括作者信息、修改日志、版权申明、常见问题、用户手册等等
+    extra:      项目所需的额外文件
+    lib:        项目核心实现文件夹
+    plugins:    项目的插件,主要包括连接数据库、枚举数据库信息,接管数据库
+    procs:      项目所需要使用的存储过程
+    shell:      项目shell相关的信息
+    tamper:     项目进行注入的时候,绕过防火墙的一些基本伪装技术
+    thirdparty: 项目的第三方库文件,主要包括后台颜色输出控制
+    txt:        项目进行暴力破解所需要的文件,主要包括常见列名、常见表名、常见的输出、用户代理、密码字典等等
+    udf:        项目的用户自定义功能函数,主要用于在后台数据库系统中执行
+    waf:        项目目前能够是别的防火墙种类型信息
+    xml:        项目进行注入需要使用的信息,主要包括注入的payload、边界选择条件、数据库识别的报错信息、查询数据库使用的信息
+    .gitattributes 版本控制相关的信息
+    .gitgnore      版本控制时,进行忽略的信息
+    .travis.yml:   项目版本信息
+    readme.md:     项目的用户手册
+    sqlmap.conf:   项目的默认配置信息
+    sqlmap.py      项目测试入口
+    sqlmapapi.py   项目测试入口
+
+git 创建 .gitignore 文件 建立项目过滤规则
+
+6. [ .gitignore](http://blog.csdn.net/liuqiaoyu080512/article/details/8648266)
+Git 可以管理所有文件的变更， 但并不是所有文件都有意义。
+    6.1. 大部分二进制文件没有意义
+　　      比如说 VC 工程的 Debug 和 Release 文件夹下的文件， 或者 Java 项目的 bin 文件夹中的 class 文件， 
+         这些文件都是基于源代码生成的， 只要有源代码就能生成出来，所以版本管理的时候应该忽略它们。
+    6.2. 有些文本文件也没有意义
+　　      比如说 VC 工程中的 .plg 文件， 它是个 html 格式的文本文件， 保存了编译后产生的 error 和 warning， 显然没有进行版本管理的必要。
+    6.3. 有些二进制文件不能忽略
+　　      比如说 MFC 工程的 res\Toolbar.bmp， 是工具栏的位图文件，二进制文件， 如果忽略，工程就不完整了，别人 clone 你的版本库后用不了。 而这些文件一般不频繁变更，进行版本管理也不浪费空间。
+　　      总之，能从别的文件生成的文件就应该被忽略。 要忽略这些文件，一般在 .gitignore 中设置规则， 如下是一篇对 .gitignore 介绍得很好的文章
+
+7. [浅识 .gitattributes](https://www.jmlog.com/recognize-gitattributes/)
+.gitattributes 位于 Git 仓库的根目录下，用于对特定文件的属性进行设定。
+* text=auto
+默认设置所有文件是文本类型时，Checkout 时换行符转换为 Unix 换行符 LF，不是文本类型时，不作改变。
+.vimrc text eol=lf
+.gvimrc text eol=lf
+*.vim text eol=lf
+强制将 Vim 的配置文件的换行符转换为 Unix 换行符 LF。
+*.rb diff=ruby
+*.tex diff=tex
+根据不同类型指定不同的 diff 模式，diff 时更美观。
+*.png binary -delta
+*.jpeg binary -delta
+*.jpg binary -delta
+*.gif binary -delta
+*.gz binary -delta
+*.bz2 binary -delta
+*.tgz binary -delta
+对于二进制文件，指定 binary 属性，等价于 -text -diff，含义不言而喻。
+-delta 让 Git 在 pack 时不进行压缩，减少 git commit 等操作时的系统时间消耗，
+pack 是为了减少空间占用，压缩二进制文件显然达不到这个目的。
+
+8. SQL注入技术分类,以及每一种注入技术的作用
+基于时间的注入(time-based injection):
+参考网址:[User-Agent注入攻击和基于时间的注入](www.freebuf.com/articles/web/105124.html)
+作用:用于猜测数据库名、表名、字段名、数据信息
+基于错误的注入(error-based injection):
+参考网址:
+作用:
+基于bool的注入(boolean-based injection):
+参考网址:
+作用:
+基于union的注入(union-based injection):
+参考网址:
+作用:进行拖数据操作
+
+9. SQL注入的目的: 提权和获取数据
+
+10. 网络安全方面的网站
+ 10.1 www.freebuf.com
+ 10.2 www.wooyun.org
+ 10.3 drops.wooyun.org
+ 10.4 www.shack2.org
+ 10.5 www.shack2.org/article/142279387.html
+

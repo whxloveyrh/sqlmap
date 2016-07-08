@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
 """
 '''
+参考网址:http://drops.wooyun.org/tools/4760
 第一：tamper脚本是什么时候被sqlmap载入的；
 main()->init()->_setTamperingFunctions()
 第二：tamper脚本是什么时候被sqlmap调用的；

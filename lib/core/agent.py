@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#-*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -184,7 +184,7 @@ class Agent(object):
                         if _:
                             try:
                                 repl = repl.replace(_.group(0), match.group(int(_.group(1)) if _.group(1).isdigit() else _.group(1)))
-                            except IndexError:
+                            except IndexError:  # 索引超出范围
                                 break
                         else:
                             break

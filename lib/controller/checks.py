@@ -85,10 +85,11 @@ from lib.request.templates import getPageTemplate
 from lib.techniques.union.test import unionTest
 from lib.techniques.union.use import configUnion
 
+
 def checkSqlInjection(place, parameter, value):
     # Store here the details about boundaries and payload used to
     # successfully inject
-    injection = InjectionDict()
+    injection = InjectionDict()  # 用于存储注入成功的数据信息
 
     # Localized thread data needed for some methods
     threadData = getCurrentThreadData()
@@ -103,17 +104,17 @@ def checkSqlInjection(place, parameter, value):
     '''
     tests表示的是要进行测试的列表，包含了每个测试项的名称，这些数据都是和xml/payloads/目录下面每个xml相对应的
     '''
-    tests = getSortedInjectionTests()
+    tests = getSortedInjectionTests()  #获取所有的注入测试用例
     seenPayload = set()
 
     kb.data.setdefault("randomInt", str(randomInt(10)))
     kb.data.setdefault("randomStr", str(randomStr(10)))
 
-    while tests:
+    while tests:  # 循环遍历所有的注入测试数据
         test = tests.pop(0)
 
         try:
-            if kb.endDetection:
+            if kb.endDetection:  # 用于判断是否检测完毕，当所有的注入测试均检测了，或者6种注入类型都找到了。
                 break
 
             '''
@@ -126,7 +127,7 @@ def checkSqlInjection(place, parameter, value):
                 # test what the DBMS may be
                 if not injection.dbms and PAYLOAD.TECHNIQUE.BOOLEAN in injection.data:
                     if not Backend.getIdentifiedDbms() and kb.heuristicDbms is None:
-                        kb.heuristicDbms = heuristicCheckDbms(injection)
+                        kb.heuristicDbms = heuristicCheckDbms(injection)  # 确定后台数据库类型
 
                 # If the DBMS has already been fingerprinted (via DBMS-specific
                 # error message, simple heuristic check or via DBMS-specific
@@ -154,11 +155,11 @@ def checkSqlInjection(place, parameter, value):
                 kb.extendTests = (Backend.getErrorParsedDBMSes() or [kb.heuristicDbms]) if readInput(msg, default='Y').upper() == 'Y' else []
 
             title = test.title
-            kb.testType = stype = test.stype    #test.stype表示的就是payload文件夹下面xml文件中的stype
+            kb.testType = stype = test.stype    # test.stype表示的就是payload文件夹下面xml文件中的stype
             clause = test.clause
             unionExtended = False
 
-            if stype == PAYLOAD.TECHNIQUE.UNION:  #判断数据库DBMS是否是union注入的
+            if stype == PAYLOAD.TECHNIQUE.UNION:  # 判断数据库DBMS是否是union注入的，当前需要进行检测的注入类型为union注入
                 configUnion(test.request.char)
 
                 if "[CHAR]" in title:
@@ -196,6 +197,7 @@ def checkSqlInjection(place, parameter, value):
 
             # Skip test if the user's wants to test only for a specific
             # technique
+            # 测试用户自定义的注入技术类型等级
             if conf.tech and isinstance(conf.tech, list) and stype not in conf.tech:
                 debugMsg = "skipping test '%s' because the user " % title
                 debugMsg += "specified to test only for "
@@ -205,7 +207,8 @@ def checkSqlInjection(place, parameter, value):
 
             # Skip test if it is the same SQL injection type already
             # identified by another test
-            if injection.data and stype in injection.data:
+            # injection.data表示成功注入的注入类型编号
+            if injection.data and stype in injection.data:  # 当已经检测到了相同类型的注入，就需要跳过当前需要进行测试的注入案例
                 debugMsg = "skipping test '%s' because " % title
                 debugMsg += "the payload for %s has " % PAYLOAD.SQLINJECTION[stype]
                 debugMsg += "already been identified"
@@ -326,7 +329,7 @@ def checkSqlInjection(place, parameter, value):
                 boundaries = conf.boundaries
 
             for boundary in boundaries:
-                injectable = False
+                injectable = False  # 默认表示不可注入
 
                 # Skip boundary if the level is higher than the provided (or
                 # default) value
@@ -453,11 +456,17 @@ def checkSqlInjection(place, parameter, value):
 
                                 return cmpPayload
 
+                            '''
+                            基于布尔注入(boolean-based injection)的核心思想：
+                            比较falsePage的内容和truePage的内容之间不同
+                            '''
                             # Useful to set kb.matchRatio at first based on
                             # the False response content
                             kb.matchRatio = None
                             kb.negativeLogic = (where == PAYLOAD.WHERE.NEGATIVE)
-                            Request.queryPage(genCmpPayload(), place, raise404=False)
+                            randvalue = genCmpPayload()  # 方便进行统计分析
+                            # Request.queryPage(genCmpPayload(), place, raise404=False)
+                            Request.queryPage(randvalue, place, raise404=False)
                             falsePage, falseHeaders, falseCode = threadData.lastComparisonPage or "", threadData.lastComparisonHeaders, threadData.lastComparisonCode
                             falseRawResponse = "%s%s" % (falseHeaders, falsePage)
 
@@ -468,29 +477,38 @@ def checkSqlInjection(place, parameter, value):
 
                             if trueResult and not(truePage == falsePage and not kb.nullConnection):
                                 # Perform the test's False request
-                                falseResult = Request.queryPage(genCmpPayload(), place, raise404=False)
+                                # falseResult = Request.queryPage(genCmpPayload(), place, raise404=False)
+                                inline_randomvalue = genCmpPayload()  # 获取payload
+                                falseResult = Request.queryPage(inline_randomvalue, place, raise404=False)
+                                print 'enter 1'
 
                                 if not falseResult:
+                                    print 'enter 2'
                                     if kb.negativeLogic:
+                                        print 'enter 3'
                                         boundPayload = agent.prefixQuery(kb.data.randomStr, prefix, where, clause)
                                         boundPayload = agent.suffixQuery(boundPayload, comment, suffix, where)
                                         errorPayload = agent.payload(place, parameter, newValue=boundPayload, where=where)
 
                                         errorResult = Request.queryPage(errorPayload, place, raise404=False)
                                         if errorResult:
+                                            print 'enter 4'
                                             continue
                                     elif not any((conf.string, conf.notString, conf.regexp, conf.code, kb.nullConnection)):
+                                        print 'enter 5'
                                         _ = comparison(kb.heuristicPage, None, getRatioValue=True)
                                         if _ > kb.matchRatio:
                                             kb.matchRatio = _
                                             logger.debug("adjusting match ratio for current parameter to %.3f" % kb.matchRatio)
 
+                                    print 'enter 6'
                                     injectable = True
 
                             if injectable and kb.pageStable and not any((conf.string, conf.notString, conf.regexp, conf.code, kb.nullConnection)):
                                 if all((falseCode, trueCode)) and falseCode != trueCode:
+                                    print('falseCode= %s' % falseCode)
+                                    print('trueCode = %s' % trueCode)
                                     conf.code = trueCode
-
                                     infoMsg = "%s parameter '%s' appears to be '%s' injectable (with --code=%d)" % (paramType, parameter, title, conf.code)
                                     logger.info(infoMsg)
                                 else:
@@ -519,6 +537,22 @@ def checkSqlInjection(place, parameter, value):
                                         if candidates:
                                             candidates = sorted(candidates, key=lambda _: len(_))
                                             for candidate in candidates:
+                                                '''
+                                                ^
+                                                指定匹配必须出现在字符串的开头或行的开头。有关更多信息，请参阅正则表达式选项中的   Multiline   选项。
+                                                $
+                                                指定匹配必须出现在以下位置：字符串结尾、字符串结尾的   \n   之前或行的结尾。有关更多信息，请参阅正则表达式选项中的   Multiline   选项。
+                                                \A
+                                                指定匹配必须出现在字符串的开头（忽略   Multiline   选项）。
+                                                \Z
+                                                指定匹配必须出现在字符串的结尾或字符串结尾的   \n   之前（忽略   Multiline   选项）。
+                                                \z
+                                                指定匹配必须出现在字符串的结尾（忽略   Multiline   选项）。
+                                                \w
+                                                匹配包括下划线的任何单词字符。类似但不等价于“[A-Za-z0-9_]”，这里的"单词"字符使用Unicode字符集。
+                                                \W
+                                                匹配任何非单词字符。等价于“[^A-Za-z0-9_]”。
+                                                '''
                                                 if re.match(r"\A\w+\Z", candidate):
                                                     break
 
@@ -532,7 +566,7 @@ def checkSqlInjection(place, parameter, value):
                                     logger.info(infoMsg)
 
                         # In case of error-based SQL injection
-                        elif method == PAYLOAD.METHOD.GREP:  #基于错误的sql注入  这是payload中response的代码，而注入用的是request代码，通过比较request和response的两者的结果，从而确定是否可以进行注入
+                        elif method == PAYLOAD.METHOD.GREP:  # 基于错误的sql注入  这是payload中response的代码，而注入用的是request代码，通过比较request和response的两者的结果，从而确定是否可以进行注入
                             # Perform the test's request and grep the response
                             # body for the test's <grep> regular expression
                             try:
@@ -541,11 +575,29 @@ def checkSqlInjection(place, parameter, value):
                                 test元素的grep子节点的值是一个正则表达式：<grep>[DELIMITER_START](?P&lt;result&gt;.*?)[DELIMITER_STOP]</grep>
                                 '''
                                 page, headers = Request.queryPage(reqPayload, place, content=True, raise404=False)
-                                '''
+                                '''参考：http://www.cnblogs.com/PythonHome/archive/2011/11/19/2255459.html
+                                5.编译标志
+                                编译标志让你可以修改正则表达式的一些运行方式。在 re 模块中标志可以使用两个名字，一个是全名如 IGNORECASE，一个是缩写，一字母形式如 I。（如果你熟悉 Perl 的模式修改，一字母形式使用同样的字母；例如 re.VERBOSE的缩写形式是 re.X。）多个标志可以通过按位 OR-ing 它们来指定。如 re.I | re.M 被设置成 I 和 M 标志：
+                                I
+                                IGNORECASE
+                                使匹配对大小写不敏感；字符类和字符串匹配字母时忽略大小写。举个例子，[A-Z]也可以匹配小写字母，Spam 可以匹配 "Spam", "spam", 或 "spAM"。这个小写字母并不考虑当前位置。
+                                L
+                                LOCALE
+                                影响 "w, "W, "b, 和 "B，这取决于当前的本地化设置。locales 是 C 语言库中的一项功能，是用来为需要考虑不同语言的编程提供帮助的。举个例子，如果你正在处理法文文本，你想用 "w+ 来匹配文字，但 "w 只匹配字符类 [A-Za-z]；它并不能匹配 "é" 或 "?"。如果你的系统配置适当且本地化设置为法语，那么内部的 C 函数将告诉程序 "é" 也应该被认为是一个字母。当在编译正则表达式时使用 LOCALE 标志会得到用这些 C 函数来处理 "w 後的编译对象；这会更慢，但也会象你希望的那样可以用 "w+ 来匹配法文文本。
+                                M
+                                MULTILINE
+                                (此时 ^ 和 $ 不会被解释; 它们将在 4.1 节被介绍.)
+                                使用 "^" 只匹配字符串的开始，而 $ 则只匹配字符串的结尾和直接在换行前（如果有的话）的字符串结尾。当本标志指定後， "^" 匹配字符串的开始和字符串中每行的开始。同样的， $ 元字符匹配字符串结尾和字符串中每行的结尾（直接在每个换行之前）。
+                                S
+                                DOTALL
+                                使 "." 特殊字符完全匹配任何字符，包括换行；没有这个标志， "." 匹配除了换行外的任何字符。
+                                X
+                                VERBOSE
+                                该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解。当该标志被指定时，在 RE 字符串中的空白符被忽略，除非该空白符在字符类中或在反斜杠之後；这可以让你更清晰地组织和缩进 RE。它也可以允许你将注释写入 RE，这些注释会被引擎忽略；注释用 "#"号 来标识，不过该符号不能在字符串或反斜杠之後。
                                 将page和check正则表达式传递给函数extractRegexResult
                                 extractRegexResult()函数功能较简单，主要使用正则表达式判断是否包含指定的数据，
                                 如果有，则返回匹配的数据，没有，则返回None。
-                                由前面的内容，可知，如果url可以注入的话，返回值retVal应该等于"1",即output="1"
+                                由前面的内容，可知，如果url可以注入的话，返回值retVal应该等于"1",即output="1"。
                                 '''
                                 output = extractRegexResult(check, page, re.DOTALL | re.IGNORECASE) \
                                         or extractRegexResult(check, listToStrValue( \
@@ -612,6 +664,7 @@ def checkSqlInjection(place, parameter, value):
                             # used afterwards by Agent.forgeUnionQuery()
                             # method to forge the UNION query payload
 
+                            # configUnion()函数的作用是将union注入检测的payload中char和columns信息添加到kb/conf中
                             configUnion(test.request.char, test.request.columns)
 
                             if not Backend.getIdentifiedDbms():
@@ -978,12 +1031,12 @@ def heuristicCheckSqlInjection(place, parameter):
 
     randStr = ""
 
-    while '\'' not in randStr:  #randStr必须有单引号"'"
+    while '\'' not in randStr:  #randStr必须有单引号"'"，产生一个长度为10的随机字符串
         randStr = randomStr(length=10, alphabet=HEURISTIC_CHECK_ALPHABET)
 
     kb.heuristicMode = True
 
-    payload = "%s%s%s" % (prefix, randStr, suffix)  #根据前缀和后缀，已经随机的字符，产生一个payload(攻击点)
+    payload = "%s%s%s" % (prefix, randStr, suffix)  # 根据前缀和后缀，已经随机的字符，产生一个payload(攻击点)
     payload = agent.payload(place, parameter, newValue=payload)
     page, _ = Request.queryPage(payload, place, content=True, raise404=False)
 
@@ -993,8 +1046,8 @@ def heuristicCheckSqlInjection(place, parameter):
     kb.heuristicPage = page
     kb.heuristicMode = False
 
-    parseFilePaths(page)  #解析网页,查看是否会爆出绝对路径
-    result = wasLastResponseDBMSError()  #wasLastResponseDBMSError()函数主要是判断response中是否包含了数据库报错信息
+    parseFilePaths(page)  # 解析网页,查看是否会爆出绝对路径
+    result = wasLastResponseDBMSError()  # wasLastResponseDBMSError()函数主要是判断response中是否包含了数据库报错信息
 
     infoMsg = "heuristic (basic) test shows that %s parameter " % paramType
     infoMsg += "'%s' might " % parameter
@@ -1010,6 +1063,9 @@ def heuristicCheckSqlInjection(place, parameter):
         payload = agent.payload(place, parameter, newValue=payload, where=PAYLOAD.WHERE.REPLACE)
         result = Request.queryPage(payload, place, raise404=False)
 
+        '''
+        random.randint()的函数原型为：random.randint(a, b)，用于生成一个指定范围内的整数。其中参数a是下限，参数b是上限，生成的随机数n: a <= n <= b
+        '''
         if not result:
             randStr = randomStr()
             payload = "%s%s%s" % (prefix, "%s.%d%s" % (origValue, random.randint(1, 9), randStr), suffix)
@@ -1305,16 +1361,22 @@ def checkWaf():
     infoMsg += "some kind of WAF/IPS/IDS"
     logger.info(infoMsg)
 
+    '''
+    retVal=False返回值默认为False，表示没有防火墙。否则，retVal=表示存在防火墙
+    '''
     retVal = False
+    '''
+    构建payload，判断是否存在防火墙
+    '''
     payload = "%d %s" % (randomInt(), IDS_WAF_CHECK_PAYLOAD)
 
     value = "" if not conf.parameters.get(PLACE.GET) else conf.parameters[PLACE.GET] + DEFAULT_GET_POST_DELIMITER
     value += agent.addPayloadDelimiters("%s=%s" % (randomStr(), payload))
 
     pushValue(conf.timeout)
-    conf.timeout = IDS_WAF_CHECK_TIMEOUT
+    conf.timeout = IDS_WAF_CHECK_TIMEOUT  #超时
 
-    try:
+    try:  #发送请求
         retVal = Request.queryPage(place=PLACE.GET, value=value, getRatioValue=True, noteResponseTime=False, silent=True)[1] < IDS_WAF_CHECK_RATIO
     except SqlmapConnectionException:
         retVal = True
@@ -1333,7 +1395,7 @@ def checkWaf():
             output = readInput(message, default="N")
 
             if output and output[0] in ("Y", "y"):
-                conf.identifyWaf = True
+                conf.identifyWaf = True  #conf.identifyWaf=True表示需要检测后台防火墙的类型,否则，表示不检测防火墙类型
 
         if conf.timeout == defaults.timeout:
             logger.warning("dropping timeout to %d seconds (i.e. '--timeout=%d')" % (IDS_WAF_CHECK_TIMEOUT, IDS_WAF_CHECK_TIMEOUT))
@@ -1344,7 +1406,7 @@ def checkWaf():
     return retVal
 
 def identifyWaf():
-    if not conf.identifyWaf:
+    if not conf.identifyWaf: # 当存在防火墙的时候，conf.identifyWaf=True。否则，conf.identifyWaf=False
         return None
 
     if not kb.wafFunctions:
