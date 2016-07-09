@@ -1,4 +1,4 @@
-1. Google dork的作用
+1. Google dork的作用和 Google site:
 2. [认识SQL注入的类型](http://www.codesec.net/view/211276.html)
 <br>SQL注入的原理:用户在正常请求中伪造一些程序命令,绕过防火墙,传输到相应的应用程序中,进入数据库中。从而执行一些非授权的SQL代码,以此达到修改、窃取或者破坏数据库信息的目的。
 <br>[SQL注入分类](www.freebuf.com/articles/web/98119.html)
