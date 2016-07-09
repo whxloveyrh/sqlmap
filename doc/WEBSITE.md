@@ -75,10 +75,10 @@ pack 是为了减少空间占用，压缩二进制文件显然达不到这个目
 8. SQL注入技术分类,以及每一种注入技术的作用
 <br>&emsp;&emsp;基于时间的注入(time-based injection):
 <br>&emsp;&emsp;参考网址:[User-Agent注入攻击和基于时间的注入](www.freebuf.com/articles/web/105124.html)
-<br>&emsp;&emsp;作用:用于猜测数据库名、表名、字段名、数据信息
+<br>&emsp;&emsp;作用:用于猜测数据库名、表名、字段名、数据信息等等
 <br>&emsp;&emsp;基于错误的注入(error-based injection):
-<br>&emsp;&emsp;参考网址:
-<br>&emsp;&emsp;作用:
+<br>&emsp;&emsp;参考网址:[基于错误回显的SQL注入整理](http://www.51testing.com/html/26/n-3364326.html)
+<br>&emsp;&emsp;作用:用于爆出数据库名、表名、字段名、数据信息等等
 <br>&emsp;&emsp;基于bool的注入(boolean-based injection):
 <br>&emsp;&emsp;参考网址:
 <br>&emsp;&emsp;作用:
@@ -94,4 +94,5 @@ pack 是为了减少空间占用，压缩二进制文件显然达不到这个目
  <br>&emsp;&emsp;10.3 drops.wooyun.org
  <br>&emsp;&emsp;10.4 www.shack2.org
  <br>&emsp;&emsp;10.5 www.shack2.org/article/142279387.html
+ <br>$emsp;$emsp;10.6 [防止sql注入和sqlmap介绍](http://lawson.cnblogs.com/)
 

