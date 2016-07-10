@@ -4,7 +4,6 @@
     <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/WEBSITE.md" afterPath="$PROJECT_DIR$/doc/WEBSITE.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/samples" afterPath="$PROJECT_DIR$/doc/samples" />
     </list>
     <ignored path="sqlmap-master.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,8 +36,8 @@
           </provider>
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="1387">
-                <caret line="102" column="116" selection-start-line="102" selection-start-column="116" selection-end-line="102" selection-end-column="116" />
+              <first_editor relative-caret-position="220">
+                <caret line="96" column="12" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="12" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -692,7 +691,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468154399911</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;webiste.md&#10;delete&#10;update&#10;&#10;">
+      <created>1468162269786</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1468162269786</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TodoView">
@@ -779,7 +785,8 @@
     <MESSAGE value="Merge branch 'master' of https://github.com/whxloveyrh/sqlmap&#10;sqlmap.py&#10;connector.py&#10;" />
     <MESSAGE value="Merge branch 'master' of https://github.com/whxloveyrh/sqlmap&#10;&#10;# Conflicts:&#10;#&#9;.gitignore&#10;#&#9;.idea/workspace.xml&#10;" />
     <MESSAGE value="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;delete&#10;update&#10;&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;delete&#10;update&#10;&#10;" />
+    <MESSAGE value="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;webiste.md&#10;delete&#10;update&#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;webiste.md&#10;delete&#10;update&#10;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1237,8 +1244,8 @@
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="1387">
-            <caret line="102" column="116" selection-start-line="102" selection-start-column="116" selection-end-line="102" selection-end-column="116" />
+          <first_editor relative-caret-position="220">
+            <caret line="96" column="12" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="12" />
             <folding />
           </first_editor>
           <second_editor />
