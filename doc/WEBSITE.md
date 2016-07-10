@@ -89,10 +89,19 @@ pack 是为了减少空间占用，压缩二进制文件显然达不到这个目
 9. SQL注入的目的: 提权和获取数据
 
 10. 网络安全方面的网站
- <br>&emsp;&emsp;10.1 www.freebuf.com
- <br>&emsp;&emsp;10.2 www.wooyun.org
- <br>&emsp;&emsp;10.3 drops.wooyun.org
+ <br>&emsp;&emsp;10.1 [freebuf](www.freebuf.com)
+ <br>&emsp;&emsp;10.2 [乌云网](www.wooyun.org)
+ <br>&emsp;&emsp;10.3 [乌云网知识库](drops.wooyun.org)
  <br>&emsp;&emsp;10.4 www.shack2.org
  <br>&emsp;&emsp;10.5 www.shack2.org/article/142279387.html
  <br>$emsp;$emsp;10.6 [防止sql注入和sqlmap介绍](http://lawson.cnblogs.com/)
+ <br>$emsp;$emsp;10.7 [Beyond SQLi: Obfuscate and Bypass](https://www.exploit-db.com/papers/17934/)
+ <br>$emsp;$emsp;10.8 [waf 绕过的技巧](http://drops.wooyun.org/tips/132)
+ <br>$emsp;$emsp;10.9 [MySql注入科普](http://drops.wooyun.org/tips/123)
+ <br>$emsp;$emsp;10.10 [深入了解SQL注入绕过waf和过滤机制](http://drops.wooyun.org/tips/968)
+ <br>$emsp;$emsp;10.11 [MySQL暴错注入方法整理](http://www.waitalone.cn/mysql-error-based-injection.html)
+ <br>$emsp;$emsp;10.12 [mysql ,floor,ExtractValue,UpdateXml三种报错模式注入利用方法](http://www.dreaminto.com/2013/0620/753.html)
+
+
+
 

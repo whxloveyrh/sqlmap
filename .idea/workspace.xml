@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="62eb864e-e8e2-44ea-904e-c83e5a7e5014" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/WEBSITE.md" afterPath="$PROJECT_DIR$/doc/WEBSITE.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/samples" afterPath="$PROJECT_DIR$/doc/samples" />
     </list>
     <ignored path="sqlmap-master.iws" />
@@ -29,15 +30,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="WEBSITE.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WEBSITE.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/doc/WEBSITE.md">
           <provider editor-type-id="MarkdownFxPreviewEditor">
             <state />
           </provider>
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="-500">
-                <caret line="16" column="60" selection-start-line="16" selection-start-column="60" selection-end-line="16" selection-end-column="60" />
+              <first_editor relative-caret-position="1387">
+                <caret line="102" column="116" selection-start-line="102" selection-start-column="116" selection-end-line="102" selection-end-column="116" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -45,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="samples" pinned="false" current-in-tab="true">
+      <file leaf-file-name="samples" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/doc/samples">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-19874">
-              <caret line="354" column="0" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
+            <state relative-caret-position="1350">
+              <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -110,8 +111,8 @@
         <option value="$PROJECT_DIR$/tamper/apostrophenullencode.py" />
         <option value="$PROJECT_DIR$/xml/payloads/01_boolean_blind.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/doc/WEBSITE.md" />
         <option value="$PROJECT_DIR$/doc/samples" />
+        <option value="$PROJECT_DIR$/doc/WEBSITE.md" />
       </list>
     </option>
   </component>
@@ -684,7 +685,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468141882820</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="date:&#10;action:&#10;add&#10;&#10;modify&#10;samples&#10;delete&#10;update&#10;&#10;">
+      <created>1468154399911</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1468154399911</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1215,14 +1223,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/doc/samples">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1350">
+          <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/doc/WEBSITE.md">
       <provider editor-type-id="MarkdownFxPreviewEditor">
         <state />
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="-500">
-            <caret line="16" column="60" selection-start-line="16" selection-start-column="60" selection-end-line="16" selection-end-column="60" />
+          <first_editor relative-caret-position="1387">
+            <caret line="102" column="116" selection-start-line="102" selection-start-column="116" selection-end-line="102" selection-end-column="116" />
             <folding />
           </first_editor>
           <second_editor />
@@ -1235,14 +1251,6 @@
             <folding />
           </first_editor>
           <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/samples">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-19874">
-          <caret line="354" column="0" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
