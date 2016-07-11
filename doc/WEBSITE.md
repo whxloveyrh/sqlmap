@@ -88,20 +88,38 @@ pack 是为了减少空间占用，压缩二进制文件显然达不到这个目
 
 9. SQL注入的目的: 提权和获取数据
 
-10. 网络安全方面的网站
- <br>&emsp;&emsp;10.1 [freebuf](www.freebuf.com)
- <br>&emsp;&emsp;10.2 [乌云网](www.wooyun.org)
- <br>&emsp;&emsp;10.3 [乌云网知识库](drops.wooyun.org)
- <br>&emsp;&emsp;10.4 www.shack2.org
- <br>&emsp;&emsp;10.5 www.shack2.org/article/142279387.html
- <br>&emsp;&emsp;10.6 [防止sql注入和sqlmap介绍](http://lawson.cnblogs.com/)
- <br>&emsp;&emsp;10.7 [Beyond SQLi: Obfuscate and Bypass](https://www.exploit-db.com/papers/17934/)
- <br>&emsp;&emsp;10.8 [waf 绕过的技巧](http://drops.wooyun.org/tips/132)
- <br>&emsp;&emsp;10.9 [MySql注入科普](http://drops.wooyun.org/tips/123)
+
+10. MySQL三种报错模式注入利用floor、Extractvalue、UpdateXml、name_const()函数利用
+[基于错误的注入利用](http://www.gx0759.com/241.html)
+[基于错误的注入name_const()函数利用](http://www.dreaminto.com/2013/0620/753.html)
+extractvalue()(有长度限制)
+**extractvalue(xml_document,xpath_string)**;(文件名有长度限制,最长32位)
+第一个参数:xml_document是string格式,为xml文档对象的名称
+第二个参数:xpath_string（xpath格式的字符串)）
+作用:从目标xml中返回包含所有查询值的字符串
+**updatexml(xml_document,xpath_string,new_value)**;
+第一个参数:xml_document是string格式,为xml文档对象的名称
+第二个参数:xpath_string(xpath格式的字符串)
+第三个参数:new_value,string格式,替换查找到符合条件的数据
+作用:改变文档中符合条件的节点的值
+updatexml()(有长度约束)
+exp()函数
+11. 网络安全方面的网站
+ <br>&emsp;&emsp;10.01 [freebuf](www.freebuf.com)
+ <br>&emsp;&emsp;10.02 [乌云网](www.wooyun.org)
+ <br>&emsp;&emsp;10.03 [乌云网知识库](drops.wooyun.org)
+ <br>&emsp;&emsp;10.04 www.shack2.org
+ <br>&emsp;&emsp;10.05 www.shack2.org/article/142279387.html
+ <br>&emsp;&emsp;10.06 [防止sql注入和sqlmap介绍](http://lawson.cnblogs.com/)
+ <br>&emsp;&emsp;10.07 [Beyond SQLi: Obfuscate and Bypass](https://www.exploit-db.com/papers/17934/)
+ <br>&emsp;&emsp;10.08 [waf 绕过的技巧](http://drops.wooyun.org/tips/132)
+ <br>&emsp;&emsp;10.09 [MySql注入科普](http://drops.wooyun.org/tips/123)
  <br>&emsp;&emsp;10.10 [深入了解SQL注入绕过waf和过滤机制](http://drops.wooyun.org/tips/968)
  <br>&emsp;&emsp;10.11 [MySQL暴错注入方法整理](http://www.waitalone.cn/mysql-error-based-injection.html)
  <br>&emsp;&emsp;10.12 [mysql ,floor,ExtractValue,UpdateXml三种报错模式注入利用方法](http://www.dreaminto.com/2013/0620/753.html)
-
-
+ <br>&emsp;&emsp;10.13 [利用Insert、Update、Delete注入获取数据](http://drops.wooyun.org/tips/2078)
+ <br>&emsp;&emsp;10.14 [BigInt Overflow Error-based sql injection](https://osandamalith.wordpress.com/2015/07/08/bigint-overflow-error-based-sql-injection/)
+ <br>&emsp;&emsp;10.15 [基于BIGINT溢出错误的SQL注入](http://drops.wooyun.org/web/8024)
+ <br>&emsp;&emsp;10.16 [使用exp进行SQL报错注入](http://drops.wooyun.org/tips/8166)
 
 
