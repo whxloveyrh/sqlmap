@@ -98,13 +98,13 @@ def checkSqlInjection(place, parameter, value):
     kb.testMode = True
 
     '''
-    paramType是注入的类型，如GET,POST
+    paramType是注入的类型，如GET,POST(data),URI,Cookie,User-Agent, REFERER, Host,(custom)POST, (custom)HEADER
     '''
     paramType = conf.method if conf.method not in (None, HTTPMETHOD.GET, HTTPMETHOD.POST) else place
     '''
     tests表示的是要进行测试的列表，包含了每个测试项的名称，这些数据都是和xml/payloads/目录下面每个xml相对应的
     '''
-    tests = getSortedInjectionTests()  #获取所有的注入测试用例
+    tests = getSortedInjectionTests()  # 获取所有的注入测试用例
     seenPayload = set()
 
     kb.data.setdefault("randomInt", str(randomInt(10)))
@@ -393,7 +393,7 @@ def checkSqlInjection(place, parameter, value):
                     if where == PAYLOAD.WHERE.ORIGINAL or conf.prefix:
                         origValue = value
 
-                        if kb.tamperFunctions:  #产生payload
+                        if kb.tamperFunctions:  # 产生payload
                             templatePayload = agent.payload(place, parameter, value="", newValue=origValue, where=where)
                     elif where == PAYLOAD.WHERE.NEGATIVE:
                         # Use different page template than the original
@@ -419,7 +419,7 @@ def checkSqlInjection(place, parameter, value):
                     # Forge request payload by prepending with boundary's
                     # prefix and appending the boundary's suffix to the
                     # test's ' <payload><comment> ' string
-                    if fstPayload:  #伪造请求的payload，通过添加前缀和后缀信息
+                    if fstPayload:  # 伪造请求的payload，通过添加前缀和后缀信息
                         '''
                         组合前缀、后缀、payload等，生成请求的reqPayload。
                         '''
