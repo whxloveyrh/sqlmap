@@ -82,6 +82,7 @@ def modulePath():
 
     return getUnicode(os.path.dirname(os.path.realpath(_)), encoding=sys.getfilesystemencoding())
 
+
 def checkEnvironment():
     paths.SQLMAP_ROOT_PATH = modulePath()
 

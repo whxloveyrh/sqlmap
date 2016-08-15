@@ -854,7 +854,7 @@ def cmdLineParser(argv=None):
 
         '''用户自定义函数注入
         参数：--udf-inject,--shared-lib
-        你可以通过编译MySQL注入你自定义的函数（UDFs）或PostgreSQL在windows中共享库，DLL，或者Linux/Unix中共享对象，
+        你可以通过编译MySQL注入你自定义的函数（user define functions,UDFs）或PostgreSQL在windows中共享库，DLL，或者Linux/Unix中共享对象，
         sqlmap将会问你一些问题，上传到服务器数据库自定义函数，然后根据你的选择执行他们，当你注入完成后，sqlmap将会移除它们。
         '''
         # User-defined function options
