@@ -25,7 +25,7 @@ class AttribDict(dict):
     有了__init__方法，在创建实例的时候，就不能传入空的参数了，必须传入与__init__方法匹配的参数，
     但self不需要传，Python解释器自己会把实例变量传进去：
     '''
-    def __init__(self, indict=None, attribute=None):
+    def  __init__(self, indict=None, attribute=None):
         if indict is None:
             indict = {}
 
