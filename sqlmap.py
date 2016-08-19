@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -81,6 +81,7 @@ def modulePath():
         _ = inspect.getsourcefile(modulePath)
 
     return getUnicode(os.path.dirname(os.path.realpath(_)), encoding=sys.getfilesystemencoding())
+
 
 def checkEnvironment():
     paths.SQLMAP_ROOT_PATH = modulePath()
@@ -202,7 +203,7 @@ def main():
         except KeyboardInterrupt:  # Ctrl+C被按下
             pass
 
-    except EOFError:
+    except EOFError:  # 遇到文件末尾引发的异常
         print
         errMsg = "exit"
 

@@ -21,6 +21,16 @@ def reset_all():
 
 
 def init(autoreset=False, convert=None, strip=None, wrap=True):
+    """
+    Args:
+        autoreset:
+        convert:
+        strip:
+        wrap:
+
+    Returns:
+
+    """
     global wrapped_stdout, wrapped_stderr
     global orig_stdout, orig_stderr
 

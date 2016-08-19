@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding:utf-8 -*-
 """
 Copyright (c) 2006-2016 sqlmap developers (http://sqlmap.org/)
 See the file 'doc/COPYING' for copying permission
@@ -9,9 +9,12 @@ from lib.core.enums import PRIORITY
 
 __priority__ = PRIORITY.LOWEST
 
+
 def dependencies():
     pass
 
+
+# 过滤双引号,
 def tamper(payload, **kwargs):
     """
     Replaces apostrophe character with its illegal double unicode counterpart

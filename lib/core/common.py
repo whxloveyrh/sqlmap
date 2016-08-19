@@ -1081,6 +1081,7 @@ def randomStr(length=4, lowercase=False, alphabet=None, seed=None):
 
     return retVal
 
+
 def sanitizeStr(value):
     """
     Sanitizes string value in respect to newline and line-feed characters
@@ -1091,6 +1092,7 @@ def sanitizeStr(value):
 
     return getUnicode(value).replace("\n", " ").replace("\r", "")
 
+
 def getHeader(headers, key):
     retVal = None
     for _ in (headers or {}):
@@ -1098,6 +1100,7 @@ def getHeader(headers, key):
             retVal = headers[_]
             break
     return retVal
+
 
 def checkFile(filename, raiseOnError=True):
     """
@@ -1124,6 +1127,7 @@ def checkFile(filename, raiseOnError=True):
         raise SqlmapSystemException("unable to read file '%s'" % filename)
 
     return valid
+
 
 def banner():
     """
@@ -1202,7 +1206,7 @@ def setPaths():
     '''
     os.path.expanduser(path)  #把path中包含的"~"和"~user"转换成用户目录
     '''
-    _ = os.path.join(os.path.expandvars(os.path.expanduser("~")), ".sqlmap") #把path中包含的"~"和"~user"转换成用户目录
+    _ = os.path.join(os.path.expandvars(os.path.expanduser("~")), ".sqlmap") # 把path中包含的"~"和"~user"转换成用户目录
     paths.SQLMAP_OUTPUT_PATH = getUnicode(paths.get("SQLMAP_OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
     paths.SQLMAP_DUMP_PATH = os.path.join(paths.SQLMAP_OUTPUT_PATH, "%s", "dump")
     paths.SQLMAP_FILES_PATH = os.path.join(paths.SQLMAP_OUTPUT_PATH, "%s", "files")
@@ -1231,7 +1235,7 @@ def setPaths():
 
     for path in paths.values():
         if any(path.endswith(_) for _ in (".txt", ".xml", ".zip")):
-            checkFile(path)  #checkFile()函数的目的在于判断path是否是文件
+            checkFile(path)  # checkFile()函数的目的在于判断path是否是文件
 
 def weAreFrozen():
     """
